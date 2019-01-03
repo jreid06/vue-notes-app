@@ -1,4 +1,5 @@
 import Global from '../Global'
+import 'babel-polyfill'
 
 const categoriesKey = Global.categoriesKey;
 const notesKey = Global.notesKey;
@@ -32,87 +33,117 @@ export default class {
 
   }
 
-  static initCategoriesStorage() {
+  static async initStorage() {
+    let $this = this,
+      cat,
+      note;
 
-    let exists = false;
+    await this.initCategoriesStorage().then((initres) => {
+      console.log("category storage exists");
+      cat = true;
+    }).catch((initerr) => {
+      cat = false;
+    });
 
-    // init categories local storage key-value
-    try {
-      DB.getItem(categoriesKey).then((item) => {
-              
-        if(item == null){
-            try {
-              DB.setItem(categoriesKey, []).then(() => {
-                console.log('category STORAGE SET SUCCESSFULLY');
-              }).catch((err) => {
-                console.log('error CREATING STORAGE for category');
-              })
-            } catch (error) {
-              console.log('error creating cat storage');
-              return;
-            }
-        }else{
-            console.log('categories STORAGE EXISTS');
-        }
-
-      
-
-        return;
-      }).catch((err) => {
-        console.log('doesnt exist. create categories');
-      });
-
-      return;
-
-    } catch (error) {
-      console.log('error with indexed DB');
-      return;
+    if (!cat) {
+      await $this.setCategoriesStorage().then((setres) => {
+        console.log('category storage initialized');
+      }).catch((seterr) => {
+        console.log('ERROR: category storage NOT initialized');
+      })
     }
 
+    console.log('BETWEEN CAT STORAGE AND NOTE');
+
+    await this.initNotesStorage().then((initres) => {
+      console.log("note storage exists");
+      note = true;
+    }).catch((err) => {
+      note = false
+    })
+
+    if (!note) {
+      await $this.setNotesStorage().then((setres) => {
+        console.log('note storage initialized');
+      }).catch((seterr) => {
+        console.log('ERROR: note storage NOT initialized');
+      })
+    }
+
+    console.log('IM LAST');
+
+  }
+
+  static initCategoriesStorage() {
+    return new Promise((resolve, reject) => {
+      DB.getItem(categoriesKey).then((item) => {
+        // no data exists for storage reject to create in next step
+        if (item == null) {
+          reject(item);
+        }
+
+        // resolve to ignore set function
+        resolve(true);
+      }).catch((err) => {
+        reject(null);
+      });
+    });
+  }
+
+  static setCategoriesStorage() {
+    return new Promise((resolve, reject) => {
+      DB.setItem(categoriesKey, []).then((item) => {
+        resolve(true);
+      }).catch((err) => {
+        reject(null);
+      });
+    });
   }
 
   static initNotesStorage() {
-    // init notes local storage key-value
-
-    try {
+    return new Promise((resolve, reject) => {
       DB.getItem(notesKey).then((item) => {
-        if(item == null){
-           try {
-             DB.setItem(notesKey, []).then(() => {
-               console.log('NOTES STORAGE SET SUCCESSFULLY');
-             }).catch((err) => {
-               console.log('error CREATING STORAGE for notes');
-               return;
-             })
-           } catch (error) {
-             console.log('error creating notes storage');
-           }
-        }else{
-            console.log('NOTES STORAGE EXISTS');
+        // no data exists for storage reject to create in next step
+        if (item == null) {
+          reject(item);
         }
 
-        return;
-
+        // resolve to ignore set function
+        resolve(true);
       }).catch((err) => {
-        console.log('doesnt exist. create notes');
-      })
-    } catch (error) {
-      console.log('error with indexed DB');
-      return;
+        reject(null);
+      });
+    });
+  }
 
-    }
-   
+  static setNotesStorage() {
+    return new Promise((resolve, reject) => {
+      DB.setItem(notesKey, []).then((item) => {
+        resolve(true);
+      }).catch((err) => {
+        reject(null);
+      });
+    });
   }
 
   static allCategories() {
-    DB.getItem(categoriesKey, []).then((item) => {
-      console.log('categories STORAGE EXISTS');
-    }).catch((err) => {
-      DB.setItem(categoriesKey).then(() => {
-        console.log('category STORAGE SET SUCCESSFULLY');
+
+    try {
+      DB.getItem(categoriesKey).then((item) => {
+        if (item === undefined || item.length == 0) {
+          return false;
+        } else {
+          return item;
+        }
+
       }).catch((err) => {
-        console.log('error CREATING STORAGE for category');
+        return false;
       })
-    })
+    } catch (error) {
+      return false;
+    }
+
   }
+
+
 }

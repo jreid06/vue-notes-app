@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Vuex from 'vuex'
-import { routes } from './routes'
+import {
+  routes
+} from './routes'
 import store from './store'
 import VueRouter from 'vue-router'
 import Storage from './classes/LocalForageClass'
@@ -54,20 +56,12 @@ function storageAvailable(type) {
   }
 }
 
-router.beforeEach((to, from, next)=>{
-  if (storageAvailable('localStorage')) {
-    Storage.initCategoriesStorage();
-    Storage.initNotesStorage();
+router.beforeEach((to, from, next) => {
+  Storage.initStorage();
 
-    
-    
-    // Storage.allCategories();
-  
-    next();
-  } else {
-    // Too bad, no localStorage for us
-    alert('no local storage access');
-  }
+  // store.commit('setCategories', Storage.allCategories());
+  next();
+
 })
 
 new Vue({
