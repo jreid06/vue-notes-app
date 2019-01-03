@@ -51,9 +51,11 @@ export default class {
               console.log('error creating cat storage');
               return;
             }
+        }else{
+            console.log('categories STORAGE EXISTS');
         }
 
-        console.log('categories STORAGE EXISTS');
+      
 
         return;
       }).catch((err) => {
@@ -85,9 +87,10 @@ export default class {
            } catch (error) {
              console.log('error creating notes storage');
            }
+        }else{
+            console.log('NOTES STORAGE EXISTS');
         }
 
-        console.log('notes STORAGE EXISTS');
         return;
 
       }).catch((err) => {
