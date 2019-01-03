@@ -17,6 +17,11 @@ const mutations = {
 		state.categories.selected = payload;
 	},
 	setCategories(state, payload){
+		if(!payload || payload.length < 1){
+			console.log('array is empty. no need to update');
+			return;
+		}
+
 		console.log('UPDATE ALL CATEGORIES ARRAY');
 		state.categories.all = payload;
 	}
