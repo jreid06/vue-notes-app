@@ -135,15 +135,22 @@ export default class {
         // console.log(item);
         if (item === undefined || item.length == 0) {
           categories = false;
+           console.log(item);
+           
+           console.log('DFRTGRGRGBTBTD-----0');
           reject(categories);
+          
         } else {
           categories = item;
           resolve(categories);
         }
 
       }).catch((err) => {
+        console.log(err);
+        console.log('DFRTGRGRGBTBTD-----');
+        
         categories = false;
-        reject(categories);
+        reject(err);
       })
 
 

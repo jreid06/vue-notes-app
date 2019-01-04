@@ -7,6 +7,7 @@ import {
 import store from './store'
 import VueRouter from 'vue-router'
 import Storage from './classes/LocalForageClass'
+import 'babel-polyfill'
 
 require('bootstrap');
 // require('localforage');
@@ -59,6 +60,7 @@ function storageAvailable(type) {
 router.beforeEach((to, from, next) => {
   if (store.getters.appStatus){    
     next();
+    return;
   }
 
   // initial load when app is functionalional
@@ -75,7 +77,9 @@ router.beforeEach((to, from, next) => {
         console.log(err);
         // block entry to app as load failed
 
-        next('/');
+        console.log(err);
+        
+        next();
         return;
       })
     
@@ -83,7 +87,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // next();
-  return;
+  // return;
 
 })
 
