@@ -22,14 +22,14 @@ export const routes = [{
         path: 'categories',
         component: Categories,
         children: [{
-          path: ':catid/:catslug'
+          path: ':catid'
         }]
       },
       {
         path: 'notes',
         component: Notes,
         children: [{
-          path: ':noteid/:noteslug'
+          path: ':noteid'
         }]
 	  },
 	  {

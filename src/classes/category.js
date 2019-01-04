@@ -9,6 +9,7 @@ export default class {
     this.colour = colour;
     this.notes = [];
     this.key = Helpers.randomString();
+    this.createdAt = Date.now();
   }
 
   returnColour(col = false) {

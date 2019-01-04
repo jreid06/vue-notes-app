@@ -199,14 +199,12 @@ export default {
       category = new Category(vm.categoryDetails.title, vm.categoryDetails.description, vm.categoryDetails.color);
 
       // update category array with new category
-      this.$store.commit('updateCategory', category);
       // save in local storage
-      // Storage.createItem(category);
-      let catObj = this.$store.getters.currentCategory;
-      // new Category(this.$store.getters.currentCategory.title, this.$store.getters.currentCategory.description, this.$store.getters.currentCategory.color);
-
-      console.log(catObj.returnColour(true));
+      this.$store.commit('updateAll', category);
+      this.$store.commit('updateSelectedCategory', category);
       
+      // emit result to redirect via route
+      this.$emit('change-route', `/dashboard/categories/${category.key}`)
     },
     toggleError() {
       this.error = false;

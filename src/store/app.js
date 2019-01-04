@@ -3,7 +3,8 @@ const state = {
     name: 'mynotes',
     version: 1.0,
     orientation: '',
-    description: 'Your personal note tracker. Keep all your ideas in one place'
+    description: 'Your personal note tracker. Keep all your ideas in one place',
+    init: false
   },
   modal: {
     note: 'note-modal',
@@ -122,6 +123,9 @@ const getters = {
   appName: state => {
     return state.app.name;
   },
+  appStatus: state=>{
+    return state.app.init;
+  },
   orientationSet: state => {
     return state.app.orientation ? true : false
   },
@@ -141,8 +145,11 @@ const actions = {
 }
 
 const mutations = {
+  initApp(state){
+    state.app.init = true;
+  },
   updateOrientation(state, payload) {
-    this.state.app.orientation = payload;
+    state.app.orientation = payload;
   },
   addColour(state, payload) {
     // validate hex code

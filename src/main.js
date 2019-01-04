@@ -57,10 +57,33 @@ function storageAvailable(type) {
 }
 
 router.beforeEach((to, from, next) => {
-  Storage.initStorage();
+  if (store.getters.appStatus){    
+    next();
+  }
 
-  // store.commit('setCategories', Storage.allCategories());
-  next();
+  // initial load when app is functionalional
+  if (!store.getters.appStatus) {
+    console.log('init storage RUNS');
+    
+    Storage.initStorage().then(() => {
+      Storage.allCategories().then((res)=>{
+        store.commit('loadCategories', res);
+
+        next();
+        return;
+      }).catch((err)=>{
+        console.log(err);
+        // block entry to app as load failed
+
+        next('/');
+        return;
+      })
+    
+    });
+  }
+
+  // next();
+  return;
 
 })
 

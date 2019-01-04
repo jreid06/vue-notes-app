@@ -5,7 +5,7 @@
     </div>
 
     <note-modal :id="modalID('note')"></note-modal>
-    <category-modal :id="modalID('category')"></category-modal>
+    <category-modal :id="modalID('category')" v-on:change-route="redirectTo"></category-modal>
     <load-modal :id="modalID('load')"></load-modal>
   </div>
 </template>
@@ -31,6 +31,13 @@ export default {
     return {
       appName: "mynotes"
     };
+  },
+  methods: {
+    redirectTo(route){
+			console.log('REDIRECT TO RUNS');
+			
+			console.log(route);
+		}
   },
   mounted(){
   

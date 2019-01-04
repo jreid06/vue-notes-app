@@ -1,5 +1,5 @@
 <template>
-  <div class="p-md-2 nav-box vh-100 bg-light d-flex justify-content-center align-items-center shadow-sm">
+  <div class="p-md-2 nav-box vh-100 bg-light d-flex justify-content-center align-items-center">
     <div class="nav-links d-flex flex-column flex-wrap">
       <div class="nav-link-item py-4" v-for="(link, i) in links" :key="i">
         <router-link :to="link.path">

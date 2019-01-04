@@ -1,6 +1,11 @@
+// import { stat } from "fs";
+import store from './../../store'
+import Storage from './../../classes/LocalForageClass';
+
 const state = {
 	categories:{
-		selected: '',
+		loaded: false,
+		selected: {},
 		all: [],
 		bookmarked: []
 	}
@@ -9,14 +14,33 @@ const state = {
 const getters = {
 	currentCategory: state => {
 		return state.categories.selected;
+	},
+	allCategories(){		
+		return state.categories.all;
 	}
 }
 
 const mutations = {
-	updateCategory(state, payload){
+	updateSelectedCategory(state, payload){
 		state.categories.selected = payload;
 	},
-	setCategories(state, payload){
+	updateAll(state, payload){
+		state.categories.all.push(payload);
+
+		// update storage
+		Storage.updateCategories(state.categories.all);
+	},
+	loadCategories(state, payload){
+		if(!state.categories.loaded){
+			state.categories.loaded = true;
+		}else{
+			return;
+		}
+		
+		store.commit('initApp');
+
+		console.log(payload);
+		
 		if(!payload || payload.length < 1){
 			console.log('array is empty. no need to update');
 			return;

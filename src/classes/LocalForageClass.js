@@ -127,21 +127,31 @@ export default class {
   }
 
   static allCategories() {
+    // return 'test';
+    let categories;
 
-    try {
+    return new Promise((resolve, reject) => {
       DB.getItem(categoriesKey).then((item) => {
+        // console.log(item);
         if (item === undefined || item.length == 0) {
-          return false;
+          categories = false;
+          reject(categories);
         } else {
-          return item;
+          categories = item;
+          resolve(categories);
         }
 
       }).catch((err) => {
-        return false;
+        categories = false;
+        reject(categories);
       })
-    } catch (error) {
-      return false;
-    }
+
+
+    });
+    
+    
+   
+    
 
   }
 

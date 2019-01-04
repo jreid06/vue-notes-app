@@ -7,21 +7,29 @@
 			</div>
 		</div>
 		<div class="row pr t-30 z-3">
-			<div class="col-12 col-sm-6 col-lg-4 p-2 d-flex flex-column">
+			<div class="col-12 col-sm-6 col-lg-4 p-2 d-flex flex-row flex-sm-column">
 				<div class="click-box create-category p-3 w-100 shadow-sm mb-3 bg-white" v-for="(action, key) in actions[0]" :key="key" :data-action="key" @click="triggerModal">
 					<h2 :data-action="key"><i :class="action.icon"></i></h2>
 					<h4 class="text-capitalize" :data-action="key">{{action.name}}</h4>
 					<p class="h3" :data-action="key"><i class="fas fa-plus-circle text-success" :data-action="key"></i></p>
 				</div>
 			</div>
+			<div class="col-12 col-sm-6 col-lg-8 p-2">
+				<category-list :load="'categories'" :limit="5"></category-list>
+			</div>
 		</div>
 	</div>
 </template>
 <script>
 const $ = require('jquery');
-import {mapGetters} from 'vuex';
+
+import {mapGetters} from 'vuex'
+import ItemList from './widgets/ItemList.vue'
 
 export default {
+	components: {
+		'category-list': ItemList
+	},
 	computed: {
 		...mapGetters(['appDescription', 'modalID'])
 	},
@@ -77,13 +85,32 @@ export default {
 			console.log('action');
 			console.log(action);
 
-
-		}
+		},
 	}
 }
 </script>
 <style lang="scss" scoped>
 	.click-box{
 		cursor: pointer;
+	}
+
+	.create-category{
+		@media screen and (max-width: 568px) {
+			width: calc(100%/3) !important;
+
+			h2{
+				font-size: 2rem;
+			}
+
+			h4{
+				font-size: 0.9em;
+			}
+
+			.h3{
+				font-size: 2rem !important;
+			}
+		}
+
+		
 	}
 </style>
