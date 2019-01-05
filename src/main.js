@@ -66,9 +66,14 @@ router.beforeEach((to, from, next) => {
   // initial load when app is functionalional
   if (!store.getters.appStatus) {
     console.log('init storage RUNS');
-    
+
+    // init cat or notes storage
     Storage.initStorage().then(() => {
+
+      // get all categories for initial load
       Storage.allCategories().then((res)=>{
+        
+        // update store with saved categories
         store.commit('loadCategories', res);
 
         next();
@@ -76,9 +81,7 @@ router.beforeEach((to, from, next) => {
       }).catch((err)=>{
         console.log(err);
         // block entry to app as load failed
-
         console.log(err);
-        
         next();
         return;
       })

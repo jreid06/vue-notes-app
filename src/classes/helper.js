@@ -12,4 +12,18 @@ export default class {
 	static randomString(){
 		return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 	}
+
+	static formatDate(timestamp){
+		let date = new Date(timestamp),
+			months = ['january','february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+
+		return {
+			day: date.getDay(),
+			month: months[date.getMonth()],
+			minutes: date.getMinutes(),
+			hours: date.getHours() < 10 ? `0${date.getHours()}` : date.getHours(),
+			year: date.getFullYear(),
+			prefix: date.getHours() < 12 ? 'am':'pm' 
+		}
+	}
 }

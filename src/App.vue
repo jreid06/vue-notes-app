@@ -49,6 +49,7 @@ export default {
 // @import "./scss/custom-bootstrap.scss";
 @import url("https://fonts.googleapis.com/css?family=Passion+One:400,700");
 @import "./../node_modules/bootstrap/scss/bootstrap.scss";
+@import "./../node_modules/hover.css/scss/hover.scss";
 
 #app {
   font-family: "Passion One", cursive;

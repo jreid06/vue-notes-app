@@ -80,10 +80,13 @@
 import { mapGetters } from "vuex"
 import Category from "./../../classes/category"
 import Storage from "./../../classes/LocalStorage"
+import HelperMixin from "./../../mixins/helpers.js"
 
 const Joi = require("joi-browser");
+const $ = require('jquery');
 
 export default {
+  mixins: [HelperMixin],
   props: {
     id: {
       type: String,
@@ -91,7 +94,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["colorPalette"]),
+    ...mapGetters(["colorPalette", "modalID"]),
     categoryDetails() {
       return this.category;
     }
@@ -203,8 +206,11 @@ export default {
       this.$store.commit('updateAll', category);
       this.$store.commit('updateSelectedCategory', category);
       
-      // emit result to redirect via route
-      this.$emit('change-route', `/dashboard/categories/${category.key}`)
+      // // emit result to redirect via route
+      this.$emit('change-route', `/dashboard/categories/${category.key}`);
+
+      // close modal
+      $(`#${this.modalID('category')}`).modal('hide');
     },
     toggleError() {
       this.error = false;
