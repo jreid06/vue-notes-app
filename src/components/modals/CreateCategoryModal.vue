@@ -161,9 +161,8 @@ export default {
     categorySchema() {
       const schema = Joi.object().keys({
         title: Joi.string()
-          .regex(/^[a-zA-Z]/)
           .min(3)
-          .max(25),
+          .max(35),
         description: Joi.string()
           .min(0)
           .max(255),

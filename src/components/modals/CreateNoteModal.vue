@@ -114,9 +114,8 @@ export default {
     noteSchema() {
       const schema = Joi.object().keys({
         title: Joi.string()
-          .regex(/^[a-zA-Z]/)
           .min(3)
-          .max(25),
+          .max(35),
         brief: Joi.string()
           .min(0)
           .max(255),
@@ -173,6 +172,7 @@ export default {
 
       if (valid.error !== null) {
         vm.error = true;
+        console.log(valid);
         vm.updateErrorMessage(valid.error.details[0].path[0]);
         return;
       }
@@ -186,6 +186,8 @@ export default {
       // save in local storage
       this.$store.commit('updateAllNotes', note);
       this.$store.commit('updateSelectedNote', note);
+
+      // add note to correct category
       
       // // emit result to redirect via route
       this.$emit('change-route', `/dashboard/notes/${note.key}`);
