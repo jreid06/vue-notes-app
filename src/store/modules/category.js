@@ -17,11 +17,22 @@ const state = {
 }
 
 const getters = {
-  currentCategory: state => {
+  selectedCategory: state => {
     return state.categories.selected;
   },
-  allCategories() {
+  allCategories: state => {
     return state.categories.all;
+  },
+  getCategory: (state) => (id) => {
+    let cat = '';
+    state.categories.all.find((element, i) => {
+      if (element.key === id) {
+        //  cat = i;
+        cat = element;
+      }
+    });
+
+    return cat;
   }
 }
 
