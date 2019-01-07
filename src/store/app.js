@@ -1,3 +1,5 @@
+import Storage from './../classes/LocalForageClass'
+
 const state = {
   app: {
     name: 'mynotes',
@@ -146,7 +148,7 @@ const actions = {
 
 const mutations = {
   initApp(state){
-    state.app.init = true;
+    !state.app.init ? state.app.init = true : '';
   },
   updateOrientation(state, payload) {
     state.app.orientation = payload;

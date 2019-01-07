@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white shadow-sm itemlist pr">
-    <ul class="list-group list-group-flush" v-if="listData.length > 0">
+    <ul class="list-group list-group-flush" v-if="this.items.length > 0">
       <li
         class="itemlist-li list-group-item d-flex flex-row flex-no-wrap flex-sm-wrap flex-md-no-wrap text-capitalize"
         v-for="(n,i) in lastestData"
@@ -9,9 +9,17 @@
         <div class="p-2 flex-fill h4" :style="{color: n.colour}">
           <i :class="icon"></i>
         </div>
-        <div class="p-2 flex-fill">
-          <p>{{n.category}}</p>
-        </div>
+
+        <template v-if="load === 'categories'">
+          <div class="p-2 flex-fill">
+            <p>{{n.category}}</p>
+          </div>
+        </template>
+        <template v-if="load === 'notes'">
+          <div class="p-2 flex-fill">
+            <p>{{n.title}}</p>
+          </div>
+        </template>
         <div class="p-2 flex-fill">
           <p>
             {{helpers.formatDate(n.createdAt).day}}
@@ -70,22 +78,19 @@ export default {
     },
     icon: {
       type: String
-    }
+    },
+    mutationName: {
+      type: String,
+      required: true
+	},
+	items: {
+	  type: Array
+	}
   },
   watch: {
-    listData: function(newVal, oldVal) {
-      console.log("WATCHER RUNS");
-      console.log(newVal);
-
-      if (newVal.length < 0) {
-        console.log("EMPTY ARRAY OF DATA");
-      } else {
-        console.log("LIST WITH DATA TO SHOW");
-      }
-    }
   },
   computed: {
-    ...mapGetters(["allCategories"]),
+    ...mapGetters(["allCategories", "allNotes"]),
     lastestData() {
       let limit = this.limit,
         vm = this;
@@ -97,7 +102,11 @@ export default {
             return b.createdAt - a.createdAt;
           });
           break;
-
+        case "notes":
+          return vm.allNotes.sort(function(a, b) {
+            return b.createdAt - a.createdAt;
+          });
+          break;
         default:
           break;
       }
@@ -106,7 +115,7 @@ export default {
   data() {
     return {
       loading: true,
-      listData: []
+      listData: this.items 
     };
   },
   methods: {
@@ -114,23 +123,50 @@ export default {
       let target = e.target,
         itemID = target.attributes["data-id"].value;
 
-      this.$store.commit("deleteCategory", itemID);
+      this.deleteItem(this.mutationName, itemID, this.load);
     },
-    updateData() {
-      vm.listData = vm.$store.getters.allCategories;
+    deleteItem(commit, itemID, loadItem) {
+      this.$store.commit(commit, itemID);
+      this.updateData(loadItem);
+    },
+    // called from the create modals
+    updateData(getter) {
+	  const vm = this;
+	  console.log(getter);
+	  
+      switch (getter) {
+		case "categories":
+			console.log('categories list data updated');
+			console.log(this.$store.getters.allCategories);
+          vm.listData = this.$store.getters.allCategories;
+          break;
+		case "notes":
+			console.log('notes list data updated');
+			console.log(this.$store.getters.allNotes);
+			
+			
+          vm.listData = this.$store.getters.allNotes;
+          break;
+        default:
+          break;
+      }
     }
   },
   mounted() {
     let vm = this;
 
-    switch (vm.load) {
-      case "categories":
-        vm.listData = vm.$store.getters.allCategories;
-        break;
-
-      default:
-        break;
-    }
+    // switch (vm.load) {
+    //   case "categories":
+    //     vm.updateData(vm.load);
+    //     break;
+	//   case "notes":
+	//   console.log('update LOAD NOTES');
+	  
+	// 	vm.updateData(vm.load);
+    //     break;
+    //   default:
+    //     break;
+    // }
   },
   destroyed() {
     console.log("DESTROYED ITEM LIST");

@@ -15,6 +15,7 @@ export default class {
 
   // updates category storage with new category added to all categories array
   static updateCategories(categoryArray) {
+      console.log('UPDATE INDEXED DB CATEGORIES RUNS');
 
     // check if categories key exists
     DB.getItem(categoriesKey).then(() => {
@@ -22,7 +23,23 @@ export default class {
     }).catch((err) => {
 
       return {
-        error: true,
+        error: false,
+        message: 'item created successfully'
+      }
+    });
+
+  }
+
+  static updateNotes(notesArray) {
+    console.log('UPDATE INDEXED DB NOTES RUNS');
+    
+    // check if categories key exists
+    DB.getItem(notesKey).then(() => {
+      DB.setItem(notesKey, notesArray);
+    }).catch((err) => {
+
+      return {
+        error: false,
         message: 'item created successfully'
       }
     });
@@ -159,6 +176,42 @@ export default class {
     
    
     
+
+  }
+
+  static allNotes() {
+    // return 'test';
+    let notes;
+
+    return new Promise((resolve, reject) => {
+      DB.getItem(notesKey).then((item) => {
+        // console.log(item);
+        if (item === undefined || item.length == 0) {
+          notes = false;
+          console.log(item);
+
+          console.log('DFRTGRGRGBTBTD NOTES-----0');
+          reject(notes);
+
+        } else {
+          notes = item;
+          resolve(notes);
+        }
+
+      }).catch((err) => {
+        console.log(err);
+        console.log('DFRTGRGRGBTBTD NOTES-----');
+
+        notes = false;
+        reject(err);
+      })
+
+
+    });
+
+
+
+
 
   }
 

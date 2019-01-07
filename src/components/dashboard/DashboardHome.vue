@@ -2,16 +2,17 @@
   <div>
     <div class="row pt-0 bg-light">
       <div class="col-12 p-4 text-left">
-        <h3>Welcome to
+        <h3>
+          Welcome to
           <span class="text-success">mynotes</span>
         </h3>
         <p class="small">{{appDescription}}</p>
       </div>
     </div>
     <div class="row pr t-30 z-3">
-      <div class="col-12 col-sm-6 col-lg-4 p-2 d-flex flex-row flex-sm-column">
+      <div class="col-12 col-lg-4 p-2 d-flex flex-row flex-lg-column">
         <div
-          class="click-box create-category p-3 w-100 shadow-sm mb-3 bg-white"
+          class="click-box create-category p-3 w-100 shadow-sm mb-3 bg-white hvr-grow"
           v-for="(action, key) in actions[0]"
           :key="key"
           :data-action="key"
@@ -21,16 +22,28 @@
             <i :class="action.icon"></i>
           </h2>
           <h4 class="text-capitalize" :data-action="key">{{action.name}}</h4>
-          <p class="h3" :data-action="key">
+          <p class="h3 hvr-grow" :data-action="key">
             <i class="fas fa-plus-circle text-success" :data-action="key"></i>
           </p>
         </div>
       </div>
-      <div class="col-12 col-sm-6 col-lg-4 p-2">
-        <category-list :load="'categories'" :limit="5" :icon="'fas fa-folder'"></category-list>
+      <div class="col-12 col-lg-4 p-2">
+        <category-list
+          :load="'categories'"
+          :limit="5"
+          :icon="'fas fa-folder'"
+          :mutation-name="'deleteCategory'"
+		  :items="this.allCategories"
+        ></category-list>
       </div>
       <div class="col-12 col-sm-6 col-lg-4 p-2">
-        <note-list :load="'notes'" :limit="5" :icon="'far fa-file-alt'"></note-list>
+        <note-list
+          :load="'notes'"
+          :limit="5"
+          :icon="'far fa-file-alt'"
+          :mutation-name="'deleteNote'"
+		  :items="this.allNotes"
+        ></note-list>
       </div>
     </div>
   </div>
@@ -47,11 +60,12 @@ export default {
     "note-list": ItemList
   },
   computed: {
-    ...mapGetters(["appDescription", "modalID"])
+    ...mapGetters(["appDescription", "modalID", "allCategories", "allNotes"])
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.$store.commit("syncDatabase", { load: "categories" });
+	  vm.$store.commit("syncDatabase", {load: 'categories'});
+	  vm.$store.commit("syncDatabase", {load: 'notes'});
     });
   },
   data() {
@@ -116,7 +130,7 @@ export default {
 }
 
 .create-category {
-  @media screen and (max-width: 568px) {
+  @media screen and (max-width: 992px) {
     width: calc(100% / 3) !important;
 
     h2 {

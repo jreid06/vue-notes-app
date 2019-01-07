@@ -14,11 +14,11 @@ export default class {
 	}
 
 	static formatDate(timestamp){
-		let date = new Date(timestamp),
+		let date = new Date((timestamp)),
 			months = ['january','february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 
 		return {
-			day: date.getDay(),
+			day: date.getDate(),
 			month: months[date.getMonth()],
 			minutes: date.getMinutes(),
 			hours: date.getHours() < 10 ? `0${date.getHours()}` : date.getHours(),

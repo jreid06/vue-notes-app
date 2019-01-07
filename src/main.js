@@ -58,7 +58,7 @@ function storageAvailable(type) {
 }
 
 router.beforeEach((to, from, next) => {
-  if (store.getters.appStatus){    
+  if (store.getters.appStatus) {
     next();
     return;
   }
@@ -71,21 +71,37 @@ router.beforeEach((to, from, next) => {
     Storage.initStorage().then(() => {
 
       // get all categories for initial load
-      Storage.allCategories().then((res)=>{
-        
+      Storage.allCategories().then((res) => {
+
         // update store with saved categories
         store.commit('loadCategories', res);
 
         next();
         return;
-      }).catch((err)=>{
+      }).catch((err) => {
         console.log(err);
         // block entry to app as load failed
         console.log(err);
         next();
         return;
       })
-    
+
+      // get all categories for initial load
+      Storage.allNotes().then((res) => {
+
+        // update store with saved categories
+        store.commit('loadNotes', res);
+
+        next();
+        return;
+      }).catch((err) => {
+        console.log(err);
+        // block entry to app as load failed
+        console.log(err);
+        next();
+        return;
+      })
+
     });
   }
 

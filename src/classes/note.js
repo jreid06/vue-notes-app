@@ -1,10 +1,20 @@
+import Helpers from './helper'
+
+const Marked = require('marked');
+
 export default class {
  
 
-  constructor(title) {
+  constructor(title, brief, categoryID) {
     this.title = title;
-    this.status = this.returnDraft(),
-	  this.bookmarked = false;
+    this.brief = brief;
+    this.categoryID = categoryID;
+    this.status = this.returnDraft();
+    this.noteHTML = '';
+    this.noteMarkdown = '';
+    this.bookmarked = false;
+    this.key = this.key = Helpers.randomString();
+    this.createdAt = Date.now();
   }
 
   returnDraft() {

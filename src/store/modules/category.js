@@ -1,6 +1,11 @@
 // import { stat } from "fs";
 import store from './../../store'
-import Storage from './../../classes/LocalForageClass';
+import Storage from './../../classes/LocalForageClass'
+import Global from './../../Global'
+import 'babel-polyfill'
+
+const categoriesKey = Global.categoriesKey;
+const notesKey = Global.notesKey;
 
 const state = {
   categories: {
@@ -41,7 +46,8 @@ const mutations = {
   updateSelectedCategory(state, payload) {
     state.categories.selected = payload;
   },
-  updateAll(state, payload) {
+  updateAllCategories(state, payload) {
+    // push recently created item into the array
     state.categories.all.push(payload);
 
     // update storage
@@ -56,8 +62,6 @@ const mutations = {
 
     store.commit('initApp');
 
-    console.log(payload);
-
     if (!payload || payload.length < 1) {
       console.log('array is empty. no need to update');
       return;
@@ -66,22 +70,41 @@ const mutations = {
     console.log('UPDATE ALL CATEGORIES ARRAY');
     state.categories.all = payload;
   },
-  syncDatabase(state, payload){
-	switch (payload.load) {
-		case 'categories':
-			Storage.allCategories().then((res) =>{
-				// update the store with a fresh load
-				console.log('CATEGORY SYNC');
-				
-				console.log(res);
-				
-				state.categories.all = res;
-			})
-			break;
-	
-		default:
-			break;
-	}
+  syncDatabaseDeprecated(state) {
+    let keys = ['categories', 'notes'];
+
+    console.log(state);
+
+    if (element === 'categories') {
+      Storage.allCategories().then((res) => {
+        // update the store with a fresh load
+        console.log('CATEGORY SYNC');
+        console.log(res);
+        console.log(state);
+
+
+        state.categories.all = res;
+      }).catch((err) => {
+        console.log('NO DATA');
+        console.log(err);
+
+      })
+    }
+
+    if (element === 'notes') {
+      Storage.allNotes().then((res) => {
+        // update the store with a fresh load
+        console.log('NOTES SYNC');
+        console.log(res);
+
+        state.notes.all = res;
+      }).catch((err) => {
+        console.log('NO DATA');
+        console.log(err);
+
+      })
+    }
+
   }
 }
 

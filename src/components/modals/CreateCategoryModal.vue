@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" tabindex="-1" role="dialog" :id="id">
+  <div class="modal fade" tabindex="-1" role="dialog" :id="id">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header text-center">
@@ -203,7 +203,7 @@ export default {
 
       // update category array with new category
       // save in local storage
-      this.$store.commit('updateAll', category);
+      this.$store.commit('updateAllCategories', category);
       this.$store.commit('updateSelectedCategory', category);
       
       // // emit result to redirect via route
