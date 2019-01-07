@@ -6,6 +6,7 @@ export default class {
   constructor(category, description, colour) {
     this.category = category;
     this.description = description;
+    this.icon = 'fas fa-folder';
     this.colour = colour;
     this.notes = [];
     this.key = Helpers.randomString();

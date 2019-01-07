@@ -10,6 +10,7 @@ export default class {
     this.brief = brief;
     this.categoryID = categoryID;
     this.status = this.returnDraft();
+    this.icon = "far fa-file-alt";
     this.noteHTML = '';
     this.noteMarkdown = '';
     this.bookmarked = false;
