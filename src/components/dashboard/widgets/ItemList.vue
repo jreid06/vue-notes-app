@@ -6,8 +6,8 @@
         v-for="(n,i) in lastestData"
         :key="i"
       >
-        <div class="p-2 flex-fill h4" :style="{color: n.colour}">
-          <i :class="icon"></i>
+        <div class="p-2 flex-fill h4 text-left" :style="{color: n.colour}">
+          <i :class="n.icon"></i>
         </div>
 
         <template v-if="load === 'categories'">
@@ -43,7 +43,7 @@
               <i class="far fa-trash-alt" :data-id="n.key"></i>
             </li>
             <li class="list-inline-item text-info hvr-grow">
-              <i class="far fa-edit"></i>
+				<router-link :to="'/dashboard/'+ load +'/'+ n.key"> <i class="far fa-edit"></i></router-link>
             </li>
             <li class="list-inline-item hvr-grow">
               <i class="fas fa-ellipsis-h"></i>
