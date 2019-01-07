@@ -11,9 +11,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import Note from './../classes/note.js'
-import Helpers from './../classes/helper.js'
+import { mapGetters } from "vuex"
 
 export default {
   computed: {
