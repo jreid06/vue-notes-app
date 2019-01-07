@@ -20,7 +20,7 @@ export default class {
 		return {
 			day: date.getDate(),
 			month: months[date.getMonth()],
-			minutes: date.getMinutes(),
+			minutes: date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes(), ,
 			hours: date.getHours() < 10 ? `0${date.getHours()}` : date.getHours(),
 			year: date.getFullYear(),
 			prefix: date.getHours() < 12 ? 'am':'pm' 
