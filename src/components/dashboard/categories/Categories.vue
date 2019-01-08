@@ -14,7 +14,7 @@
             <div class="card-header border-0 bg-light" id="headingOne">
               <h2 class="mb-0">
                 <div
-                  class="w-100 all-cat-header"
+                  class="w-100 all-cat-header text-left"
                   data-toggle="collapse"
                   :data-target="`#collapse${i}`"
                   aria-expanded="true"
