@@ -188,6 +188,7 @@ export default {
       this.$store.commit('updateSelectedNote', note);
 
       // add note to correct category
+      this.$store.dispatch('addNoteToCategory', note);
       
       // // emit result to redirect via route
       this.$emit('change-route', `/dashboard/notes/${note.key}`);
