@@ -22,12 +22,7 @@ export default class {
 
   // setters
 
-  set initNotes(notes){
-    let $this = this;
-    notes.forEach(element => {
-      $this.notes.push(element);
-    });
-  }
+  
 
   // getters
 }
