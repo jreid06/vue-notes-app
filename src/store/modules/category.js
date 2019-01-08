@@ -24,15 +24,20 @@ const getters = {
     return state.categories.all;
   },
   getCategory: (state) => (id) => {
-    let cat = '';
+	  console.log('GET CATEGORYIES RUNS');
+	  
+	let cat = '',
+		index = '';
+		console.log(id);
+		
     state.categories.all.find((element, i) => {
       if (element.key === id) {
-        //  cat = i;
+        index = i;
         cat = element;
       }
     });
 
-    return cat;
+    return {cat, index};
   }
 }
 
@@ -52,6 +57,15 @@ const mutations = {
     state.categories.all.splice(cat, 1);
 
     // update storage
+    Storage.updateCategories(state.categories.all);
+  },
+  addNoteToCategory(state, {note, getters}) {	
+	let cat = getters.getCategory(note.categoryID);
+	
+	// push note into the selected categories notes array
+	cat.cat.notes.push(note);
+	
+    // // update storage
     Storage.updateCategories(state.categories.all);
   },
   updateSelectedCategory(state, payload) {
@@ -120,7 +134,12 @@ const mutations = {
 }
 
 const actions = {
+  addNoteToCategory({commit, getters}, note) {
+    commit('addNoteToCategory',{note, getters})
 
+    // // update storage
+    // Storage.updateCategories(state.categories.all);
+  },
 }
 
 export default {
