@@ -31,7 +31,7 @@ export default {
     getSelectedCategory() {
 		let catKey = this.$route.params.catid;
 		
-		this.category = this.getCategory(catKey);		
+		this.category = this.getCategory(catKey).cat;		
 	}
   },
   mounted(){
