@@ -21,17 +21,7 @@
           </div>
         </template>
         <div class="p-2 flex-fill">
-          <p>
-            {{helpers.formatDate(n.createdAt).day}}
-            {{helpers.formatDate(n.createdAt).month}}
-            &nbsp;&bull;&nbsp;
-            {{helpers.formatDate(n.createdAt).hours}}:{{helpers.formatDate(n.createdAt).minutes}}
-            <span
-              class="small text-lowercase"
-            >{{helpers.formatDate(n.createdAt).prefix}}</span>
-            &nbsp;&bull;&nbsp;
-            {{helpers.formatDate(n.createdAt).year}}
-          </p>
+          <p v-html="helpers.formatDate(n.createdAt).readableDate"> </p>
         </div>
         <div class="p-2 flex-fill bg-light">
           <ul class="list-inline">
