@@ -50,6 +50,7 @@ export default {
 @import url("https://fonts.googleapis.com/css?family=Passion+One:400,700");
 @import "./../node_modules/bootstrap/scss/bootstrap.scss";
 @import "./../node_modules/hover.css/scss/hover.scss";
+@import './../node_modules/simplemde/dist/simplemde.min.css';
 
 #app {
   font-family: "Passion One", cursive;
