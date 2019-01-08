@@ -1,6 +1,13 @@
 <template>
 	<div>
-		<p v-for="n in 3" :key="n" class="pb-2"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Esse deleniti blanditiis reprehenderit, laudantium sapiente amet maxime sunt nam placeat cupiditate expedita consectetur quis officia dicta vero earum laboriosam dolor perferendis?</p>
+		<div class="row pt-0 bg-light">
+			<div class="col-12 p-4 text-left">
+        		<h3>
+          		<span class="text-success text-capitalize">{{category.category}}</span>
+        		</h3>
+        		<p class="small">{{category.description}}</p>
+			</div>
+      	</div>
 	</div>
 </template>
 <script>
@@ -15,14 +22,11 @@ export default {
   computed: {
     ...mapGetters(["selectedCategory", "getCategory"])
   },
-//   beforeRouteEnter(to, from, next){
-// 	  console.log('BEFORE ROUTE ENTER');
-	  
-// 	  next(vm=>{
-//   console.log('BEFORE ROUTE ENTER NEXT');
-// 		   vm.getSelectedCategory();
-// 	  })
-//   },
+  beforeRouteEnter(to, from, next){
+	  next(vm=>{
+		   vm.getSelectedCategory();
+	  })
+  },
   methods: {
     getSelectedCategory() {
 		let catKey = this.$route.params.catid;
