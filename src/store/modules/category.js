@@ -24,12 +24,12 @@ const getters = {
     return state.categories.all;
   },
   getCategory: (state) => (id) => {
-	  console.log('GET CATEGORYIES RUNS');
-	  
-	let cat = '',
-		index = '';
-		console.log(id);
-		
+    console.log('GET CATEGORYIES RUNS');
+
+    let cat = '',
+      index = '';
+    console.log(id);
+
     state.categories.all.find((element, i) => {
       if (element.key === id) {
         index = i;
@@ -37,7 +37,10 @@ const getters = {
       }
     });
 
-    return {cat, index};
+    return {
+      cat,
+      index
+    };
   }
 }
 
@@ -53,23 +56,56 @@ const mutations = {
       return;
     });
 
+    console.log(cat);
+    console.log(payload);
+
+
     // delete the category
     state.categories.all.splice(cat, 1);
 
     // update storage
     Storage.updateCategories(state.categories.all);
   },
-  addNoteToCategory(state, {note, getters}) {	
-	let cat = getters.getCategory(note.categoryID);
-	
-	// push note into the selected categories notes array
-	cat.cat.notes.push(note);
-	
+  deleteCategoryNote(state, payload) {
+    let cat = store.getters.getCategory(payload.categoryID),
+      note;
+
+    state.categories.all[cat.index].notes.find((el, i) => {
+      if (el.key === payload.key) {
+        note = i;
+        return;
+      }
+    })
+
+    state.categories.all[cat.index].notes.splice(note, 1);
+
+    //
+    Storage.updateCategories(state.categories.all);
+
+  },
+  addNoteToCategory(state, {
+    note,
+    getters
+  }) {
+    let cat = getters.getCategory(note.categoryID);
+
+    // push note into the selected categories notes array
+    cat.cat.notes.push(note);
+
     // // update storage
     Storage.updateCategories(state.categories.all);
   },
   updateSelectedCategory(state, payload) {
     state.categories.selected = payload;
+  },
+  updateEditedCategory(state, payload) {
+    let cat = store.getters.getCategory(payload.key);
+
+    // overwrite old category data with the new data
+    state.categories.all[cat.index] = payload;
+
+    // // update storage
+    Storage.updateCategories(state.categories.all);
   },
   updateAllCategories(state, payload) {
     // push recently created item into the array
@@ -134,11 +170,14 @@ const mutations = {
 }
 
 const actions = {
-  addNoteToCategory({commit, getters}, note) {
-    commit('addNoteToCategory',{note, getters})
-
-    // // update storage
-    // Storage.updateCategories(state.categories.all);
+  addNoteToCategory({
+    commit,
+    getters
+  }, note) {
+    commit('addNoteToCategory', {
+      note,
+      getters
+    })
   },
 }
 

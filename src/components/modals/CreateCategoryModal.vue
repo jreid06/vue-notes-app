@@ -4,7 +4,8 @@
       <div class="modal-content">
         <div class="modal-header text-center">
           <h5 class="modal-title">
-            Create
+            <span v-if="action === 'edit'">Edit</span>
+            <span v-else>Create</span>
             <span class="text-success">Category</span>
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -15,7 +16,10 @@
           <form>
             <div class="form-row">
               <div class="col-12 pb-3" v-if="error">
-                <div class="alert alert-danger alert-dismissible fade show text-capitalize" role="alert">
+                <div
+                  class="alert alert-danger alert-dismissible fade show text-capitalize"
+                  role="alert"
+                >
                   <button
                     type="button"
                     class="close"
@@ -68,7 +72,16 @@
           <button type="button" class="btn text-danger" data-dismiss="modal">
             <i class="far fa-times-circle"></i>
           </button>
-          <button type="button" class="btn text-success" @click="createCategory">
+          <button
+            type="button"
+            class="btn text-success"
+            @click="createCategory"
+            v-if="action === 'create'"
+          >
+            <i class="fas fa-check"></i>
+          </button>
+          
+          <button type="button" class="btn text-success" @click="updateCategory" v-else>
             <i class="fas fa-check"></i>
           </button>
         </div>
@@ -77,13 +90,13 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex"
-import Category from "./../../classes/category"
-import Storage from "./../../classes/LocalStorage"
-import HelperMixin from "./../../mixins/helpers.js"
+import { mapGetters } from "vuex";
+import { mapMutations } from "vuex";
+import Category from "./../../classes/category";
+import Storage from "./../../classes/LocalStorage";
+import HelperMixin from "./../../mixins/helpers.js";
 
-const Joi = require("joi-browser");
-const $ = require('jquery');
+const $ = require("jquery");
 
 export default {
   mixins: [HelperMixin],
@@ -94,7 +107,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["colorPalette", "modalID"]),
+    ...mapGetters(["colorPalette", "modalID", "editStatus", "getItemToEdit"]),
     categoryDetails() {
       return this.category;
     }
@@ -102,17 +115,19 @@ export default {
   data() {
     return {
       error: false,
+      action: "create",
       category: {
         title: "",
         description: "",
-        color: ""
+        colour: ""
       },
       colors: this.$store.getters.colorPalette
     };
   },
   methods: {
+    ...mapMutations(["resetColourPalette", "updateEditItem"]),
     updateColor(color) {
-      this.category.color = color;
+      this.category.colour = color;
     },
     updateErrorMessage(key) {
       let message = "";
@@ -146,11 +161,28 @@ export default {
         if (el.selected) el.selected = false;
       });
 
+      console.log(pos);
+      
       this.colors[pos].selected = true;
       this.updateColor(this.colors[pos].styleObj.backgroundColor);
     },
-    defaultDescription(){
-      this.category.description = '...';
+    setEditColor(editColour) {
+      let pos;
+
+      this.colors.find((el, i) => {
+        if (editColour === el.styleObj.backgroundColor) {
+          pos = i;
+          return;
+        }
+      });
+
+      const vm = this;
+      if (pos != null || pos != "undefined") {
+        vm.updateSelectedColor(pos);
+      }
+    },
+    defaultDescription() {
+      this.category.description = "...";
     },
     changeColor(e) {
       let target = e.target,
@@ -158,38 +190,10 @@ export default {
 
       this.updateSelectedColor(pos);
     },
-    categorySchema() {
-      const schema = Joi.object().keys({
-        title: Joi.string()
-          .min(3)
-          .max(35),
-        description: Joi.string()
-          .min(0)
-          .max(255),
-        color: Joi.string().max(8)
-      });
-
-      return schema;
-    },
-    validateCategory() {
-      const vm = this;
-      let schema = this.categorySchema();
-
-      vm.categoryDetails.description ? vm.categoryDetails.description : vm.defaultDescription();
-
-      return Joi.validate(
-        {
-          title: vm.categoryDetails.title,
-          description: vm.categoryDetails.description,
-          color: vm.categoryDetails.color
-        },
-        schema
-      );
-    },
     createCategory() {
       const vm = this;
       let valid = this.validateCategory(),
-          category = '';
+        category = "";
 
       if (valid.error !== null) {
         vm.error = true;
@@ -198,22 +202,82 @@ export default {
       }
 
       // instantiate a new category
-      category = new Category(vm.categoryDetails.title, vm.categoryDetails.description, vm.categoryDetails.color);
+      category = new Category(
+        vm.categoryDetails.title,
+        vm.categoryDetails.description,
+        vm.categoryDetails.colour,
+        vm.randomString()
+      );
 
       // update category array with new category
       // save in local storage
-      this.$store.commit('updateAllCategories', category);
-      this.$store.commit('updateSelectedCategory', category);
-      
+      this.$store.commit("updateAllCategories", category);
+      this.$store.commit("updateSelectedCategory", category);
+
       // // emit result to redirect via route
-      this.$emit('change-route', `/dashboard/categories/${category.key}`);
+      this.$emit("change-route", `/dashboard/categories/${category.key}`);
 
       // close modal
-      $(`#${this.modalID('category')}`).modal('hide');
+      $(`#${this.modalID("category")}`).modal("hide");
+    },
+    updateCategory() {
+      let { title, description, colour } = this.categoryDetails;
+      this.updateEditItem({ title, description, colour });
+
+       // // emit result to update the selected category
+      this.$emit("update-selected", `reload`);
+
+       // close modal
+      $(`#${this.modalID("category")}`).modal("hide");
     },
     toggleError() {
       this.error = false;
+    },
+    resetData() {
+      const vm = this;
+      for (const key in vm.categoryDetails) {
+        if (vm.categoryDetails.hasOwnProperty(key)) {
+          vm.category[key] = "";
+        }
+      }
+
+      this.resetColourPalette();
+      this.toggleError();
+    },
+    resetEdit() {
+      this.action = "create";
+
+      this.$store.dispatch("resetEditObjAction");
     }
+  },
+  mounted() {
+    const vm = this;
+    console.log("CATEGORY MODAL MOUNTED");
+    $(`#${this.modalID("category")}`).on("show.bs.modal", function(e) {
+      if (vm.editStatus) {
+        vm.action = "edit";
+        var { colour, title, description, key } = vm.getItemToEdit;
+
+        console.log({colour, title, description, key});
+        // return;
+        
+
+        vm.category.title = title;
+        vm.category.description = description;
+        vm.setEditColor(colour);
+      }
+    });
+
+    $(`#${this.modalID("category")}`).on("hidden.bs.modal", function(e) {
+      vm.resetData();
+
+      if (vm.editStatus) {
+        vm.resetEdit();
+      }
+    });
+  },
+  beforeDestroy() {
+    console.log("CATEGORY MODAL DESTROYED");
   }
 };
 </script>

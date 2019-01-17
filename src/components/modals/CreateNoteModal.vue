@@ -50,12 +50,12 @@
               <div class="col-12 pb-2">
                 <div class="input-group mb-3">
                   <select class="custom-select" id="inputGroupSelect02" v-model="note.catID">
-                    <option selected>Choose...</option>
+                    <option value="n/a" selected>Choose...</option>
                     <option
                       :value="category.key"
                       v-for="(category, i) in allCategories"
                       :key="i"
-                    >{{category.category}}</option>
+                    >{{category.title}}</option>
                   </select>
                   <div class="input-group-append">
                     <label class="input-group-text" for="inputGroupSelect02">Options</label>
@@ -80,9 +80,9 @@
 <script>
 import { mapGetters } from "vuex";
 import Note from "./../../classes/note.js";
-import HelperMixin from "./../../mixins/helpers.js"
+import HelperMixin from "./../../mixins/helpers.js";
 
-const $ = require('jquery');
+const $ = require("jquery");
 const Joi = require("joi-browser");
 
 export default {
@@ -94,13 +94,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['allCategories', 'modalID']),
+    ...mapGetters(["allCategories", "modalID"]),
     noteDetails() {
       return this.note;
     }
   },
   data() {
     return {
+      action: 'create',
       note: {
         title: "",
         brief: "",
@@ -111,33 +112,6 @@ export default {
     };
   },
   methods: {
-    noteSchema() {
-      const schema = Joi.object().keys({
-        title: Joi.string()
-          .min(3)
-          .max(35),
-        brief: Joi.string()
-          .min(0)
-          .max(255),
-        catID: Joi.string()
-      });
-
-      return schema;
-    },
-    validateNote() {
-      let schema = this.noteSchema();
-
-     const vm = this;
-
-      return Joi.validate(
-        {
-          title: vm.noteDetails.title,
-          brief: vm.noteDetails.brief ? vm.noteDetails.brief : '...',
-          catID: vm.noteDetails.catID
-        },
-        schema
-      );
-    },
     updateErrorMessage(key) {
       let message = "";
 
@@ -168,7 +142,7 @@ export default {
     createNote() {
       const vm = this;
       let valid = this.validateNote(),
-          note = '';
+        note = "";
 
       if (valid.error !== null) {
         vm.error = true;
@@ -178,26 +152,46 @@ export default {
       }
 
       // instantiate a new note
-      note = new Note(vm.noteDetails.title, vm.noteDetails.brief, vm.noteDetails.catID);
+      note = new Note(
+        vm.noteDetails.title,
+        vm.noteDetails.brief,
+        vm.noteDetails.catID,
+        vm.randomString()
+      );
 
       console.log(note);
-      
+
       // update category array with new category
       // save in local storage
-      this.$store.commit('updateAllNotes', note);
-      this.$store.commit('updateSelectedNote', note);
+      this.$store.commit("updateAllNotes", note);
+      this.$store.commit("updateSelectedNote", note);
 
       // add note to correct category
-      this.$store.dispatch('addNoteToCategory', note);
-      
+      this.$store.dispatch("addNoteToCategory", note);
+
       // // emit result to redirect via route
-      this.$emit('change-route', `/dashboard/notes/${note.key}`);
+      this.$emit("change-route", `/dashboard/notes/${note.key}`);
 
       // close modal
-      $(`#${this.modalID('note')}`).modal('hide');
+      $(`#${this.modalID("note")}`).modal("hide");
     },
     toggleError() {
       this.error = false;
+    },
+    resetData() {
+      const vm = this;
+      for (const key in vm.noteDetails) {
+        if (vm.noteDetails.hasOwnProperty(key)) {
+          vm.note[key] = "";
+        }
+      }
+
+      // this.resetColourPalette();
+    },
+    resetEdit() {
+      this.action = "create";
+
+      this.$store.dispatch("resetEditObjAction");
     }
   }
 };

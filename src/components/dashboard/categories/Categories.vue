@@ -9,30 +9,44 @@
       </div>
       <div class="col-12 p-4">
         <div class="accordion bg-light" id="accordionExample" v-if="this.categories.length">
-          <div class="card border-0" v-for="(n,i) in latestCategories"
-            :key="i">
+          <div class="card border-0" v-for="(n,i) in latestCategories" :key="i">
             <div class="card-header border-0 bg-light" id="headingOne">
               <h2 class="mb-0">
                 <div
-                  class="w-100 all-cat-header text-left"
+                  class="w-100 all-cat-header text-left d-flex flex-no-wrap"
                   data-toggle="collapse"
                   :data-target="`#collapse${i}`"
                   aria-expanded="true"
                   :aria-controls="`#collapse${i}`"
-                >{{n.category}}</div>
+                >
+                  <div class="p-2 flex-fill text-capitalize">{{n.title}}</div>
+                  <div class="py-2 px-4 flex-shrink text-right">
+                    <router-link :to="$route.path+'/'+n.key" :style="{color: n.colour}">
+                      <i class="fas fa-folder"></i>
+                    </router-link>
+                  </div>
+                  <div class="p-2 flex-shrink text-right">
+                    <i class="fas fa-chevron-down"></i>
+                  </div>
+                </div>
               </h2>
             </div>
 
             <div
               :id="`collapse${i}`"
               class="collapse"
-			  :class="n < 1 ? 'show' : ''"
+              :class="n < 1 ? 'show' : ''"
               aria-labelledby="headingOne"
               data-parent="#accordionExample"
             >
-              <div
-                class="card-body"
-              >Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
+              <div class="card-body">
+                <ul>
+                  <li v-for="(note, i) in n.notes" :key="i">
+                    {{note.title}}
+                    <hr>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -83,7 +97,7 @@
               </ul>
             </div>
           </li>
-        </ul> -->
+        </ul>-->
       </div>
     </div>
   </div>
@@ -102,7 +116,7 @@ export default {
   computed: {
     ...mapGetters(["allCategories"]),
     latestCategories() {
-      return this.categories.sort(function(a, b) {
+      return this.allCategories.sort(function(a, b) {
         return b.createdAt - a.createdAt;
       });
     }
@@ -115,8 +129,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.all-cat-header{
-	cursor: pointer;
-	// background-color: 
+.all-cat-header {
+  cursor: pointer;
+  // background-color:
 }
 </style>

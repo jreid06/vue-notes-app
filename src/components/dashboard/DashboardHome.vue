@@ -33,7 +33,7 @@
           :limit="5"
           :icon="'fas fa-folder'"
           :mutation-name="'deleteCategory'"
-		  :items="this.allCategories"
+          :items="this.allCategories"
         ></category-list>
       </div>
       <div class="col-12 col-sm-6 col-lg-4 p-2">
@@ -42,10 +42,12 @@
           :limit="5"
           :icon="'far fa-file-alt'"
           :mutation-name="'deleteNote'"
-		  :items="this.allNotes"
+          :items="this.allNotes"
         ></note-list>
       </div>
     </div>
+    <category-modal :id="modalID('category')" v-on:change-route="redirectTo"></category-modal>
+    <note-modal :id="modalID('note')"></note-modal>
   </div>
 </template>
 <script>
@@ -53,21 +55,28 @@ const $ = require("jquery");
 
 import { mapGetters } from "vuex";
 import ItemList from "./widgets/ItemList.vue";
+import HelperMixin from './../../mixins/helpers.js';
+import CategoryModal from './../modals/CreateCategoryModal.vue'
+import NoteModal from "./../modals/CreateNoteModal.vue";
+
 
 export default {
+  mixins: [HelperMixin],
   components: {
     "category-list": ItemList,
-    "note-list": ItemList
+    "note-list": ItemList,
+    "category-modal": CategoryModal,
+    "note-modal": NoteModal
   },
   computed: {
     ...mapGetters(["appDescription", "modalID", "allCategories", "allNotes"])
   },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-	  vm.$store.commit("syncDatabase", {load: 'categories'});
-	  vm.$store.commit("syncDatabase", {load: 'notes'});
-    });
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   next(vm => {
+  //     vm.$store.commit("syncDatabase", { load: "categories" });
+  //     vm.$store.commit("syncDatabase", { load: "notes" });
+  //   });
+  // },
   data() {
     return {
       actions: [
@@ -92,35 +101,7 @@ export default {
     };
   },
   methods: {
-    triggerModal(e) {
-      const vm = this;
-
-      let target = e.target,
-        action = target.hasAttribute("data-action")
-          ? target.attributes["data-action"].value
-          : target.parentElement.attributes["data-action"].value;
-
-      switch (action) {
-        case "note":
-          console.log("note modal");
-          $(`#${vm.modalID(action)}`).modal();
-          return;
-          break;
-        case "category":
-          console.log("category modal");
-          $(`#${vm.modalID(action)}`).modal();
-          return;
-          break;
-        case "load":
-          console.log("load note modal");
-          $(`#${vm.modalID(action)}`).modal();
-          return;
-          break;
-      }
-
-      console.log("action");
-      console.log(action);
-    }
+   
   }
 };
 </script>

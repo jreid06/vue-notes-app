@@ -10,30 +10,34 @@
           <i :class="n.icon"></i>
         </div>
 
-        <template v-if="load === 'categories'">
-          <div class="p-2 flex-fill">
-            <p>{{n.category}}</p>
-          </div>
-        </template>
-        <template v-if="load === 'notes'">
-          <div class="p-2 flex-fill">
-            <p>{{n.title}}</p>
-          </div>
-        </template>
         <div class="p-2 flex-fill">
-          <p v-html="helpers.formatDate(n.createdAt).readableDate"> </p>
+          <p>
+            {{n.title}} 
+            <span class="text-danger" v-if="load === 'notes'"> - CatID: {{n.categoryID}}</span>
+          </p>
+        </div>
+        <div class="p-2 flex-fill">
+          <p v-html="formatDate(n.createdAt).readableDate"></p>
+        </div>
+        <div class="p-2 flex-fill">
+          <p>{{n.key}}</p>
         </div>
         <div class="p-2 flex-fill bg-light">
           <ul class="list-inline">
             <li
               class="list-inline-item text-danger hvr-grow"
               :data-id="n.key"
-              @click="quickDeleteItem"
+              :data-item="JSON.stringify(n)"
+              :data-type="load"
+              data-action="delete"
+              @click="triggerModal"
             >
               <i class="far fa-trash-alt" :data-id="n.key"></i>
             </li>
             <li class="list-inline-item text-info hvr-grow">
-				<router-link :to="'/dashboard/'+ load +'/'+ n.key"> <i class="far fa-edit"></i></router-link>
+              <router-link :to="'/dashboard/'+ load +'/'+ n.key">
+                <i class="far fa-edit"></i>
+              </router-link>
             </li>
             <li class="list-inline-item hvr-grow">
               <i class="fas fa-ellipsis-h"></i>
@@ -72,13 +76,12 @@ export default {
     mutationName: {
       type: String,
       required: true
-	},
-	items: {
-	  type: Array
-	}
+    },
+    items: {
+      type: Array
+    }
   },
-  watch: {
-  },
+  watch: {},
   computed: {
     ...mapGetters(["allCategories", "allNotes"]),
     lastestData() {
@@ -105,7 +108,7 @@ export default {
   data() {
     return {
       loading: true,
-      listData: this.items 
+      listData: this.items
     };
   },
   methods: {
@@ -121,20 +124,19 @@ export default {
     },
     // called from the create modals
     updateData(getter) {
-	  const vm = this;
-	  console.log(getter);
-	  
+      const vm = this;
+      console.log(getter);
+
       switch (getter) {
-		case "categories":
-			console.log('categories list data updated');
-			console.log(this.$store.getters.allCategories);
+        case "categories":
+          console.log("categories list data updated");
+          console.log(this.$store.getters.allCategories);
           vm.listData = this.$store.getters.allCategories;
           break;
-		case "notes":
-			console.log('notes list data updated');
-			console.log(this.$store.getters.allNotes);
-			
-			
+        case "notes":
+          console.log("notes list data updated");
+          console.log(this.$store.getters.allNotes);
+
           vm.listData = this.$store.getters.allNotes;
           break;
         default:
@@ -149,10 +151,10 @@ export default {
     //   case "categories":
     //     vm.updateData(vm.load);
     //     break;
-	//   case "notes":
-	//   console.log('update LOAD NOTES');
-	  
-	// 	vm.updateData(vm.load);
+    //   case "notes":
+    //   console.log('update LOAD NOTES');
+
+    // 	vm.updateData(vm.load);
     //     break;
     //   default:
     //     break;

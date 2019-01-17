@@ -59,6 +59,12 @@ function storageAvailable(type) {
 
 router.beforeEach((to, from, next) => {
   if (store.getters.appStatus) {
+    store.commit("syncDatabase", {
+      load: "categories"
+    });
+    store.commit("syncDatabase", {
+      load: "notes"
+    });
     next();
     return;
   }

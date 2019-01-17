@@ -3,13 +3,14 @@ import Helpers from './helper'
 export default class {
   //
 
-  constructor(category, description, colour) {
-    this.category = category;
+  constructor(title, description, colour, key) {
+    this.type = 'categories',
+    this.title = title;
     this.description = description;
     this.icon = 'fas fa-folder';
     this.colour = colour;
     this.notes = [];
-    this.key = Helpers.randomString();
+    this.key = key;
     this.createdAt = Date.now();
   }
 

@@ -3,10 +3,10 @@ import Helpers from './helper'
 const Marked = require('marked');
 
 export default class {
- 
 
-  constructor(title, brief, categoryID) {
-    this.title = title;
+  constructor(title, brief, categoryID, key) {
+    this.type = 'note',
+      this.title = title;
     this.brief = brief;
     this.categoryID = categoryID;
     this.status = this.returnDraft();
@@ -14,7 +14,7 @@ export default class {
     this.noteHTML = '';
     this.noteMarkdown = '';
     this.bookmarked = false;
-    this.key = this.key = Helpers.randomString();
+    this.key = key;
     this.createdAt = Date.now();
   }
 
@@ -23,7 +23,7 @@ export default class {
   }
 
   toggleBookmark(status) {
-	this.bookmarked = status;
+    this.bookmarked = status;
   }
 
   // setters
@@ -32,8 +32,8 @@ export default class {
     this.status = status;
   }
 
-  set updateBookmark(status){
-	  this.toggleBookmark(status);
+  set updateBookmark(status) {
+    this.toggleBookmark(status);
   }
 
   // getters

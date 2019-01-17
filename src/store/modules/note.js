@@ -7,16 +7,39 @@ const state = {
     loaded: false,
     selected: '',
     all: [],
-    bookmarked: []
+    bookmarked: [],
+    toDelete: []
   }
 }
 
 const getters = {
+   selectedNoteItem: state => {
+     return state.notes.selected;
+   },
   currentNotes: state => {
     return state.notes.selected;
   },
-  allNotes: state =>  {
-    	return state.notes.all;
+  allNotes: state => {
+    return state.notes.all;
+  },
+  getNote: (state) => (id) => {
+    console.log('GET NOTE RUNS');
+
+    let note = '',
+      index = '';
+    console.log(id);
+
+    state.notes.all.find((element, i) => {
+      if (element.key === id) {
+        index = i;
+        note = element;
+      }
+    });
+
+    return {
+      note,
+      index
+    };
   }
 }
 
@@ -39,6 +62,25 @@ const mutations = {
     // update storage
     Storage.updateNotes(state.notes.all);
   },
+  deleteRelatedNotes(state, payload) {
+    let itemCount = 0;
+
+    for (let i = 0; i < state.notes.all.length; i++) {
+      let el = state.notes.all[i];
+      if (el.categoryID === payload) {
+        itemCount += 1;
+        state.notes.all.splice(i, 1);
+
+        // this accounts for the deleted item
+        i -= 1;
+      }
+
+    }
+
+    // update storage
+    Storage.updateNotes(state.notes.all);
+
+  },
   updateSelectedNote(state, payload) {
     state.notes.selected = payload;
   },
@@ -56,7 +98,10 @@ const mutations = {
       return;
     }
 
-    store.commit('initApp');
+    if (!store.getters.appStatus) {
+      store.commit('initApp');
+    }
+
 
     if (!payload || payload.length < 1) {
       console.log('array is empty. no need to update');

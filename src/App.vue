@@ -4,9 +4,8 @@
       <router-view></router-view>
     </div>
 
-    <note-modal :id="modalID('note')"></note-modal>
-    <category-modal :id="modalID('category')" v-on:change-route="redirectTo"></category-modal>
     <load-modal :id="modalID('load')"></load-modal>
+    <confirm-delete :id="modalID('delete')"></confirm-delete>
   </div>
 </template>
 
@@ -14,6 +13,7 @@
 import NoteModal from "./components/modals/CreateNoteModal.vue";
 import CatModal from "./components/modals/CreateCategoryModal.vue";
 import LoadModal from './components/modals/LoadNoteModal.vue';
+import DeleteItemModal from './components/modals/ConfirmDelete';
 
 import { mapGetters } from "vuex";
 
@@ -22,7 +22,8 @@ export default {
   components: {
     "note-modal": NoteModal,
     "category-modal": CatModal,
-    "load-modal": LoadModal
+    "load-modal": LoadModal,
+    "confirm-delete": DeleteItemModal
   },
   computed: {
     ...mapGetters(["modalID"])
@@ -33,11 +34,7 @@ export default {
     };
   },
   methods: {
-    redirectTo(route){
-			console.log('REDIRECT TO RUNS');
-			
-			console.log(route);
-		}
+   
   },
   mounted(){
   
@@ -59,6 +56,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   // margin-top: 60px;
+}
+
+.pointer{
+  cursor: pointer !important;
 }
 
 .app-body {

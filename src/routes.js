@@ -5,6 +5,7 @@ import DashboardHome from './components/dashboard/DashboardHome.vue'
 import Categories from './components/dashboard/categories/Categories.vue'
 import Category from './components/dashboard/categories/Category.vue'
 import Notes from './components/dashboard/notes/Notes.vue'
+import Note from './components/dashboard/notes/Note.vue'
 import Settings from './components/dashboard/settings/Settings.vue'
 
 export const routes = [{
@@ -18,13 +19,6 @@ export const routes = [{
     children: [{
         path: 'home',
         component: DashboardHome
-      },
-      {
-        path: 'notes',
-        component: Notes,
-        children: [{
-          path: ':noteid'
-        }]
       },
       {
         path: 'settings',
@@ -44,6 +38,19 @@ export const routes = [{
       {
         path: ':catid',
         component: Category
+      }
+    ]
+  },
+  {
+    path: '/dashboard/notes',
+    component: Dashboard,
+    children: [{
+        path: '',
+        component: Notes
+      },
+      {
+        path: ':noteid',
+        component: Note
       }
     ]
   },

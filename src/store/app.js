@@ -1,4 +1,5 @@
 import Storage from './../classes/LocalForageClass'
+import store from '.';
 
 const state = {
   app: {
@@ -8,10 +9,20 @@ const state = {
     description: 'Your personal note tracker. Keep all your ideas in one place',
     init: false
   },
+  delete: {
+    status: false,
+    item: ''
+  },
+  edit: {
+    status: false,
+    item: ''
+  },
   modal: {
     note: 'note-modal',
     category: 'category-modal',
-    load: 'load-modal'
+    load: 'load-modal',
+    delete: 'delete-item-modal',
+    edit: 'edit-item-modal'
   },
   settings: {
     profile: {
@@ -27,7 +38,7 @@ const state = {
         },
         selected: false,
         selectedStyles: {
-			backgroundColor: '#f2f2f2',
+          backgroundColor: '#f2f2f2',
           border: '2px solid #f2f2f2',
           boxShadow: '0px 2px 2px #f2f2f2'
         },
@@ -39,7 +50,7 @@ const state = {
         },
         selected: false,
         selectedStyles: {
-			backgroundColor: '#fc5555',
+          backgroundColor: '#fc5555',
           border: '2px solid #fc5555',
           boxShadow: '0px 2px 2px #fc5555'
         },
@@ -51,7 +62,7 @@ const state = {
         },
         selected: false,
         selectedStyles: {
-			backgroundColor: '#fd9827',
+          backgroundColor: '#fd9827',
           border: '2px solid #fd9827',
           boxShadow: '0px 2px 2px #fd9827'
         },
@@ -63,7 +74,7 @@ const state = {
         },
         selected: false,
         selectedStyles: {
-			    backgroundColor: '#ccb50c',
+          backgroundColor: '#ccb50c',
           border: '2px solid #ccb50c',
           boxShadow: '0px 2px 2px #ccb50c'
         },
@@ -75,7 +86,7 @@ const state = {
         },
         selected: false,
         selectedStyles: {
-			backgroundColor: '#151db2',
+          backgroundColor: '#151db2',
           border: '2px solid #151db2',
           boxShadow: '0px 2px 2px #151db2'
         },
@@ -87,7 +98,7 @@ const state = {
         },
         selected: false,
         selectedStyles: {
-			backgroundColor: '#28a745',
+          backgroundColor: '#28a745',
           border: '2px solid #28a745',
           boxShadow: '0px 2px 2px #28a745'
         },
@@ -99,7 +110,7 @@ const state = {
         },
         selected: false,
         selectedStyles: {
-			 backgroundColor: '#222',
+          backgroundColor: '#222',
           border: '2px solid #222',
           boxShadow: '0px 2px 2px #222'
         },
@@ -111,7 +122,7 @@ const state = {
         },
         selected: false,
         selectedStyles: {
-		backgroundColor: '#3A9CED',
+          backgroundColor: '#3A9CED',
           border: '2px solid #3A9CED',
           boxShadow: '0px 2px 2px #3A9CED'
         },
@@ -125,7 +136,7 @@ const getters = {
   appName: state => {
     return state.app.name;
   },
-  appStatus: state=>{
+  appStatus: state => {
     return state.app.init;
   },
   orientationSet: state => {
@@ -139,15 +150,33 @@ const getters = {
   },
   colorPalette: state => {
     return state.settings.colorPalette;
+  },
+  getItemToDelete: state => {
+    return state.delete.item;
+  },
+  editStatus: state => {
+    return state.edit.status;
+  },
+  getItemToEdit: state => {
+    return state.edit.item;
   }
 }
 
 const actions = {
-
+  resetDeleteObjAction({
+    commit
+  }) {
+    commit('resetDeleteObj');
+  },
+  resetEditObjAction({
+    commit
+  }) {
+    commit('resetEditObj');
+  },
 }
 
 const mutations = {
-  initApp(state){
+  initApp(state) {
     !state.app.init ? state.app.init = true : '';
   },
   updateOrientation(state, payload) {
@@ -155,6 +184,63 @@ const mutations = {
   },
   addColour(state, payload) {
     // validate hex code
+  },
+  itemToDelete(state, payload) {
+    state.delete.status = true;
+    state.delete.item = payload;
+  },
+  resetDeleteObj(state) {
+    state.delete.status = false;
+    state.delete.item = '';
+  },
+  itemToEdit(state, payload) {
+    state.edit.status = true;
+    state.edit.item = payload;
+  },
+  updateEditItem(state, payload){
+    let item = state.edit.item;
+
+    console.log('UPDATE EDIT ITEM ');
+    
+
+    try {
+      for (const key in item) {
+        if (payload.hasOwnProperty(key)) {
+
+          item[key] = payload[key];
+
+        }
+      }
+    } catch (error) {
+      console.log('error updating item');
+      
+    }
+
+    switch (item.type) {
+      case 'categories':
+        console.log('update category now');
+        
+        store.commit('updateEditedCategory', item);
+        break;
+      case value:
+
+        break;
+    
+      default:
+        break;
+    }
+    // store.
+    
+
+  },
+  resetEditObj(state) {
+    state.edit.status = false;
+    state.edit.item = '';
+  },
+  resetColourPalette(state){
+    state.settings.colorPalette.forEach(element => {
+      element.selected = false;
+    });
   }
 }
 

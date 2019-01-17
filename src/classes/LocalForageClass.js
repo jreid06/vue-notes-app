@@ -154,7 +154,6 @@ export default class {
           categories = false;
            console.log(item);
            
-           console.log('DFRTGRGRGBTBTD-----0');
           reject(categories);
           
         } else {
@@ -164,7 +163,6 @@ export default class {
 
       }).catch((err) => {
         console.log(err);
-        console.log('DFRTGRGRGBTBTD-----');
         
         categories = false;
         reject(err);
@@ -189,8 +187,6 @@ export default class {
         if (item === undefined || item.length == 0) {
           notes = false;
           console.log(item);
-
-          console.log('DFRTGRGRGBTBTD NOTES-----0');
           reject(notes);
 
         } else {
@@ -200,7 +196,6 @@ export default class {
 
       }).catch((err) => {
         console.log(err);
-        console.log('DFRTGRGRGBTBTD NOTES-----');
 
         notes = false;
         reject(err);
