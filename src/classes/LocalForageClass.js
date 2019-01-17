@@ -62,6 +62,8 @@ export default class {
       cat = false;
     });
 
+    console.log(cat);
+    
     if (!cat) {
       await $this.setCategoriesStorage().then((setres) => {
         console.log('category storage initialized');
@@ -143,29 +145,32 @@ export default class {
     });
   }
 
-  static allCategories() {
+  static async allCategories() {
     // return 'test';
     let categories;
 
     return new Promise((resolve, reject) => {
       DB.getItem(categoriesKey).then((item) => {
+        console.log(item);
         // console.log(item);
         if (item === undefined || item.length == 0) {
           categories = false;
            console.log(item);
            
+          // return categories;
           reject(categories);
           
         } else {
           categories = item;
-          resolve(categories);
+          // return categories;
+          resolve(categories)
         }
 
       }).catch((err) => {
         console.log(err);
         
         categories = false;
-        reject(err);
+        return categories;
       })
 
 
@@ -173,6 +178,7 @@ export default class {
     
     
    
+    console.log('ALL CATEGORIES END');
     
 
   }
@@ -186,11 +192,11 @@ export default class {
         // console.log(item);
         if (item === undefined || item.length == 0) {
           notes = false;
-          console.log(item);
+          // return notes;
           reject(notes);
-
         } else {
           notes = item;
+          // return notes;
           resolve(notes);
         }
 
@@ -198,13 +204,13 @@ export default class {
         console.log(err);
 
         notes = false;
-        reject(err);
+        return err;
       })
 
 
     });
 
-
+      console.log('ALL NOTES END');
 
 
 

@@ -92,8 +92,6 @@ export default {
     //   this.deleteItem = this.getItemToDelete;
     const vm = this;
 
-    console.log(this.id);
-
     $(`#${this.id}`).on("hidden.bs.modal", e => {
       console.log("MODAL HIDDEN");
 

@@ -69,7 +69,7 @@ router.beforeEach((to, from, next) => {
     return;
   }
 
-  // initial load when app is functionalional
+  // initial load when app is functional
   if (!store.getters.appStatus) {
     console.log('init storage RUNS');
 
@@ -77,38 +77,61 @@ router.beforeEach((to, from, next) => {
     Storage.initStorage().then(() => {
 
       // get all categories for initial load
+      let categories, notes;
+
       Storage.allCategories().then((res) => {
-
-        // update store with saved categories
+        console.log(res);
         store.commit('loadCategories', res);
+      });
 
-        next();
-        return;
-      }).catch((err) => {
-        console.log(err);
-        // block entry to app as load failed
-        console.log(err);
-        next();
-        return;
-      })
-
-      // get all categories for initial load
       Storage.allNotes().then((res) => {
-
-        // update store with saved categories
         store.commit('loadNotes', res);
 
         next();
-        return;
       }).catch((err) => {
         console.log(err);
-        // block entry to app as load failed
-        console.log(err);
-        next();
-        return;
-      })
+      });
+
+
+      // store.commit('loadCategories', categories);
+      // store.commit('loadNotes', notes);
+
+      // next();
+
+      // Storage.allCategories().then((res) => {
+
+      //   // update store with saved categories
+      //   store.commit('loadCategories', res);
+
+      //   // next();
+      //   return;
+      // }).catch((err) => {
+      //   console.log(err);
+      //   // block entry to app as load failed
+      //   console.log(err);
+      //   next();
+      //   return;
+      // })
+
+      // get all categories for initial load
+      // Storage.allNotes().then((res) => {
+
+      //   // update store with saved categories
+      //   store.commit('loadNotes', res);
+
+      //   // next();
+      //   return;
+      // }).catch((err) => {
+      //   console.log(err);
+      //   // block entry to app as load failed
+      //   console.log(err);
+      //   next();
+      //   return;
+      // })
 
     });
+
+
   }
 
   // next();
