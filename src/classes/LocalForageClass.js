@@ -1,4 +1,5 @@
 import Global from '../Global'
+import store from './../store'
 import 'babel-polyfill'
 
 const categoriesKey = Global.categoriesKey;
@@ -15,7 +16,7 @@ export default class {
 
   // updates category storage with new category added to all categories array
   static updateCategories(categoryArray) {
-      console.log('UPDATE INDEXED DB CATEGORIES RUNS');
+    console.log('UPDATE INDEXED DB CATEGORIES RUNS');
 
     // check if categories key exists
     DB.getItem(categoriesKey).then(() => {
@@ -32,7 +33,7 @@ export default class {
 
   static updateNotes(notesArray) {
     console.log('UPDATE INDEXED DB NOTES RUNS');
-    
+
     // check if categories key exists
     DB.getItem(notesKey).then(() => {
       DB.setItem(notesKey, notesArray);
@@ -56,40 +57,34 @@ export default class {
       note;
 
     await this.initCategoriesStorage().then((initres) => {
-      console.log("category storage exists");
       cat = true;
     }).catch((initerr) => {
       cat = false;
     });
 
-    console.log(cat);
-    
     if (!cat) {
-      await $this.setCategoriesStorage().then((setres) => {
-        console.log('category storage initialized');
-      }).catch((seterr) => {
-        console.log('ERROR: category storage NOT initialized');
-      })
+      await $this.setCategoriesStorage().then((setres) => {}).catch((seterr) => {})
     }
 
-    console.log('BETWEEN CAT STORAGE AND NOTE');
-
     await this.initNotesStorage().then((initres) => {
-      console.log("note storage exists");
       note = true;
     }).catch((err) => {
       note = false
     })
 
     if (!note) {
-      await $this.setNotesStorage().then((setres) => {
-        console.log('note storage initialized');
-      }).catch((seterr) => {
-        console.log('ERROR: note storage NOT initialized');
-      })
+      await $this.setNotesStorage().then((setres) => {}).catch((seterr) => {})
     }
 
-    console.log('IM LAST');
+    await this.allCategories().then((res) => {
+      store.commit('loadCategories', res);
+    });
+
+    await this.allNotes().then((res) => {
+      store.commit('loadNotes', res);
+    });
+
+    // return true;
 
   }
 
@@ -146,45 +141,31 @@ export default class {
   }
 
   static async allCategories() {
-    // return 'test';
     let categories;
 
     return new Promise((resolve, reject) => {
       DB.getItem(categoriesKey).then((item) => {
-        console.log(item);
-        // console.log(item);
         if (item === undefined || item.length == 0) {
           categories = false;
-           console.log(item);
-           
-          // return categories;
           reject(categories);
-          
+
         } else {
           categories = item;
-          // return categories;
           resolve(categories)
         }
 
       }).catch((err) => {
-        console.log(err);
-        
+        // console.log(err);
+
         categories = false;
-        return categories;
+        reject(categories);
       })
 
-
     });
-    
-    
-   
-    console.log('ALL CATEGORIES END');
-    
 
   }
 
-  static allNotes() {
-    // return 'test';
+  static async allNotes() {
     let notes;
 
     return new Promise((resolve, reject) => {
@@ -192,27 +173,20 @@ export default class {
         // console.log(item);
         if (item === undefined || item.length == 0) {
           notes = false;
-          // return notes;
           reject(notes);
         } else {
           notes = item;
-          // return notes;
           resolve(notes);
         }
 
       }).catch((err) => {
-        console.log(err);
 
         notes = false;
-        return err;
+        reject(notes);
       })
 
 
     });
-
-      console.log('ALL NOTES END');
-
-
 
   }
 

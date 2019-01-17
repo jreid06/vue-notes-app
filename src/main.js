@@ -59,83 +59,35 @@ function storageAvailable(type) {
 
 router.beforeEach((to, from, next) => {
   if (store.getters.appStatus) {
-    store.commit("syncDatabase", {
-      load: "categories"
+    // store.commit("syncDatabase", {
+    //   load: "categories"
+    // });
+    // store.commit("syncDatabase", {
+    //   load: "notes"
+    // });
+    store.dispatch('syncDatabaseAction', {
+      load: "categories",
+      next: next
     });
-    store.commit("syncDatabase", {
-      load: "notes"
+
+    store.dispatch('syncDatabaseAction', {
+      load: "notes",
+      next: next
     });
-    next();
+
+    // next();
     return;
   }
 
   // initial load when app is functional
   if (!store.getters.appStatus) {
-    console.log('init storage RUNS');
-
     // init cat or notes storage
-    Storage.initStorage().then(() => {
-
-      // get all categories for initial load
-      let categories, notes;
-
-      Storage.allCategories().then((res) => {
-        console.log(res);
-        store.commit('loadCategories', res);
-      });
-
-      Storage.allNotes().then((res) => {
-        store.commit('loadNotes', res);
-
-        next();
-      }).catch((err) => {
-        console.log(err);
-      });
-
-
-      // store.commit('loadCategories', categories);
-      // store.commit('loadNotes', notes);
-
-      // next();
-
-      // Storage.allCategories().then((res) => {
-
-      //   // update store with saved categories
-      //   store.commit('loadCategories', res);
-
-      //   // next();
-      //   return;
-      // }).catch((err) => {
-      //   console.log(err);
-      //   // block entry to app as load failed
-      //   console.log(err);
-      //   next();
-      //   return;
-      // })
-
-      // get all categories for initial load
-      // Storage.allNotes().then((res) => {
-
-      //   // update store with saved categories
-      //   store.commit('loadNotes', res);
-
-      //   // next();
-      //   return;
-      // }).catch((err) => {
-      //   console.log(err);
-      //   // block entry to app as load failed
-      //   console.log(err);
-      //   next();
-      //   return;
-      // })
-
+    Storage.initStorage().then((res) => {
+      next();
+    }).catch((err) => {
+      alert('there was an issue');
     });
-
-
   }
-
-  // next();
-  // return;
 
 })
 

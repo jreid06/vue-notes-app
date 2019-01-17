@@ -20,50 +20,49 @@ export default new Vuex.Store({
       let categories, notes;
       switch (payload.load) {
         case 'categories':
-          // Storage.allCategories().then((res) => {
-
-          //   console.log('SYNC DATABASE CATEGORIES');
-            
-          //   console.log(res);
-
-          //   // update the store with a fresh load
-          //   state.category.categories.all = res;
-          // }).catch((err) => {
-          //   console.log('NO DATA');
-          //   console.log(err);
-          //   state.category.categories.all = [];
-          // })
-
-          categories = Storage.allCategories();
-          console.log('categories return');
-          
-          console.log(categories);
-          if(categories.length > 0){
-            state.category.categories.all = categories;
-          }
-          
+          state.category.categories.all = payload.data;
+          // payload.next();
           break;
         case 'notes':
-          // Storage.allNotes().then((res) => {
-          //   // update the store with a fresh load
-          //   state.note.notes.all = res;
-          // }).catch((err) => {
-          //   console.log('NO DATA');
-          //   console.log(err);
-
-          //    state.note.notes.all = [];
-
-          // })
-
-           notes = Storage.allNotes();
-
-           console.log(typeof notes);
-           console.log(notes);
-          //  if (notes.length > 0) {
-          //    state.note.notes.all = notes;
-          //  }
+          state.note.notes.all = payload.data;
+          // payload.next();
           break;
       }
     },
+  },
+  actions: {
+    async syncDatabaseAction({
+      commit
+    }, payload) {
+      let categories, notes;
+
+      switch (payload.load) {
+        case 'categories':
+          await Storage.allCategories().then((res) => {
+            console.log('SYNC DATABASE CATEGORIES');
+            // update the store with a fresh load
+            categories = res;
+          }).catch((err) => {
+            categories = [];
+          })
+
+          //  state.category.categories.all = payload.data;
+          payload.data = categories;
+          commit('syncDatabase', payload);
+          break;
+        case 'notes':
+          await Storage.allNotes().then((res) => {
+            console.log('SYNC DATABASE NOTES');
+            // update the store with a fresh load
+            notes = res;
+          }).catch((err) => {
+            notes = [];
+          })
+
+          payload.data = notes;
+          commit('syncDatabase', payload);
+          break;
+      }
+    }
   }
 })

@@ -46,7 +46,6 @@ import { mapGetters } from "vuex";
 export default {
   props: {
     fill: {
-      type: String,
       required: true
     }
   },

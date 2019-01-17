@@ -115,7 +115,6 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // on initial load get selected category
-      vm.getSelectedCategory();
     });
   },
   methods: {
@@ -148,6 +147,8 @@ export default {
     console.log(this.$route.params);
     // this.initSMDE();
     // console.log(this.smde);
+          this.getSelectedCategory();
+
   }
 };
 </script>
