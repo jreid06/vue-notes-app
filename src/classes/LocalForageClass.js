@@ -88,6 +88,22 @@ export default class {
 
   }
 
+  static async updateData() {
+    await this.allCategories().then((res) => {
+      store.commit('syncDatabase', {
+        load: "categories",
+        data: res
+      });
+    });
+
+    await this.allNotes().then((res) => {
+      store.commit('syncDatabase', {
+        load: "notes",
+        data: res
+      });
+    });
+  }
+
   static initCategoriesStorage() {
     return new Promise((resolve, reject) => {
       DB.getItem(categoriesKey).then((item) => {
