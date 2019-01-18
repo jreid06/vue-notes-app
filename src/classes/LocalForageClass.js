@@ -7,204 +7,219 @@ const notesKey = Global.notesKey;
 const DB = require('localforage');
 
 export default class {
-  static itemExists(key) {
-    if (DB.getItem(key)) return true;
+    static itemExists(key) {
+        if (DB.getItem(key)) return true;
 
-    return false;
-  }
-
-
-  // updates category storage with new category added to all categories array
-  static updateCategories(categoryArray) {
-    console.log('UPDATE INDEXED DB CATEGORIES RUNS');
-
-    // check if categories key exists
-    DB.getItem(categoriesKey).then(() => {
-      DB.setItem(categoriesKey, categoryArray);
-    }).catch((err) => {
-
-      return {
-        error: false,
-        message: 'item created successfully'
-      }
-    });
-
-  }
-
-  static updateNotes(notesArray) {
-    console.log('UPDATE INDEXED DB NOTES RUNS');
-
-    // check if categories key exists
-    DB.getItem(notesKey).then(() => {
-      DB.setItem(notesKey, notesArray);
-    }).catch((err) => {
-
-      return {
-        error: false,
-        message: 'item created successfully'
-      }
-    });
-
-  }
-
-  static deleteMultipleItems() {
-
-  }
-
-  static async initStorage() {
-    let $this = this,
-      cat,
-      note;
-
-    await this.initCategoriesStorage().then((initres) => {
-      cat = true;
-    }).catch((initerr) => {
-      cat = false;
-    });
-
-    if (!cat) {
-      await $this.setCategoriesStorage().then((setres) => {}).catch((seterr) => {})
+        return false;
     }
 
-    await this.initNotesStorage().then((initres) => {
-      note = true;
-    }).catch((err) => {
-      note = false
-    })
 
-    if (!note) {
-      await $this.setNotesStorage().then((setres) => {}).catch((seterr) => {})
+    // updates category storage with new category added to all categories array
+    static updateCategories(categoryArray) {
+        console.log('UPDATE INDEXED DB CATEGORIES RUNS');
+
+        // check if categories key exists
+        DB.getItem(categoriesKey).then(() => {
+            DB.setItem(categoriesKey, categoryArray);
+        }).catch((err) => {
+
+            return {
+                error: false,
+                message: 'item created successfully'
+            }
+        });
+
     }
 
-    await this.allCategories().then((res) => {
-      store.commit('loadCategories', res);
-    });
+    static updateNotes(notesArray) {
+        console.log('UPDATE INDEXED DB NOTES RUNS');
 
-    await this.allNotes().then((res) => {
-      store.commit('loadNotes', res);
-    });
+        // check if categories key exists
+        DB.getItem(notesKey).then(() => {
+            DB.setItem(notesKey, notesArray);
+        }).catch((err) => {
 
-    // return true;
+            return {
+                error: false,
+                message: 'item created successfully'
+            }
+        });
 
-  }
+    }
 
-  static async updateData() {
-    await this.allCategories().then((res) => {
-      store.commit('syncDatabase', {
-        load: "categories",
-        data: res
-      });
-    });
+    static deleteMultipleItems() {
 
-    await this.allNotes().then((res) => {
-      store.commit('syncDatabase', {
-        load: "notes",
-        data: res
-      });
-    });
-  }
+    }
 
-  static initCategoriesStorage() {
-    return new Promise((resolve, reject) => {
-      DB.getItem(categoriesKey).then((item) => {
-        // no data exists for storage reject to create in next step
-        if (item == null) {
-          reject(item);
+    static async initStorage() {
+        let $this = this,
+            cat,
+            note;
+
+        await this.initCategoriesStorage().then((initres) => {
+            cat = true;
+        }).catch((initerr) => {
+            cat = false;
+        });
+
+        if (!cat) {
+            await $this.setCategoriesStorage().then((setres) => {}).catch((seterr) => {})
         }
 
-        // resolve to ignore set function
-        resolve(true);
-      }).catch((err) => {
-        reject(null);
-      });
-    });
-  }
+        await this.initNotesStorage().then((initres) => {
+            note = true;
+        }).catch((err) => {
+            note = false
+        })
 
-  static setCategoriesStorage() {
-    return new Promise((resolve, reject) => {
-      DB.setItem(categoriesKey, []).then((item) => {
-        resolve(true);
-      }).catch((err) => {
-        reject(null);
-      });
-    });
-  }
-
-  static initNotesStorage() {
-    return new Promise((resolve, reject) => {
-      DB.getItem(notesKey).then((item) => {
-        // no data exists for storage reject to create in next step
-        if (item == null) {
-          reject(item);
+        if (!note) {
+            await $this.setNotesStorage().then((setres) => {}).catch((seterr) => {})
         }
 
-        // resolve to ignore set function
-        resolve(true);
-      }).catch((err) => {
-        reject(null);
-      });
-    });
-  }
+        await this.allCategories().then((res) => {
+            store.commit('loadCategories', res);
+        }).catch((err) => {
+            console.log('error getting all categories');
+        });
 
-  static setNotesStorage() {
-    return new Promise((resolve, reject) => {
-      DB.setItem(notesKey, []).then((item) => {
-        resolve(true);
-      }).catch((err) => {
-        reject(null);
-      });
-    });
-  }
+        await this.allNotes().then((res) => {
+            store.commit('loadNotes', res);
+        }).catch((err) => {
+            console.log('error getting all notes');
+        })
 
-  static async allCategories() {
-    let categories;
+        return true;
 
-    return new Promise((resolve, reject) => {
-      DB.getItem(categoriesKey).then((item) => {
-        if (item === undefined || item.length == 0) {
-          categories = false;
-          reject(categories);
+    }
 
-        } else {
-          categories = item;
-          resolve(categories)
-        }
+    static async updateData() {
+        return new Promise((resolve, reject) => {
+            this.allCategories().then((res) => {
+                store.commit('syncDatabase', {
+                    load: "categories",
+                    data: res
+                });
+                resolve();
+            }).catch((err) => {
+                console.log('no data to set');
+                reject();
+            });
 
-      }).catch((err) => {
-        // console.log(err);
+            this.allNotes().then((res) => {
+                store.commit('syncDatabase', {
+                    load: "notes",
+                    data: res
+                });
 
-        categories = false;
-        reject(categories);
-      })
+                resolve();
+            }).catch((err) => {
+                console.log('no data to set');
+                reject();
+            });
+        });
+    }
 
-    });
+    static initCategoriesStorage() {
+        return new Promise((resolve, reject) => {
+            DB.getItem(categoriesKey).then((item) => {
+                // no data exists for storage reject to create in next step
+                if (item == null) {
+                    reject(item);
+                }
 
-  }
+                // resolve to ignore set function
+                resolve(true);
+            }).catch((err) => {
+                reject(null);
+            });
+        });
+    }
 
-  static async allNotes() {
-    let notes;
+    static setCategoriesStorage() {
+        return new Promise((resolve, reject) => {
+            DB.setItem(categoriesKey, []).then((item) => {
+                resolve(true);
+            }).catch((err) => {
+                reject(null);
+            });
+        });
+    }
 
-    return new Promise((resolve, reject) => {
-      DB.getItem(notesKey).then((item) => {
-        // console.log(item);
-        if (item === undefined || item.length == 0) {
-          notes = false;
-          reject(notes);
-        } else {
-          notes = item;
-          resolve(notes);
-        }
+    static initNotesStorage() {
+        return new Promise((resolve, reject) => {
+            DB.getItem(notesKey).then((item) => {
+                // no data exists for storage reject to create in next step
+                if (item == null) {
+                    reject(item);
+                }
 
-      }).catch((err) => {
+                // resolve to ignore set function
+                resolve(true);
+            }).catch((err) => {
+                reject(null);
+            });
+        });
+    }
 
-        notes = false;
-        reject(notes);
-      })
+    static setNotesStorage() {
+        return new Promise((resolve, reject) => {
+            DB.setItem(notesKey, []).then((item) => {
+                resolve(true);
+            }).catch((err) => {
+                reject(null);
+            });
+        });
+    }
+
+    static async allCategories() {
+        let categories;
+
+        return new Promise((resolve, reject) => {
+            DB.getItem(categoriesKey).then((item) => {
+                if (item === undefined || item.length == 0) {
+                    categories = false;
+                    reject(categories);
+
+                } else {
+                    categories = item;
+                    resolve(categories)
+                }
+
+            }).catch((err) => {
+                // console.log(err);
+
+                categories = false;
+                reject(categories);
+            })
+
+        });
+
+    }
+
+    static async allNotes() {
+        let notes;
+
+        return new Promise((resolve, reject) => {
+            DB.getItem(notesKey).then((item) => {
+                // console.log(item);
+                if (item === undefined || item.length == 0) {
+                    notes = false;
+                    reject(notes);
+                } else {
+                    notes = item;
+                    resolve(notes);
+                }
+
+            }).catch((err) => {
+
+                notes = false;
+                reject(notes);
+            })
 
 
-    });
+        });
 
-  }
+    }
 
 
 }
