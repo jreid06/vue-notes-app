@@ -48,6 +48,7 @@ export default {
 @import "./../node_modules/bootstrap/scss/bootstrap.scss";
 @import "./../node_modules/hover.css/scss/hover.scss";
 @import './../node_modules/simplemde/dist/simplemde.min.css';
+@import './../node_modules/animate.css/animate.min.css';
 
 #app {
   font-family: "Passion One", cursive;
@@ -106,4 +107,5 @@ a {
   // color: #42b983;
   color: #30a54a;
 }
+
 </style>
