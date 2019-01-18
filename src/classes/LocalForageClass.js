@@ -93,30 +93,37 @@ export default class {
     }
 
     static async updateData() {
-        return new Promise((resolve, reject) => {
-            this.allCategories().then((res) => {
-                store.commit('syncDatabase', {
-                    load: "categories",
-                    data: res
-                });
-                resolve();
-            }).catch((err) => {
-                console.log('no data to set');
-                reject();
+        // return new Promise((resolve, reject) => {
+        await this.allCategories().then((res) => {
+            store.commit('syncDatabase', {
+                load: "categories",
+                data: res
             });
-
-            this.allNotes().then((res) => {
-                store.commit('syncDatabase', {
-                    load: "notes",
-                    data: res
-                });
-
-                resolve();
-            }).catch((err) => {
-                console.log('no data to set');
-                reject();
-            });
+            // resolve();
+        }).catch((err) => {
+            console.log('no data to set');
+            // reject();
         });
+
+        console.log('in betweeen all categories load');
+
+
+        await this.allNotes().then((res) => {
+            store.commit('syncDatabase', {
+                load: "notes",
+                data: res
+            });
+
+            // resolve();
+        }).catch((err) => {
+            console.log('no data to set');
+            // reject();
+        });
+
+        console.log('all notes load');
+
+        return true;
+        // });
     }
 
     static initCategoriesStorage() {
