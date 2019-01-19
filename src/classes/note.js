@@ -4,11 +4,12 @@ const Marked = require('marked');
 
 export default class {
 
-  constructor(title, brief, categoryID, key) {
+  constructor(title, brief, categoryID, key, categoryObj) {
     this.type = 'note',
-      this.title = title;
+    this.title = title;
     this.brief = brief;
     this.categoryID = categoryID;
+    this.category = categoryObj;
     this.status = this.returnDraft();
     this.icon = "far fa-file-alt";
     this.noteHTML = '';
