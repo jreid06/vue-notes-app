@@ -13,9 +13,9 @@ const state = {
 }
 
 const getters = {
-   selectedNoteItem: state => {
-     return state.notes.selected;
-   },
+  selectedNoteItem: state => {
+    return state.notes.selected;
+  },
   currentNotes: state => {
     return state.notes.selected;
   },
@@ -23,11 +23,8 @@ const getters = {
     return state.notes.all;
   },
   getNote: (state) => (id) => {
-    console.log('GET NOTE RUNS');
-
     let note = '',
       index = '';
-    console.log(id);
 
     state.notes.all.find((element, i) => {
       if (element.key === id) {
@@ -82,7 +79,17 @@ const mutations = {
 
   },
   updateSelectedNote(state, payload) {
+
     state.notes.selected = payload;
+  },
+  updateEditedNote(state, payload) {
+    let note = store.getters.getNote(payload.key);
+
+    // overwrite old category data with the new data
+    state.notes.all[note.index] = payload;
+
+    // // update storage
+    Storage.updateNotes(state.notes.all);
   },
   updateAllNotes(state, payload) {
     // push recently created item into the array
@@ -108,7 +115,6 @@ const mutations = {
       return;
     }
 
-    console.log('UPDATE ALL NOTES ARRAY');
     state.notes.all = payload;
   },
 }
