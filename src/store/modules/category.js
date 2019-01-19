@@ -1,4 +1,3 @@
-// import { stat } from "fs";
 import store from './../../store'
 import Storage from './../../classes/LocalForageClass'
 import Global from './../../Global'
@@ -24,11 +23,9 @@ const getters = {
     return state.categories.all;
   },
   getCategory: (state) => (id) => {
-    console.log('GET CATEGORYIES RUNS');
 
     let cat = '',
       index = '';
-    console.log(id);
 
     state.categories.all.find((element, i) => {
       if (element.key === id) {
@@ -83,6 +80,32 @@ const mutations = {
     Storage.updateCategories(state.categories.all);
 
   },
+  updateNoteInCategory(state, {
+    getters,
+    categoryID,
+    note
+  }) {
+    let catIndex, noteIndex;
+    // update note store & note storage
+    store.commit('updateEditedNote', note);
+    store.commit('updateSelectedNote', note);
+    
+    // update note in category
+    state.categories.all.find((el, i) => {
+      if (el.key === categoryID) {
+        catIndex = i;
+        el.notes.find((n, j) => {
+          if (n.key === note.key) {
+            noteIndex = j;
+          }
+        })
+      }
+    });
+
+    state.categories.all[catIndex].notes[noteIndex] = note;
+   
+    Storage.updateCategories(state.categories.all);
+  },
   addNoteToCategory(state, {
     note,
     getters
@@ -124,48 +147,11 @@ const mutations = {
     store.commit('initApp');
 
     if (!payload || payload.length < 1) {
-      console.log('array is empty. no need to update');
+      // console.log('array is empty. no need to update');
       return;
     }
 
-    console.log('UPDATE ALL CATEGORIES ARRAY');
     state.categories.all = payload;
-  },
-  syncDatabaseDeprecated(state) {
-    let keys = ['categories', 'notes'];
-
-    console.log(state);
-
-    if (element === 'categories') {
-      Storage.allCategories().then((res) => {
-        // update the store with a fresh load
-        console.log('CATEGORY SYNC');
-        console.log(res);
-        console.log(state);
-
-
-        state.categories.all = res;
-      }).catch((err) => {
-        console.log('NO DATA');
-        console.log(err);
-
-      })
-    }
-
-    if (element === 'notes') {
-      Storage.allNotes().then((res) => {
-        // update the store with a fresh load
-        console.log('NOTES SYNC');
-        console.log(res);
-
-        state.notes.all = res;
-      }).catch((err) => {
-        console.log('NO DATA');
-        console.log(err);
-
-      })
-    }
-
   }
 }
 
