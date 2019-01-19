@@ -72,8 +72,24 @@ export default {
       this.updateSelectedNote(note.note);
     },
     initSMDE() {
-      this.smde = new SimpleMDE({
-        element: document.getElementById("category-markdown")
+      const vm = this;
+      let smde = new SimpleMDE({
+        element: document.getElementById("note-smde"),
+        initialValue: vm.note.noteMarkdown
+          ? vm.note.noteMarkdown
+          : "# Your note information here"
+      });
+
+      let timeout = null;
+      // smde events
+      smde.codemirror.on("changes", val => {
+        clearTimeout(timeout);
+        vm.editing = true;
+
+        timeout = setTimeout(function() {
+          vm.note.noteMarkdown = smde.value();
+          vm.editing = false;
+        }, 400);
       });
     }
   },
