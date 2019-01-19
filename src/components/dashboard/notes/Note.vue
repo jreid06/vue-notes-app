@@ -89,11 +89,19 @@ export default {
   computed: {
     ...mapGetters(["selectedNoteItem", "getCategory", "getNote"])
   },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      // on initial load get selected note
-      vm.getSelectedNote(vm.$route.params.noteid);
+  watch: {
+    editing: function(nv, ov) {
+      console.log("watchers");
+      console.log(nv);
+
+      if (!nv) {
+        this.updateNoteInCategory({
+          getters: this.$store.getters,
+          categoryID: this.note.categoryID,
+          note: this.note
     });
+      }
+    }
   },
   methods: {
     ...mapMutations(["updateSelectedNote"]),
