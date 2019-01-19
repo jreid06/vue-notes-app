@@ -107,9 +107,17 @@ export default {
     ...mapMutations(["updateSelectedNote"]),
     quickDeleteItem() {},
     getSelectedNote(noteID) {
-      let note = this.getNote(noteID);
-    //   debugger;
+      let note = this.getNote(noteID),
+        // check to see if its returning category object or string
+        noteCat = this.isJSON(note.note.category)
+          ? JSON.parse(note.note.category)
+          : note.note.category;
+
+      note.note.category = noteCat;
+
       this.updateSelectedNote(note.note);
+      this.note = this.selectedNoteItem;
+      this.noteindex = note.index;
     },
     initSMDE() {
       const vm = this;
@@ -133,10 +141,17 @@ export default {
       });
     }
   },
+  created() {
+    console.log("created");
+    this.getSelectedNote(this.$route.params.noteid);
+  },
   mounted() {
-    console.log(this.$route.params);
-    // this.initSMDE();
-    // console.log(this.smde);
+    const vm = this;
+    this.initSMDE();
+
+    setTimeout(function() {
+      vm.loading = false;
+    }, 1200);
   }
 };
 </script>
