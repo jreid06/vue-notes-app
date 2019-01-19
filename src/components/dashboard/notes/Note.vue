@@ -1,25 +1,53 @@
 <template>
   <div>
-    <div class="row pt-0 bg-light">
+    <div class="row pt-0 bg-light" v-if="note">
       <div class="col-12 p-4 text-left">
         <div class="float-left">
           <h3>
-            <!-- <span :style="{color: category.colour}" class="text-capitalize">{{category.title}}</span> -->
+            <i class="far fa-file-alt" :style="{color: getCategory(note.categoryID).cat.colour}"></i>
+            <span class="text-capitalize">{{note.title}}</span>
           </h3>
+          <p class="lead">{{note.brief | firstWordCapital}}</p>
+          <hr>
+          <h5>
+            <i class="fas fa-folder" :style="{color: getCategory(note.categoryID).cat.colour}"></i>
+            <span
+              :style="{color: getCategory(note.categoryID).cat.colour}"
+              class="text-capitalize"
+            >{{ getCategory(note.categoryID).cat.title}}</span>
+          </h5>
           <!-- <p class="small">{{category.description}}</p> -->
         </div>
         <div class="float-right display-4 pointer">
-          <!-- <i
+          <i
             class="far fa-edit"
-            :data-item="JSON.stringify(selectedCategory)"
+            :data-item="JSON.stringify(selectedNoteItem)"
             data-action="edit"
-            data-item-type="category"
+            data-item-type="note"
             @click="triggerModal"
-          ></i> -->
+          ></i>
         </div>
       </div>
     </div>
+    <!--  -->
+    <div class="row pt-3 note-data pr">
+      <transition
+        name="loader-fade-toggel"
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+      >
+        <loading v-if="loading"></loading>
+      </transition>
 
+      <div class="col-12 col-lg-5 markdown-note-column text-left">
+        <textarea id="note-smde"></textarea>
+      </div>
+      <div class="col-12 col-lg-7 parsed-note-markdown">
+        <note-svg :fill="getCategory(note.categoryID).cat.colour"></note-svg>
+        <div id="markdown-div" class="pt-4 p-3" v-html="marked(note.noteMarkdown)"></div>
+      </div>
+    </div>
+    <!--  -->
     <note-modal :id="modalID('note')" v-on:update-selected="getSelectedNote"></note-modal>
   </div>
 </template>
@@ -28,23 +56,27 @@ import { mapGetters } from "vuex";
 import { mapMutations } from "vuex";
 import notesvg from "./../../notesvg";
 import NoteModal from "./../../modals/CreateNoteModal.vue";
+import Loader from "./../../Loader";
 import store from "./../../../store";
 
 import HelperMixin from "./../../../mixins/helpers.js";
 
 const SimpleMDE = require("simplemde");
-const Marked = require("marked");
+const marked = require("marked");
 
 export default {
   components: {
     "note-svg": notesvg,
-    "note-modal": NoteModal
+    "note-modal": NoteModal,
+    loading: Loader
   },
   mixins: [HelperMixin],
   data() {
     return {
-      note: store.getters.selectedNoteItem,
+      note: store.getters.selectedNote,
       noteindex: 0,
+      loading: true,
+      marked: marked,
       smde: "",
       editing: false,
       selectedNote: false,
