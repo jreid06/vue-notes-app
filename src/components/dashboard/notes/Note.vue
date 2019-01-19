@@ -99,12 +99,15 @@ export default {
           getters: this.$store.getters,
           categoryID: this.note.categoryID,
           note: this.note
-    });
+        });
       }
     }
   },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {});
+  },
   methods: {
-    ...mapMutations(["updateSelectedNote"]),
+    ...mapMutations(["updateSelectedNote", "updateNoteInCategory"]),
     quickDeleteItem() {},
     getSelectedNote(noteID) {
       let note = this.getNote(noteID),
@@ -156,28 +159,27 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.note-bg {
-  width: 100%;
+.note-data {
+  min-height: 300px;
+  transition: all 0.3s ease-in-out;
 }
 
-.note-quick {
-  position: relative;
-
-  p {
-    position: absolute;
-    // border: 1px solid red;
-    background-color: rgba(248, 249, 250, 0.9);
-    text-transform: capitalize;
-    top: 0;
-    padding-left: 50px;
-    padding-top: 10px;
-    z-index: 20;
-    width: 90%;
+.parsed-note-markdown {
+  // position: relative;
+  #markdown-div {
+    border-radius: 10px;
+	  background-color: rgba(241, 241, 241, 0.2);
+    position: relative;
+    top: -100%;
+    height: 100%;
+    // right: 0;
+    width: 75%;
+	  padding-left: 10px;
+    left: 0;
     right: 0;
-
-    @media screen and (min-width: 992px) {
-      padding-left: 70px;
-    }
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 20;
   }
 }
 </style>
