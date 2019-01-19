@@ -22,14 +22,13 @@ export default {
     ...mapMutations(['updateSelectedCategory', 'updateSelectedNote', 'itemToDelete', 'itemToEdit']),
     isJSON(val) {
       try {
-        JSON.parse(val)
+		JSON.parse(val);
+		return true;
       } catch (e) {
-        console.log('not json');
+		console.log('not json');
+		return false;
       }
-
-      return 'is json';
     },
-
     redirectTo(route) {
       console.log('REDIRECT TO RUNS');
 
