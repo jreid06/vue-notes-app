@@ -202,9 +202,10 @@ const mutations = {
 
     console.log('UPDATE EDIT ITEM ');
     
-
+    debugger;
     try {
       for (const key in item) {
+        // update the item properties that are in the payload e.g title, brief etc.
         if (payload.hasOwnProperty(key)) {
 
           item[key] = payload[key];
@@ -222,8 +223,9 @@ const mutations = {
         
         store.commit('updateEditedCategory', item);
         break;
-      case value:
-
+      case 'note':
+        debugger;
+       store.commit('updateEditedNote', item);
         break;
     
       default:
