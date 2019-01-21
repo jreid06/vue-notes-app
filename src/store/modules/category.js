@@ -65,16 +65,18 @@ const mutations = {
   },
   deleteCategoryNote(state, payload) {
     let cat = store.getters.getCategory(payload.categoryID),
-      note;
+      noteToDelete;
 
-    state.categories.all[cat.index].notes.find((el, i) => {
-      if (el.key === payload.key) {
-        note = i;
+    debugger;
+    state.categories.all[cat.index].notes.find((note, i) => {
+      if (note.key === payload.key) {
+        noteToDelete = i;
+        debugger;
         return;
       }
     })
 
-    state.categories.all[cat.index].notes.splice(note, 1);
+    state.categories.all[cat.index].notes.splice(noteToDelete, 1);
 
     //
     Storage.updateCategories(state.categories.all);
