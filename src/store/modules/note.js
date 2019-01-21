@@ -78,14 +78,33 @@ const mutations = {
     Storage.updateNotes(state.notes.all);
 
   },
-  updateSelectedNote(state, payload) {
+  updateSelectedNote(state, {payload, changeCategory}) {
+
+    debugger;
+
+    if (changeCategory && state.notes.selected.categoryID !== payload.categoryID) {
+
+      // trigger a category change 
+      store.commit('deleteCategoryNote', {
+        categoryID: state.notes.selected.categoryID, // old categoryID is used 
+        key: payload.key
+      });
+
+      store.commit('addNoteToCategory', {
+        note: payload,
+        getters: store.getters
+      });
+
+    }
+
+    debugger;
 
     state.notes.selected = payload;
   },
   updateEditedNote(state, payload) {
     let note = store.getters.getNote(payload.key);
 
-    // overwrite old category data with the new data
+    // overwrite old NOTE data with the new data
     state.notes.all[note.index] = payload;
 
     // // update storage
