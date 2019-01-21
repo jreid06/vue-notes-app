@@ -42,7 +42,7 @@
               <div class="card-body">
                 <ul>
                   <li v-for="(note, i) in n.notes" :key="i">
-                    {{note.title}}
+                    {{getNote(note.id).note.title}}
                     <hr>
                   </li>
                 </ul>
@@ -114,7 +114,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["allCategories"]),
+    ...mapGetters(["allCategories", "getNote"]),
     latestCategories() {
       return this.allCategories.sort(function(a, b) {
         return b.createdAt - a.createdAt;
