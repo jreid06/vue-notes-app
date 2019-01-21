@@ -28,30 +28,30 @@
             class="itemlist-li list-group-item d-flex flex-row flex-no-wrap flex-sm-wrap flex-md-no-wrap text-capitalize"
             v-for="(n,i) in category.notes"
             :key="i"
-            :data-note-id="n.key"
+            :data-note-id="getNote(n.id).note.key"
             @click="quickViewNote"
           >
-            <div class="p-2 flex-fill h4 text-left" :style="{color: n.colour}">
-              <i :class="n.icon"></i>
+            <div class="p-2 flex-fill h4 text-left" :style="{color: getNote(n.id).note.colour}">
+              <i :class="getNote(n.id).note.icon"></i>
             </div>
 
             <div class="p-2 flex-fill">
-              <p>{{n.title}}</p>
+              <p>{{getNote(n.id).note.title}}</p>
             </div>
             <div class="p-2 flex-fill">
-              <p v-html="formatDate(n.createdAt).readableDate"></p>
+              <p v-html="formatDate(getNote(n.id).note.createdAt).readableDate"></p>
             </div>
             <div class="p-2 flex-fill bg-light">
               <ul class="list-inline">
                 <li
                   class="list-inline-item text-danger hvr-grow"
-                  :data-id="n.key"
+                  :data-id="getNote(n.id).note.key"
                   @click="quickDeleteItem"
                 >
-                  <i class="far fa-trash-alt" :data-id="n.key"></i>
+                  <i class="far fa-trash-alt" :data-id="getNote(n.id).note.key"></i>
                 </li>
                 <li class="list-inline-item text-info hvr-grow">
-                  <router-link :to="'/dashboard/notes/'+ n.key">
+                  <router-link :to="'/dashboard/notes/'+ getNote(n.id).note.key">
                     <i class="far fa-edit"></i>
                   </router-link>
                 </li>
@@ -69,9 +69,7 @@
         <div :style="noteDiv" class="w-100 note-quick">
           <!-- <img class="note-bg" :src="noteDiv.src"> -->
           <note-svg :fill="category.colour"></note-svg>
-          <p v-if="selectedNote">
-            {{selectedNote.brief}}
-          </p>
+          <p v-if="selectedNote">{{selectedNote.brief}}</p>
         </div>
       </div>
     </div>
@@ -82,7 +80,7 @@
 import { mapGetters } from "vuex";
 import { mapMutations } from "vuex";
 import notesvg from "./../../notesvg";
-import CategoryModal from './../../modals/CreateCategoryModal.vue';
+import CategoryModal from "./../../modals/CreateCategoryModal.vue";
 import store from "./../../../store";
 
 import HelperMixin from "./../../../mixins/helpers.js";
@@ -120,13 +118,11 @@ export default {
   methods: {
     ...mapMutations(["updateSelectedCategory"]),
     quickDeleteItem() {},
-    quickViewNote(e){
+    quickViewNote(e) {
       let target = e.currentTarget,
-          noteID = target.attributes['data-note-id'].value;
+        noteID = target.attributes["data-note-id"].value;
 
-      
       this.selectedNote = this.getNote(noteID).note;
-      
     },
     getSelectedCategory() {
       let catKey = this.$route.params.catid;
@@ -147,8 +143,7 @@ export default {
     console.log(this.$route.params);
     // this.initSMDE();
     // console.log(this.smde);
-          this.getSelectedCategory();
-
+    this.getSelectedCategory();
   }
 };
 </script>
@@ -157,10 +152,10 @@ export default {
   width: 100%;
 }
 
-.note-quick{
+.note-quick {
   position: relative;
 
-  p{
+  p {
     position: absolute;
     // border: 1px solid red;
     background-color: rgba(248, 249, 250, 0.9);
@@ -172,7 +167,7 @@ export default {
     width: 90%;
     right: 0;
 
-    @media screen and (min-width: 992px){
+    @media screen and (min-width: 992px) {
       padding-left: 70px;
     }
   }
