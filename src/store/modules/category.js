@@ -82,32 +82,33 @@ const mutations = {
     Storage.updateCategories(state.categories.all);
 
   },
-  updateNoteInCategory(state, {
-    getters,
-    categoryID,
-    note
-  }) {
-    let catIndex, noteIndex;
-    // update note store & note storage
-    store.commit('updateEditedNote', note);
-    store.commit('updateSelectedNote', note);
+  // updateNoteInCategory(state, {
+  //   getters,
+  //   categoryID,
+  //   note
+  // }) {
+  //   let catIndex, noteIndex;
+  //   // update note store & note storage
+  //   store.commit('updateEditedNote', note);
+  //   store.commit('updateSelectedNote', note);
     
-    // update note in category
-    state.categories.all.find((el, i) => {
-      if (el.key === categoryID) {
-        catIndex = i;
-        el.notes.find((n, j) => {
-          if (n.key === note.key) {
-            noteIndex = j;
-          }
-        })
-      }
-    });
+  //   // update note in category
+  //   state.categories.all.find((el, i) => {
+  //     if (el.key === categoryID) {
+  //       catIndex = i;
+  //       el.notes.find((n, j) => {
+  //         if (n.key === note.key) {
+  //           noteIndex = j;
+  //         }
+  //       })
+  //     }
+  //   });
 
-    state.categories.all[catIndex].notes[noteIndex] = note;
+  //   // note must be the full object
+  //   state.categories.all[catIndex].notes[noteIndex] = note;
    
-    Storage.updateCategories(state.categories.all);
-  },
+  //   Storage.updateCategories(state.categories.all);
+  // },
   addNoteToCategory(state, {
     note,
     getters
