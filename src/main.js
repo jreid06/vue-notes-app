@@ -8,6 +8,7 @@ import store from './store'
 import VueRouter from 'vue-router'
 import Storage from './classes/LocalForageClass'
 import 'babel-polyfill'
+import { sync } from 'vuex-router-sync';
 
 require('bootstrap');
 // require('localforage');
@@ -21,6 +22,8 @@ Vue.use(Vuex);
 Vue.use(VueRouter);
 
 /////
+
+sync(store, router);
 
 Vue.filter('removeHash', (value) => {
   let arr = hashword.split('');
