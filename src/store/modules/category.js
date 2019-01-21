@@ -115,8 +115,9 @@ const mutations = {
   }) {
     let cat = getters.getCategory(note.categoryID);
 
-    // push note into the selected categories notes array
-    cat.cat.notes.push(note);
+    debugger;
+    // push note.id into the selected categories notes as a reference to the note
+    cat.cat.notes.push({id: note.key });
 
     // // update storage
     Storage.updateCategories(state.categories.all);
