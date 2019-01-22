@@ -9,7 +9,6 @@ export default class {
     this.title = title;
     this.brief = brief;
     this.categoryID = categoryID;
-    this.category = categoryObj;
     this.status = this.returnDraft();
     this.icon = "far fa-file-alt";
     this.noteHTML = '';
