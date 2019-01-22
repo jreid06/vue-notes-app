@@ -160,8 +160,6 @@ export default {
       this.colors.forEach((el, i) => {
         if (el.selected) el.selected = false;
       });
-
-      console.log(pos);
       
       this.colors[pos].selected = true;
       this.updateColor(this.colors[pos].styleObj.backgroundColor);
@@ -252,15 +250,10 @@ export default {
   },
   mounted() {
     const vm = this;
-    console.log("CATEGORY MODAL MOUNTED");
     $(`#${this.modalID("category")}`).on("show.bs.modal", function(e) {
       if (vm.editStatus) {
         vm.action = "edit";
         var { colour, title, description, key } = vm.getItemToEdit;
-
-        console.log({colour, title, description, key});
-        // return;
-        
 
         vm.category.title = title;
         vm.category.description = description;
