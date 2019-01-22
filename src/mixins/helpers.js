@@ -79,15 +79,12 @@ export default {
           type = target.hasAttribute('data-item-type') ? target.attributes['data-item-type'].value : target.parentElement.attributes['data-item-type'].value;
         item = JSON.parse(targ);
 
-        console.log(item);
-
 
         vm.itemToEdit(item);
 
         action = type;
       }
 
-      console.log(vm.modalID(action));
       $(`#${vm.modalID(action)}`).modal();
 
     },
