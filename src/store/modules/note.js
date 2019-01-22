@@ -53,6 +53,8 @@ const mutations = {
       return;
     });
 
+    debugger;
+
     // delete the category
     state.notes.all.splice(note, 1);
 
@@ -104,6 +106,8 @@ const mutations = {
   updateEditedNote(state, payload) {
     let note = store.getters.getNote(payload.key);
 
+    let oldnote = state.notes.all[note.index];
+    debugger;
     // overwrite old NOTE data with the new data
     state.notes.all[note.index] = payload;
 
