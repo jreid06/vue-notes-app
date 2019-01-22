@@ -198,11 +198,7 @@ const mutations = {
     state.edit.item = payload;
   },
   updateEditItem(state, payload){
-    let item = state.edit.item;
-
-    console.log('UPDATE EDIT ITEM ');
-    
-    debugger;
+    let item = state.edit.item;    
     try {
       for (const key in item) {
         // update the item properties that are in the payload e.g title, brief etc.
@@ -214,7 +210,6 @@ const mutations = {
       }
     } catch (error) {
       console.log('error updating item');
-      
     }
 
     switch (item.type) {
