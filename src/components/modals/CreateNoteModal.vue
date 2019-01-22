@@ -4,7 +4,8 @@
       <div class="modal-content">
         <div class="modal-header text-center">
           <h5 class="modal-title">
-            Create
+            <span v-if="action === 'edit'">Edit</span>
+            <span v-else>Create</span>
             <span class="text-success">Note</span>
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -69,7 +70,16 @@
           <button type="button" class="btn text-danger" data-dismiss="modal">
             <i class="far fa-times-circle"></i>
           </button>
-          <button type="button" class="btn text-success" @click="createNote">
+           <button
+            type="button"
+            class="btn text-success"
+            @click="createNote"
+            v-if="action === 'create'"
+          >
+            <i class="fas fa-check"></i>
+          </button>
+          
+          <button type="button" class="btn text-success" @click="updateNote" v-else>
             <i class="fas fa-check"></i>
           </button>
         </div>
@@ -79,7 +89,9 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import { mapMutations } from "vuex";
 import Note from "./../../classes/note.js";
+import Storage from "./../../classes/LocalForageClass.js";
 import HelperMixin from "./../../mixins/helpers.js";
 
 const $ = require("jquery");
@@ -94,14 +106,20 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["allCategories", "modalID"]),
+    ...mapGetters([
+      "allCategories",
+      "modalID",
+      "getCategory",
+      "editStatus",
+      "getItemToEdit"
+    ]),
     noteDetails() {
       return this.note;
     }
   },
   data() {
     return {
-      action: 'create',
+      action: "create",
       note: {
         title: "",
         brief: "",
@@ -112,6 +130,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["updateEditItem", "updateNoteInCategory"]),
     updateErrorMessage(key) {
       let message = "";
 
@@ -146,31 +165,53 @@ export default {
 
       if (valid.error !== null) {
         vm.error = true;
-        console.log(valid);
         vm.updateErrorMessage(valid.error.details[0].path[0]);
         return;
       }
 
+      // get the corresponding category
+      let category = vm.getCategory(vm.noteDetails.catID);
+      let catJSON = JSON.stringify(category.cat);
       // instantiate a new note
       note = new Note(
         vm.noteDetails.title,
         vm.noteDetails.brief,
         vm.noteDetails.catID,
-        vm.randomString()
+        vm.randomString(),
       );
-
-      console.log(note);
 
       // update category array with new category
       // save in local storage
       this.$store.commit("updateAllNotes", note);
-      this.$store.commit("updateSelectedNote", note);
+      this.$store.commit("updateSelectedNote", {payload: note});
 
       // add note to correct category
       this.$store.dispatch("addNoteToCategory", note);
 
       // // emit result to redirect via route
       this.$emit("change-route", `/dashboard/notes/${note.key}`);
+
+      // close modal
+      $(`#${this.modalID("note")}`).modal("hide");
+    },
+    updateNote() {
+      const vm = this;
+      debugger;
+      let { title, brief, catID } = this.noteDetails;
+      // update edited item first
+      this.updateEditItem({ title, brief, categoryID: catID });
+
+      debugger;
+      
+      // use the updated version of note in the next mutation 
+      // this.updateNoteInCategory({getters: vm.$store.getters, categoryID: catID, note: vm.getItemToEdit });
+      // this.updateEditedNote(vm.getItemToEdit);
+
+      // when modal disappears view gets data
+      this.updateSelectedNote({payload: vm.getItemToEdit, changeCategory: true});
+
+      // // emit result to update the selected note in the view
+      this.$emit("update-selected", `reload`);
 
       // close modal
       $(`#${this.modalID("note")}`).modal("hide");
@@ -186,13 +227,33 @@ export default {
         }
       }
 
-      // this.resetColourPalette();
     },
     resetEdit() {
       this.action = "create";
-
       this.$store.dispatch("resetEditObjAction");
     }
+  },
+  mounted() {
+    const vm = this;
+
+    $(`#${this.modalID("note")}`).on("show.bs.modal", function(e) {
+      if (vm.editStatus) {
+        vm.action = "edit";
+        var { title, brief, categoryID } = vm.getItemToEdit;
+
+        vm.note.title = title;
+        vm.note.brief = brief;
+        vm.note.catID = categoryID;
+      }
+    });
+
+    $(`#${this.modalID("note")}`).on("hidden.bs.modal", function(e) {
+      vm.resetData();
+
+      if (vm.editStatus) {
+        vm.resetEdit();
+      }
+    });
   }
 };
 </script>
