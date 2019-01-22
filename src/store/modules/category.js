@@ -67,11 +67,10 @@ const mutations = {
     let cat = store.getters.getCategory(payload.categoryID),
       noteToDelete;
 
-    debugger;
+    
     state.categories.all[cat.index].notes.find((note, i) => {
-      if (note.key === payload.key) {
+      if (note.id === payload.key) {
         noteToDelete = i;
-        debugger;
         return;
       }
     })
@@ -115,7 +114,6 @@ const mutations = {
   }) {
     let cat = getters.getCategory(note.categoryID);
 
-    debugger;
     // push note.id into the selected categories notes as a reference to the note
     cat.cat.notes.push({id: note.key });
 
