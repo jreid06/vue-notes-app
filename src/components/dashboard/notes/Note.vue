@@ -93,13 +93,17 @@ export default {
     editing: function(nv, ov) {
       console.log("watchers");
       console.log(nv);
+      const vm = this;
 
       if (!nv) {
-        this.updateNoteInCategory({
-          getters: this.$store.getters,
-          categoryID: this.note.categoryID,
-          note: this.note
-        });
+        // this.updateNoteInCategory({
+        //   getters: this.$store.getters,
+        //   categoryID: this.note.categoryID,
+        //   note: this.note
+        // });
+       vm.updateEditedNote(vm.note);
+       vm.updateSelectedNote({payload: vm.note});
+
       }
     }
   },
@@ -107,18 +111,20 @@ export default {
     next(vm => {});
   },
   methods: {
-    ...mapMutations(["updateSelectedNote", "updateNoteInCategory"]),
+    ...mapMutations(["updateSelectedNote", "updateNoteInCategory", "updateEditedNote"]),
     quickDeleteItem() {},
-    getSelectedNote(noteID) {
+    getSelectedNote() {
+      let noteID = this.$route.params.noteid;
+      debugger;
       let note = this.getNote(noteID),
         // check to see if its returning category object or string
         noteCat = this.isJSON(note.note.category)
           ? JSON.parse(note.note.category)
           : note.note.category;
 
-      note.note.category = noteCat;
+      // note.note.category = noteCat;
 
-      this.updateSelectedNote(note.note);
+      this.updateSelectedNote({payload: note.note});
       this.note = this.selectedNoteItem;
       this.noteindex = note.index;
     },
@@ -146,7 +152,7 @@ export default {
   },
   created() {
     console.log("created");
-    this.getSelectedNote(this.$route.params.noteid);
+    this.getSelectedNote();
   },
   mounted() {
     const vm = this;
@@ -168,13 +174,13 @@ export default {
   // position: relative;
   #markdown-div {
     border-radius: 10px;
-	  background-color: rgba(241, 241, 241, 0.2);
+    background-color: rgba(241, 241, 241, 0.2);
     position: relative;
     top: -100%;
     height: 100%;
     // right: 0;
     width: 75%;
-	  padding-left: 10px;
+    padding-left: 10px;
     left: 0;
     right: 0;
     margin-left: auto;
