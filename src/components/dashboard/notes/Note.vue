@@ -115,14 +115,7 @@ export default {
     quickDeleteItem() {},
     getSelectedNote() {
       let noteID = this.$route.params.noteid;
-      debugger;
-      let note = this.getNote(noteID),
-        // check to see if its returning category object or string
-        noteCat = this.isJSON(note.note.category)
-          ? JSON.parse(note.note.category)
-          : note.note.category;
-
-      // note.note.category = noteCat;
+      let note = this.getNote(noteID);
 
       this.updateSelectedNote({payload: note.note});
       this.note = this.selectedNoteItem;
