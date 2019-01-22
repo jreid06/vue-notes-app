@@ -196,16 +196,10 @@ export default {
     },
     updateNote() {
       const vm = this;
-      debugger;
+      
       let { title, brief, catID } = this.noteDetails;
       // update edited item first
       this.updateEditItem({ title, brief, categoryID: catID });
-
-      debugger;
-      
-      // use the updated version of note in the next mutation 
-      // this.updateNoteInCategory({getters: vm.$store.getters, categoryID: catID, note: vm.getItemToEdit });
-      // this.updateEditedNote(vm.getItemToEdit);
 
       // when modal disappears view gets data
       this.updateSelectedNote({payload: vm.getItemToEdit, changeCategory: true});
