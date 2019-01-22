@@ -1,11 +1,10 @@
 <template>
   <div class="bg-white shadow-sm itemlist pr">
-    <ul class="list-group list-group-flush" v-if="this.items.length > 0">
+    <!-- <ul class="list-group list-group-flush" v-if="this.items.length > 0">
       <li
         class="itemlist-li list-group-item d-flex flex-row flex-no-wrap flex-sm-wrap flex-md-no-wrap text-capitalize"
         v-for="(n,i) in lastestData"
-        :key="i"
-      >
+        :key="i" >
         <div class="p-2 flex-fill h4 text-left" :style="{color: n.colour}">
           <i :class="n.icon"></i>
         </div>
@@ -45,7 +44,11 @@
           </ul>
         </div>
       </li>
-    </ul>
+    </ul> -->
+    <div v-if="this.items.length">
+        <cat-view :categories="lastestData" v-if="load === 'categories'"></cat-view>
+        <note-view :notes="lastestData" v-else></note-view>
+    </div>
     <div
       class="no-items d-flex flex-column justify-content-center align-items-center bg-light text-warning p-2"
       v-else
@@ -58,9 +61,16 @@
 import { mapGetters } from "vuex";
 import HelperMixin from "./../../../mixins/helpers.js";
 
+import CategoryList from './ItemList_categories.vue';
+import Noteist from './ItemList_notes.vue';
+
 const $ = require("jquery");
 
 export default {
+  components: {
+    'cat-view': CategoryList,
+    'note-view': Noteist
+  },
   mixins: [HelperMixin],
   props: {
     load: {
@@ -167,7 +177,7 @@ export default {
 </script>
 <style lang="scss">
 .itemlist {
-  min-height: 200px;
+  // min-height: 200px;
   max-height: 400px;
   overflow: scroll;
 }
