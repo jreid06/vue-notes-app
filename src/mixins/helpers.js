@@ -41,18 +41,22 @@ export default {
 
     formatDate(timestamp) {
       let date = new Date((timestamp)),
-        months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+        months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sept', 'oct', 'nov', 'dec'];
 
       let obj = {
         day: date.getDate(),
         month: months[date.getMonth()],
+        monthNo: (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1,
         minutes: date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes(),
         hours: date.getHours() < 10 ? `0${date.getHours()}` : date.getHours(),
         year: date.getFullYear(),
         prefix: date.getHours() < 12 ? 'am' : 'pm',
       }
+      debugger;
       return {
-        readableDate: `${obj.day} ${obj.month} &bull; ${obj.hours}:${obj.minutes} ${obj.prefix} &bull; ${obj.year}`
+        readableDate: `${obj.day} ${obj.month} &bull; ${obj.hours}:${obj.minutes} ${obj.prefix} &bull; ${obj.year}`,
+        ukDate: `${obj.day} &bull; ${obj.monthNo} &bull; ${obj.year}`,
+        month: obj.month
       }
     },
 
