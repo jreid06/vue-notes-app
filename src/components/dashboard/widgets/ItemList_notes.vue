@@ -1,6 +1,6 @@
 <template>
   <div class="w-100 d-flex flex-row flex-wrap">
-     <div class="p-2 flex-fill text-center w-100 border" v-for="(n, i) in notes" :key="i">
+     <div class="p-2 flex-fill text-center w-100 border animated fadeIn" v-for="(n, i) in notes" :key="i">
 		<h3 :style="{color: getCategory(n.categoryID).cat.colour}"> <i :class="n.icon"></i></h3>
 		<h5>{{n.title |firstWordCapital}}</h5>
 	</div>

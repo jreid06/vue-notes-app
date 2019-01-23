@@ -46,8 +46,8 @@
       </li>
     </ul> -->
     <div v-if="this.items.length">
-        <cat-view :categories="lastestData" v-if="load === 'categories'"></cat-view>
-        <note-view :notes="lastestData" v-else></note-view>
+        <cat-view :categories="lastestData" :load="load" v-if="load === 'categories'"></cat-view>
+        <note-view :notes="lastestData" :load="load" v-else></note-view>
     </div>
     <div
       class="no-items d-flex flex-column justify-content-center align-items-center bg-light text-warning p-2"
@@ -177,7 +177,7 @@ export default {
 </script>
 <style lang="scss">
 .itemlist {
-  // min-height: 200px;
+  min-height: 50px;
   max-height: 400px;
   overflow: scroll;
 }
