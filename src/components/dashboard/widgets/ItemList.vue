@@ -179,7 +179,7 @@ export default {
 .itemlist {
   min-height: 50px;
   max-height: 400px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .itemlist-li {
