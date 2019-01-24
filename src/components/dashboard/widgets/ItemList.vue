@@ -1,8 +1,8 @@
 <template>
   <div class="bg-white shadow-sm itemlist pr">
     <div v-if="this.items.length">
-        <cat-view :categories="lastestData" :load="load" v-if="load === 'categories'"></cat-view>
-        <note-view :notes="lastestData" :load="load" v-else></note-view>
+        <cat-view :categories="lastestData" :load="load" :limit="limit" v-if="load === 'categories'"></cat-view>
+        <note-view :notes="lastestData" :load="load" :limit="limit" v-else></note-view>
     </div>
     <div
       class="no-items d-flex flex-column justify-content-center align-items-center bg-light text-warning p-2"
@@ -131,10 +131,16 @@ export default {
 };
 </script>
 <style lang="scss">
+
+.itemlist::-webkit-scrollbar { width: 0 !important }
+.itemlist{ overflow: -moz-scrollbars-none; }
+.itemlist{ -ms-overflow-style: none; }
+
+
 .itemlist {
   min-height: 50px;
   max-height: 400px;
-  overflow-y: scroll;
+  overflow: scroll;
 }
 
 .itemlist-li {
