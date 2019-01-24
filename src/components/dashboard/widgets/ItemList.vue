@@ -1,53 +1,8 @@
 <template>
   <div class="bg-white shadow-sm itemlist pr">
-    <!-- <ul class="list-group list-group-flush" v-if="this.items.length > 0">
-      <li
-        class="itemlist-li list-group-item d-flex flex-row flex-no-wrap flex-sm-wrap flex-md-no-wrap text-capitalize"
-        v-for="(n,i) in lastestData"
-        :key="i" >
-        <div class="p-2 flex-fill h4 text-left" :style="{color: n.colour}">
-          <i :class="n.icon"></i>
-        </div>
-
-        <div class="p-2 flex-fill">
-          <p>
-            {{n.title}} 
-            <span class="text-danger" v-if="load === 'notes'"> - CatID: {{n.categoryID}}</span>
-          </p>
-        </div>
-        <div class="p-2 flex-fill">
-          <p v-html="formatDate(n.createdAt).readableDate"></p>
-        </div>
-        <div class="p-2 flex-fill">
-          <p>{{n.key}}</p>
-        </div>
-        <div class="p-2 flex-fill bg-light">
-          <ul class="list-inline">
-            <li
-              class="list-inline-item text-danger hvr-grow"
-              :data-id="n.key"
-              :data-item="JSON.stringify(n)"
-              :data-type="load"
-              data-action="delete"
-              @click="triggerModal"
-            >
-              <i class="far fa-trash-alt" :data-id="n.key"></i>
-            </li>
-            <li class="list-inline-item text-info hvr-grow">
-              <router-link :to="'/dashboard/'+ load +'/'+ n.key">
-                <i class="far fa-edit"></i>
-              </router-link>
-            </li>
-            <li class="list-inline-item hvr-grow">
-              <i class="fas fa-ellipsis-h"></i>
-            </li>
-          </ul>
-        </div>
-      </li>
-    </ul> -->
     <div v-if="this.items.length">
-        <cat-view :categories="lastestData" :load="load" v-if="load === 'categories'"></cat-view>
-        <note-view :notes="lastestData" :load="load" v-else></note-view>
+        <cat-view :categories="lastestData" :load="load" :limit="limit" v-if="load === 'categories'"></cat-view>
+        <note-view :notes="lastestData" :load="load" :limit="limit" v-else></note-view>
     </div>
     <div
       class="no-items d-flex flex-column justify-content-center align-items-center bg-light text-warning p-2"
@@ -176,10 +131,16 @@ export default {
 };
 </script>
 <style lang="scss">
+
+.itemlist::-webkit-scrollbar { width: 0 !important }
+.itemlist{ overflow: -moz-scrollbars-none; }
+.itemlist{ -ms-overflow-style: none; }
+
+
 .itemlist {
   min-height: 50px;
   max-height: 400px;
-  overflow-y: scroll;
+  overflow: scroll;
 }
 
 .itemlist-li {
