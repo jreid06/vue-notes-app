@@ -22,6 +22,12 @@ const getters = {
   allNotes: state => {
     return state.notes.all;
   },
+  bookmarkedNotes: state => {
+    return {
+      amount: state.notes.bookmarked.length,
+      all: state.notes.bookmarked
+    }
+  },
   getNote: (state) => (id) => {
     let note = '',
       index = '';
@@ -101,6 +107,8 @@ const mutations = {
   },
   updateEditedNote(state, payload) {
     let note = store.getters.getNote(payload.key);
+
+    payload.updatedAt = Date.now();
 
     // overwrite old NOTE data with the new data
     state.notes.all[note.index] = payload;
