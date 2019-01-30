@@ -54,7 +54,6 @@ export default {
                 year: date.getFullYear(),
                 prefix: date.getHours() < 12 ? 'am' : 'pm',
             }
-            debugger;
             return {
                 readableDate: `${obj.day} ${obj.month} &bull; ${obj.hours}:${obj.minutes} ${obj.prefix} &bull; ${obj.year}`,
                 ukDate: `${obj.day} &bull; ${obj.monthNo} &bull; ${obj.year}`,
