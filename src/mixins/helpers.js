@@ -16,7 +16,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['modalID'])
+        ...mapGetters(['modalID',
+            'allCategories'
+        ])
   },
   methods: {
     ...mapMutations(['updateSelectedCategory', 'updateSelectedNote', 'itemToDelete', 'itemToEdit']),
