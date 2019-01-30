@@ -22,6 +22,12 @@ const getters = {
   allCategories: state => {
     return state.categories.all;
   },
+  bookmarkedCategories: state =>{
+    return {
+      amount: state.categories.bookmarked.length,
+      all: state.categories.bookmarked
+    }
+  },
   getCategory: (state) => (id) => {
 
     let cat = '',

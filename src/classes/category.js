@@ -7,6 +7,7 @@ export default class {
     this.type = 'categories',
     this.title = title;
     this.description = description;
+    this.bookmarked = false,
     this.icon = 'fas fa-folder';
     this.colour = colour;
     this.notes = [];

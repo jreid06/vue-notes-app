@@ -45,6 +45,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
+.nav-box::-webkit-scrollbar { width: 0 !important }
+.nav-box{ overflow: -moz-scrollbars-none; }
+.nav-box{ -ms-overflow-style: none; }
+
 .nav-box {
   // position: fixed;
   overflow-y: scroll;
