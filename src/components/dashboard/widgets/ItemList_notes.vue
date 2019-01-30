@@ -33,6 +33,10 @@
 			<h3 :style="{color: getCategory(n.categoryID).cat.colour}"> <i :class="n.icon"></i></h3>
 		</router-link>
 		<h5>{{n.title |firstWordCapital}}</h5>
+    <hr>
+    <h6>
+      <span v-html="formatDate(n.createdAt).ukDate"></span>
+    </h6>
 	</div>
   </div>
   </div>
