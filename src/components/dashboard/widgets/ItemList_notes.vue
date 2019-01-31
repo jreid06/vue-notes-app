@@ -33,28 +33,32 @@
     </div>
     <div class="oy-s pnt-9 note-list-div">
       <ul class="list-group list-group-flush">
-        <li
-          v-for="(n, i) in filterNotes"
-          :key="i"
-          class="p-2 text-center flex-fill h-25 border-right border-light d-flex animated fadeIn m-1 w-100"
-        >
-          <div class="p-2">
-            <h2 :style="{color: getCategory(n.categoryID).cat.colour}">
-              <i :class="n.icon"></i>
-            </h2>
-          </div>
-          <div class="p-2 text-left wn-40">
-            <span class="small">Title</span>
-            <h6 :style="{color: getCategory(n.categoryID).cat.colour}">{{n.title |truncate(17) | firstWordCapital}}</h6>
-			<span class="small">Created</span>
-            <h6 class="small">
-              <span v-html="formatDate(n.createdAt).ukDate"></span>
-            </h6>
-          </div>
-          <div class="p-2 flex-fill">
-            <ul class="list-inline controls">
-              <li
-                class="list-inline-item text-danger hvr-grow"
+        <template v-if="filterNotes.length > 0">
+          <li
+            v-for="(n, i) in filterNotes"
+            :key="i"
+            class="p-2 text-center flex-fill h-25 border-right border-light d-flex animated fadeIn m-1 w-100"
+          >
+            <div class="p-2">
+              <h2 :style="{color: getCategory(n.categoryID).cat.colour}">
+                <i :class="n.icon"></i>
+              </h2>
+            </div>
+            <div class="p-2 text-left wn-40">
+              <span class="small">Title</span>
+              <h6
+                :style="{color: getCategory(n.categoryID).cat.colour}"
+              >{{n.title |truncate(17) | firstWordCapital}}</h6>
+              <span class="small">Created</span>
+              <h6 class="small">
+                <span v-html="formatDate(n.createdAt).ukDate"></span>
+              </h6>
+            </div>
+            <div
+              class="flex-fill d-flex flex-column flex-no-wrap justify-content-center text-light align-items-center"
+            >
+              <div
+                class="p-2 bg-danger w-100 flex-fill"
                 :data-id="n.key"
                 :data-item="JSON.stringify(n)"
                 :data-type="load"
@@ -62,18 +66,23 @@
                 @click="triggerModal"
               >
                 <i class="far fa-trash-alt" :data-id="n.key"></i>
-              </li>
-              <li class="list-inline-item text-info hvr-grow">
+              </div>
+              <div class="p-2 bg-light w-100 flex-fill">
                 <router-link :to="'/dashboard/'+ load +'/'+ n.key">
                   <i class="far fa-edit"></i>
                 </router-link>
-              </li>
-              <li class="list-inline-item hvr-grow">
+              </div>
+              <div class="bg-dark w-100 flex-fill">
                 <i class="fas fa-ellipsis-h"></i>
-              </li>
-            </ul>
-          </div>
-        </li>
+              </div>
+            </div>
+          </li>
+        </template>
+        <template v-else>
+          <li class="p-2 text-center flex-fill h-25 d-flex animated fadeIn m-1 w-100">
+            <p class="w-100">There are no {{load}} to show</p>
+          </li>
+        </template>
       </ul>
     </div>
   </div>
@@ -95,8 +104,8 @@ export default {
     }
   },
   computed: {
-	...mapGetters(["getCategory", "allNotes", "bookmarkedNotes"]),
-	filterNotes() {
+    ...mapGetters(["getCategory", "allNotes", "bookmarkedNotes"]),
+    filterNotes() {
       const vm = this;
       if (this.bookmarked) {
         let f = vm.notes.filter((el, i) => {
@@ -112,8 +121,8 @@ export default {
   mixins: [HelperMixin],
   data() {
     return {
-		bookmarked: false
-	};
+      bookmarked: false
+    };
   },
   methods: {
     toggleBookmarked(b) {
