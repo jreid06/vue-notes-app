@@ -45,7 +45,7 @@ Vue.filter('firstWordCapital', (value) => {
 
 Vue.filter('truncate', (value, len) => {
     let res;
-    res = value.split('').length < 6 ? value : value.substring(len, 0) + '...';
+    res = value.split('').length <= 15 ? value : value.substring(len, 0) + '...';
     return res;
 });
 ////
