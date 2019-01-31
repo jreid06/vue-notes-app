@@ -41,6 +41,19 @@ export const routes = [{
       }
     ]
   },
+   {
+     path: '/dashboard/note',
+     component: Dashboard,
+     children: [{
+         path: '',
+         redirect: '/dashboard/notes'
+       },
+       {
+         path: ':noteid',
+         component: Note
+       }
+     ]
+   },
   {
     path: '/dashboard/notes',
     component: Dashboard,
