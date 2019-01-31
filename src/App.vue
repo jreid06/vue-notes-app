@@ -63,6 +63,22 @@ export default {
   cursor: pointer !important;
 }
 
+.app-body::-webkit-scrollbar { width: 0 !important }
+.app-body{ overflow: -moz-scrollbars-none; }
+.app-body{ -ms-overflow-style: none; }
+
+.oy-s{
+  overflow-y: scroll !important;
+}
+
+.ox-h{
+  overflow-x: hidden;
+}
+
+.oy-s::-webkit-scrollbar { width: 0 !important }
+.oy-s{ overflow: -moz-scrollbars-none; }
+.oy-s{ -ms-overflow-style: none; }
+
 .app-body {
   overflow-y: scroll;
   overflow-x: hidden;
@@ -72,20 +88,45 @@ export default {
   position: relative !important;
 }
 
+.pa{
+  position: absolute !important;
+}
+
 @for $i from 1 through 3 {
   .t-#{$i}#{0} {
     top: -#{$i}0px;
   }
 }
 
-@for $i from 1 through 3 {
+@for $i from 1 through 10 {
   .z-#{$i} {
     z-index: #{$i};
   }
 }
 
+@for $i from 0 through 99 {
+  // e.g width notes - 99&
+  .wn-#{$i}{
+    width: round(percentage($i/100));
+  }
+
+  // e.g max width percentage - 78%
+  .mwp-#{$i}{
+    max-width: round(percentage($i/100));
+  }
+
+  // e.g padding notes top 
+  .pnt-#{$i} {
+    padding-top: #{$i}rem;
+  }
+}
+
 .vh-100 {
   height: 100vh;
+}
+
+.h-80{
+  height: 90% !important;
 }
 
 h1,

@@ -16,6 +16,7 @@ export default class {
     this.bookmarked = false;
     this.key = key;
     this.createdAt = Date.now();
+    this.updatedAt = '';
   }
 
   returnDraft() {

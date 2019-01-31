@@ -43,6 +43,11 @@ Vue.filter('firstWordCapital', (value) => {
   return finalStr;
 });
 
+Vue.filter('truncate', (value, len) => {
+    let res;
+    res = value.split('').length <= 15 ? value : value.substring(len, 0) + '...';
+    return res;
+});
 ////
 
 function storageAvailable(type) {

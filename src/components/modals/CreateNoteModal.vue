@@ -51,7 +51,7 @@
               <div class="col-12 pb-2">
                 <div class="input-group mb-3">
                   <select class="custom-select" id="inputGroupSelect02" v-model="note.catID">
-                    <option value="n/a" selected>Choose...</option>
+                    <option value="" selected>Choose...</option>
                     <option
                       :value="category.key"
                       v-for="(category, i) in allCategories"
@@ -160,6 +160,7 @@ export default {
     },
     createNote() {
       const vm = this;
+      // manual check to see if user has actually selected a category or ch
       let valid = this.validateNote(),
         note = "";
 
@@ -220,6 +221,8 @@ export default {
           vm.note[key] = "";
         }
       }
+
+      this.toggleError();
 
     },
     resetEdit() {

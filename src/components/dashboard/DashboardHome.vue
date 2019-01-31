@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="row pr t-30 z-3">
-      <div class="col-12 col-lg-4 p-2 d-flex flex-row flex-lg-column">
+      <div class="col-12 p-2 d-flex flex-row">
         <div
           class="click-box create-category p-3 w-100 shadow-sm mb-3 bg-white hvr-grow"
           v-for="(action, key) in actions[0]"
@@ -27,7 +27,7 @@
           </p>
         </div>
       </div>
-      <div class="col-12 col-lg-4 p-2">
+      <div class="col-12 col-md-6 p-2">
         <category-list
           :load="'categories'"
           :limit="5"
@@ -36,7 +36,7 @@
           :items="this.allCategories"
         ></category-list>
       </div>
-      <div class="col-12 col-sm-6 col-lg-4 p-2">
+      <div class="col-12 col-md-6 p-2">
         <note-list
           :load="'notes'"
           :limit="5"
@@ -111,9 +111,8 @@ export default {
 }
 
 .create-category {
+  width: calc(100% / 3) !important;
   @media screen and (max-width: 992px) {
-    width: calc(100% / 3) !important;
-
     h2 {
       font-size: 2rem;
     }

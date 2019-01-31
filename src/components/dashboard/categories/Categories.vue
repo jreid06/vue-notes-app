@@ -19,12 +19,12 @@
                   aria-expanded="true"
                   :aria-controls="`#collapse${i}`"
                 >
-                  <div class="p-2 flex-fill text-capitalize">{{n.title}}</div>
-                  <div class="py-2 px-4 flex-shrink text-right">
+                <div class="py-2 px-4 flex-shrink text-right">
                     <router-link :to="$route.path+'/'+n.key" :style="{color: n.colour}">
                       <i class="fas fa-folder"></i>
                     </router-link>
                   </div>
+                  <div class="p-2 flex-fill text-capitalize">{{n.title}}</div>
                   <div class="p-2 flex-shrink text-right">
                     <i class="fas fa-chevron-down"></i>
                   </div>
@@ -43,6 +43,9 @@
                 <ul>
                   <li v-for="(note, i) in n.notes" :key="i">
                     {{getNote(note.id).note.title}}
+                    <router-link :to="`/dashboard/${getNote(note.id).note.type}/${note.id}`">
+                    <i class="fas fa-file-alt    "></i>
+                    </router-link>
                     <hr>
                   </li>
                 </ul>
@@ -123,8 +126,12 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.categories = vm.allCategories;
+      // vm.categories = vm.allCategories;
     });
+  },
+  mounted(){
+    const vm = this;
+     vm.categories = vm.allCategories;
   }
 };
 </script>

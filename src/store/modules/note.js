@@ -22,6 +22,12 @@ const getters = {
   allNotes: state => {
     return state.notes.all;
   },
+  bookmarkedNotes: state => {
+    return {
+      amount: state.notes.bookmarked.length,
+      all: state.notes.bookmarked
+    }
+  },
   getNote: (state) => (id) => {
     let note = '',
       index = '';
@@ -82,8 +88,6 @@ const mutations = {
   },
   updateSelectedNote(state, {payload, changeCategory}) {
 
-    debugger;
-
     if (changeCategory && state.notes.selected.categoryID !== payload.categoryID) {
 
       // trigger a category change 
@@ -99,15 +103,13 @@ const mutations = {
 
     }
 
-    debugger;
-
     state.notes.selected = payload;
   },
   updateEditedNote(state, payload) {
     let note = store.getters.getNote(payload.key);
 
-    let oldnote = state.notes.all[note.index];
-    debugger;
+    payload.updatedAt = Date.now();
+
     // overwrite old NOTE data with the new data
     state.notes.all[note.index] = payload;
 

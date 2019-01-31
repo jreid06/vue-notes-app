@@ -44,7 +44,11 @@
       </div>
       <div class="col-12 col-lg-7 parsed-note-markdown">
         <note-svg :fill="getCategory(note.categoryID).cat.colour"></note-svg>
-        <div id="markdown-div" class="pt-4 p-3" v-html="marked(note.noteMarkdown)"></div>
+        <div id="markdown-div" class="pt-4 p-3">
+          <div  v-html="marked(note.noteMarkdown)">
+
+          </div>
+        </div>
       </div>
     </div>
     <!--  -->
@@ -101,9 +105,8 @@ export default {
         //   categoryID: this.note.categoryID,
         //   note: this.note
         // });
-       vm.updateEditedNote(vm.note);
-       vm.updateSelectedNote({payload: vm.note});
-
+        vm.updateEditedNote(vm.note);
+        vm.updateSelectedNote({ payload: vm.note });
       }
     }
   },
@@ -111,13 +114,18 @@ export default {
     next(vm => {});
   },
   methods: {
-    ...mapMutations(["updateSelectedNote", "updateNoteInCategory", "updateEditedNote"]),
+    ...mapMutations([
+      "updateSelectedNote",
+      "updateNoteInCategory",
+      "updateEditedNote"
+    ]),
     quickDeleteItem() {},
     getSelectedNote() {
       let noteID = this.$route.params.noteid;
       let note = this.getNote(noteID);
 
-      this.updateSelectedNote({payload: note.note});
+
+      this.updateSelectedNote({ payload: note.note });
       this.note = this.selectedNoteItem;
       this.noteindex = note.index;
     },
@@ -157,7 +165,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .note-data {
   min-height: 300px;
   transition: all 0.3s ease-in-out;
@@ -165,7 +173,14 @@ export default {
 
 .parsed-note-markdown {
   // position: relative;
-  #markdown-div {
+  
+}
+
+ h1{
+     color: gold !important;
+   }
+
+#markdown-div {
     border-radius: 10px;
     background-color: rgba(241, 241, 241, 0.2);
     position: relative;
@@ -180,5 +195,8 @@ export default {
     margin-right: auto;
     z-index: 20;
   }
-}
+
+  img {
+     width: 100%
+  }
 </style>
