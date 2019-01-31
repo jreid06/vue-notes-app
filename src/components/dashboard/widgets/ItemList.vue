@@ -138,7 +138,7 @@ export default {
 
 
 .itemlist {
- 
+  min-height: 200px;
 }
 
 .itemlist-li {
