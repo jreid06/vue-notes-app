@@ -4,7 +4,8 @@
       <div class="d-flex flex-row flex-wrap">
         <div class="header p-3 bg-dark text-light text-center w-100">Categories</div>
         <div
-          class="control all-categories p-2 d-flex border flex-no-wrap justify-content-between flex-fill align-items-center bg-white"
+          class="control all-categories p-2 d-flex border flex-no-wrap justify-content-between flex-fill align-items-center"
+          @click="toggleBookmarked(false)" :class="{ 'bg-dark text-light':!bookmarked, 'bg-white':bookmarked}"
         >
           <div class="p-2 h3">
             <i class="fas fa-folder"></i>
@@ -15,7 +16,8 @@
           <div class="p-2 h4">{{allCategories.length}}</div>
         </div>
         <div
-          class="control categories-bookmarked p-2 border d-flex flex-no-wrap justify-content-between flex-fill align-items-center bg-white"
+          class="control categories-bookmarked p-2 border d-flex flex-no-wrap justify-content-between flex-fill align-items-center"
+          @click="toggleBookmarked(true)" :class="{ 'bg-dark text-light':bookmarked, 'bg-white':!bookmarked}"
         >
           <div class="p-2 h3">
             <i class="fas fa-star bookmark"></i>
@@ -30,7 +32,7 @@
     <div class="oy-s pnt-9 cat-list-div">
       <ul class="list-group list-group-flush">
         <li
-          v-for="(n, i) in categories"
+          v-for="(n, i) in filterCategories"
           :key="i"
           class="p-2 text-center flex-fill h-25 border-right border-light d-flex animated fadeIn m-1 w-100"
         >
@@ -42,12 +44,16 @@
           <div class="p-2 text-left wn-35">
             <span class="small">Title</span>
             <h6>{{n.title |truncate(17) | firstWordCapital}}</h6>
-          </div>
-          <div class="p-2 flex-fill">
-            <span class="small">Created</span>
-            <h6>
+			 <span class="small">Created</span>
+            <h6 class="small">
               <span v-html="formatDate(n.createdAt).ukDate"></span>
             </h6>
+          </div>
+          <div class="p-2 pt-4 flex-fill d-flex flex-column align-items-center" :style="{backgroundColor: n.colour, color: '#f2f2f2'}">
+			  <span class="h3"><i class="far fa-file-alt"></i></span>
+			  <h3>
+				  {{n.notes.length}}
+			  </h3>
           </div>
           <div class="p-2 flex-fill">
             <ul class="list-inline controls">
@@ -94,12 +100,30 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["bookmarkedCategories", "allCategories"])
+    ...mapGetters(["bookmarkedCategories", "allCategories"]),
+    filterCategories() {
+      const vm = this;
+      if (this.bookmarked) {
+        let f = vm.categories.filter((el, i) => {
+          return el.bookmarked;
+        });
+
+        return f;
+      }
+
+      // return all categories
+      return vm.categories;
+    }
   },
   data() {
     return {
-      bookmarkedRows: 2
+      bookmarked: false
     };
+  },
+  methods: {
+    toggleBookmarked(b) {
+      this.bookmarked = b;
+    }
   }
 };
 </script>

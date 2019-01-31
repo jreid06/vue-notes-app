@@ -105,10 +105,17 @@ export default {
 }
 
 @for $i from 0 through 99 {
+  // e.g width notes - 99&
   .wn-#{$i}{
     width: round(percentage($i/100));
   }
 
+  // e.g max width percentage - 78%
+  .mwp-#{$i}{
+    max-width: round(percentage($i/100));
+  }
+
+  // e.g padding notes top 
   .pnt-#{$i} {
     padding-top: #{$i}rem;
   }

@@ -27,7 +27,7 @@
           </p>
         </div>
       </div>
-      <div class="col-12 col-lg-6 p-2">
+      <div class="col-12 col-md-6 p-2">
         <category-list
           :load="'categories'"
           :limit="5"
@@ -36,7 +36,7 @@
           :items="this.allCategories"
         ></category-list>
       </div>
-      <div class="col-12 col-lg-6 p-2">
+      <div class="col-12 col-md-6 p-2">
         <note-list
           :load="'notes'"
           :limit="5"

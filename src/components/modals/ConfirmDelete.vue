@@ -7,8 +7,14 @@
             Are you sure you want to delete this {{deleteItem.type}} ?
             <br>
             <span
+              v-if="deleteItem.type == 'categories'"
               :style="{color: deleteItem.colour}"
-            >{{deleteItem.hasOwnProperty('category')? deleteItem.category : deleteItem.title}}</span>
+            >{{deleteItem.title}}</span>
+            <span
+              v-else
+              :style="{color: getCategory(deleteItem.categoryID).cat.colour}"
+            >{{deleteItem.title}}</span>
+
             <template v-if="deleteItem.type == 'categories'">
               <span>has {{deleteItem.notes.length}} note(s)?</span>
             </template>
@@ -17,22 +23,22 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body border">
-          <template v-if="deleteItem.type == 'categories'">
-            <div>
+        <template v-if="deleteItem.type == 'categories'">
+          <div class="modal-body">
+            <div class="border-top">
               <ul class="list-group list-group-flush">
                 <li class="list-group-item d-flex" v-for="(n, i) in deleteItem.notes" :key="i">
-                  <div class="p-2 h2">
+                  <div class="p-2 h3">
                     <i :class="getNote(n.id).note.icon"></i>
                   </div>
-                  <div class="p-2 pl-5 h2">
+                  <div class="p-2 pl-5 h3">
                     <p :style="{color: deleteItem.colour}">{{getNote(n.id).note.title}}</p>
                   </div>
                 </li>
               </ul>
             </div>
-          </template>
-        </div>
+          </div>
+        </template>
         <div class="modal-footer border-0">
           <button type="button" class="btn text-danger" data-dismiss="modal">
             <i class="far fa-times-circle"></i>
@@ -59,7 +65,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getItemToDelete", "getNote"])
+    ...mapGetters(["getItemToDelete", "getNote", "getCategory"])
   },
   data() {
     return {
