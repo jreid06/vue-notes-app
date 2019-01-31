@@ -1,8 +1,8 @@
 <template>
   <div class="bg-white shadow-sm itemlist pr">
     <div v-if="this.items.length">
-        <cat-view :categories="lastestData" :load="load" :limit="limit" v-if="load === 'categories'"></cat-view>
-        <note-view :notes="lastestData" :load="load" :limit="limit" v-else></note-view>
+      <cat-view :categories="lastestData" :load="load" :limit="limit" v-if="load === 'categories'"></cat-view>
+      <note-view :notes="lastestData" :load="load" :limit="limit" v-else></note-view>
     </div>
     <div
       class="no-items d-flex flex-column justify-content-center align-items-center bg-light text-warning p-2"
@@ -16,15 +16,15 @@
 import { mapGetters } from "vuex";
 import HelperMixin from "./../../../mixins/helpers.js";
 
-import CategoryList from './ItemList_categories.vue';
-import Noteist from './ItemList_notes.vue';
+import CategoryList from "./ItemList_categories.vue";
+import Noteist from "./ItemList_notes.vue";
 
 const $ = require("jquery");
 
 export default {
   components: {
-    'cat-view': CategoryList,
-    'note-view': Noteist
+    "cat-view": CategoryList,
+    "note-view": Noteist
   },
   mixins: [HelperMixin],
   props: {
@@ -90,18 +90,11 @@ export default {
     // called from the create modals
     updateData(getter) {
       const vm = this;
-      console.log(getter);
-
       switch (getter) {
         case "categories":
-          console.log("categories list data updated");
-          console.log(this.$store.getters.allCategories);
           vm.listData = this.$store.getters.allCategories;
           break;
         case "notes":
-          console.log("notes list data updated");
-          console.log(this.$store.getters.allNotes);
-
           vm.listData = this.$store.getters.allNotes;
           break;
         default:
@@ -131,11 +124,15 @@ export default {
 };
 </script>
 <style lang="scss">
-
-.itemlist::-webkit-scrollbar { width: 0 !important }
-.itemlist{ overflow: -moz-scrollbars-none; }
-.itemlist{ -ms-overflow-style: none; }
-
+.itemlist::-webkit-scrollbar {
+  width: 0 !important;
+}
+.itemlist {
+  overflow: -moz-scrollbars-none;
+}
+.itemlist {
+  -ms-overflow-style: none;
+}
 
 .itemlist {
   min-height: 200px;

@@ -37,7 +37,7 @@
           <li
             v-for="(n, i) in filterCategories"
             :key="i"
-            class="p-2 text-center flex-fill h-25 border-right border-light d-flex animated fadeIn m-1 w-100"
+            class="p-2 text-center flex-fill border-right border-light d-flex animated fadeIn m-1 w-100"
           >
             <div class="p-2">
               <h2 :style="{color: n.colour}">
@@ -47,26 +47,26 @@
             <div class="p-2 text-left wn-35">
               <span class="small">Title</span>
               <h6>{{n.title |truncate(17) | firstWordCapital}}</h6>
-              <span class="small">Created</span>
+              <!-- <span class="small">Created</span>
               <h6 class="small">
                 <span v-html="formatDate(n.createdAt).ukDate"></span>
-              </h6>
+              </h6> -->
             </div>
             <div
-              class="p-2 pt-4 flex-fill d-flex flex-column align-items-center"
+              class="p-2 pt-4 flex-fill d-flex flex-row justify-content-around align-items-center"
               :style="{backgroundColor: n.colour, color: '#f2f2f2'}"
             >
-              <span class="h3">
+              <span class="h3 p-1">
                 <i class="far fa-file-alt"></i>
               </span>
-              <h3>{{n.notes.length}}</h3>
+              <h3 class="p-1">{{n.notes.length}}</h3>
             </div>
             <!--  -->
             <div
-              class="flex-fill d-flex flex-column flex-no-wrap justify-content-center text-light align-items-center"
-            >
+              class="p-2 pt-3 flex-fill d-flex flex-row flex-no-wrap justify-content-around text-light align-items-center"
+              :style="{backgroundColor: n.colour}">
               <div
-                class="p-2 bg-danger w-100 flex-fill"
+                class="w-100 flex-fill"
                 :data-id="n.key"
                 :data-item="JSON.stringify(n)"
                 :data-type="load"
@@ -75,12 +75,12 @@
               >
                 <i class="far fa-trash-alt" :data-id="n.key"></i>
               </div>
-              <div class="p-2 bg-light w-100 flex-fill">
-                <router-link :to="'/dashboard/'+ load +'/'+ n.key">
+              <div class="w-100 flex-fill">
+                <router-link :to="'/dashboard/'+ load +'/'+ n.key" class="text-light">
                   <i class="far fa-edit"></i>
                 </router-link>
               </div>
-              <div class="bg-dark w-100 flex-fill">
+              <div class="w-100 flex-fill">
                 <i class="fas fa-ellipsis-h"></i>
               </div>
             </div>

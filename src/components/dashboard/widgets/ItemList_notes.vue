@@ -72,8 +72,8 @@
                   <i class="far fa-edit"></i>
                 </router-link>
               </div>
-              <div class="bg-dark w-100 flex-fill">
-                <i class="fas fa-ellipsis-h"></i>
+              <div class="bg-light w-100 flex-fill" >
+                <i class="fas fa-ellipsis-h" :style="{color: getCategory(n.categoryID).cat.colour}"></i>
               </div>
             </div>
           </li>
