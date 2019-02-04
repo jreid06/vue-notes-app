@@ -81,7 +81,7 @@
                 </router-link>
               </div>
               <div class="w-100 flex-fill">
-                <i class="fas fa-ellipsis-h"></i>
+                <bookmark-item :requires-container="false"></bookmark-item>
               </div>
             </div>
           </li>
@@ -99,8 +99,13 @@
 import { mapGetters } from "vuex";
 import HelperMixin from "./../../../mixins/helpers";
 
+import BookmarkStar from "./Bookmark.vue";
+
 export default {
   mixins: [HelperMixin],
+  components: {
+    'bookmark-item': BookmarkStar
+  },
   props: {
     categories: {
       type: Array
