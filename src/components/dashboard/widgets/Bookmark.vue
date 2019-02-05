@@ -1,13 +1,9 @@
 <template>
-  <div v-if="itemRetrieved" @click="toggleBookmarked">
+  <div @click="toggleBookmarked" class="hvr-grow">
     <div class="bookmark cp" v-if="requiresContainer">
-      <i :class="{'far fa-star' : !currentItem.bookmarked, 'fas fa-star' : currentItem.bookmarked}"></i>
+      <i :class="{'far fa-star' : !isBookmarked, 'fas fa-star' : isBookmarked}"></i>
     </div>
-    <i
-      class="cp"
-      :class="{'far fa-star' : !currentItem.bookmarked, 'fas fa-star' : currentItem.bookmarked}"
-      v-else
-    ></i>
+    <i class="cp" :class="{'far fa-star' : !isBookmarked, 'fas fa-star' : isBookmarked}" v-else></i>
     <!-- unbookmarked star-->
   </div>
 </template>
@@ -19,23 +15,20 @@ export default {
     requiresContainer: {
       type: Boolean,
       required: true
-    },
-    item: {
-      required: true
-    },
-    itemType: {
-      type: String,
-      required: true
-    },
-    itemId: {
-      type: String,
+	},
+	itemType:{
+		required: true
+	},
+	ikey: {
+		required: true
+	},
+    isBookmarked: {
       required: true
     }
   },
   data() {
     return {
-      itemRetrieved: false,
-      currentItem: ""
+      itemRetrieved: false
     };
   },
   computed: {
@@ -56,36 +49,36 @@ export default {
     ...mapMutations([
       "updateEditedCategory",
       "updateEditedNote",
-      "updateBookmarkedCategories"
+      "updateBookmarkedCategories",
+      "toggleCategoryBookmark"
     ]),
     toggleBookmarked() {
-      const vm = this;
-      let item = this.currentItem;
+		debugger;
+	  const vm = this;
+	  let bookmarked;
 
-      if (item.hasOwnProperty("bookmarked")) {
-        if (item.bookmarked) {
-          item.bookmarked = false;
-        } else {
-          item.bookmarked = true;
-        }
+      if (vm.isBookmarked) {
+        bookmarked = false;
       } else {
-        // create the key as it doesnt exist (old category)
-        item.bookmarked = true;
+        bookmarked = true;
       }
 
       switch (vm.itemType) {
         case "categories":
-          vm.updateEditedCategory(item);
+          vm.toggleCategoryBookmark({
+            isBookmarked: bookmarked,
+            key: vm.ikey
+          });
           vm.updateBookmarkedCategories({
-            bookmarked: item.bookmarked,
-            id: item.key
+            bookmarked: bookmarked,
+            id: vm.ikey
           });
           break;
         case "note":
           vm.updateEditedNote(item);
           vm.updateBookmarkedNotes({
             bookmarked: item.bookmarked,
-            id: item.key
+            id: vm.ikey
           });
           break;
       }

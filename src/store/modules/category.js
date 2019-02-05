@@ -98,12 +98,26 @@ const mutations = {
     // // update storage
     Storage.updateCategories(state.categories.all);
   },
+  toggleCategoryBookmark(state, payload){
+    
+    // get the category
+    let cat = store.getters.getCategory(payload.key).cat;
+
+    // debugger;
+    // update the key BOOLEAN
+    cat.bookmarked = payload.isBookmarked;
+
+    // debugger;
+    //resave in ls
+    Storage.updateCategories(state.categories.all);
+  },
   updateSelectedCategory(state, payload) {
     state.categories.selected = payload;
   },
   updateEditedCategory(state, payload) {
     let cat = store.getters.getCategory(payload.key);
 
+    debugger;
     // overwrite old category data with the new data
     state.categories.all[cat.index] = payload;
 
@@ -115,6 +129,8 @@ const mutations = {
       // add to bookmarked array
       state.categories.bookmarked.push(id);
 
+      // 
+      // Storage.updateCategories()
       return;
     }
 
@@ -153,6 +169,11 @@ const mutations = {
     }
 
     state.categories.all = payload;
+    state.categories.bookmarked = payload.filter((el, i)=>{
+      if(el.bookmarked){
+        return el;
+      }
+    });
   }
 }
 
