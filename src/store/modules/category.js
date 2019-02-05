@@ -62,7 +62,6 @@ const mutations = {
     console.log(cat);
     console.log(payload);
 
-
     // delete the category
     state.categories.all.splice(cat, 1);
 
@@ -87,33 +86,6 @@ const mutations = {
     Storage.updateCategories(state.categories.all);
 
   },
-  // updateNoteInCategory(state, {
-  //   getters,
-  //   categoryID,
-  //   note
-  // }) {
-  //   let catIndex, noteIndex;
-  //   // update note store & note storage
-  //   store.commit('updateEditedNote', note);
-  //   store.commit('updateSelectedNote', note);
-    
-  //   // update note in category
-  //   state.categories.all.find((el, i) => {
-  //     if (el.key === categoryID) {
-  //       catIndex = i;
-  //       el.notes.find((n, j) => {
-  //         if (n.key === note.key) {
-  //           noteIndex = j;
-  //         }
-  //       })
-  //     }
-  //   });
-
-  //   // note must be the full object
-  //   state.categories.all[catIndex].notes[noteIndex] = note;
-   
-  //   Storage.updateCategories(state.categories.all);
-  // },
   addNoteToCategory(state, {
     note,
     getters
@@ -137,6 +109,27 @@ const mutations = {
 
     // // update storage
     Storage.updateCategories(state.categories.all);
+  },
+  updateBookmarkedCategories(state, {bookmarked, id}){
+    if(bookmarked){
+      // add to bookmarked array
+      state.categories.bookmarked.push(id);
+
+      return;
+    }
+
+    //remove from bookmarked array
+    let bookmarkToDelete;
+    state.categories.bookmarked.find((el, i)=>{
+      if(el == id){
+        bookmarkToDelete = i;
+        return;
+      }
+    });
+
+    state.categories.bookmarked.splice(bookmarkToDelete, 1);
+    return;
+
   },
   updateAllCategories(state, payload) {
     // push recently created item into the array

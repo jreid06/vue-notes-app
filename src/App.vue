@@ -88,6 +88,10 @@ export default {
   position: relative !important;
 }
 
+.cp{
+  cursor: pointer;
+}
+
 .pa{
   position: absolute !important;
 }

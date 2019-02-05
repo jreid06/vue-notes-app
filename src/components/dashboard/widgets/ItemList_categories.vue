@@ -81,7 +81,7 @@
                 </router-link>
               </div>
               <div class="w-100 flex-fill">
-                <bookmark-item :requires-container="false"></bookmark-item>
+                <bookmark-item :requires-container="false" :item-type="n.type" :item-id="n.key" :item="n"></bookmark-item>
               </div>
             </div>
           </li>
@@ -126,6 +126,7 @@ export default {
           return el.bookmarked;
         });
 
+        debugger;
         return f;
       }
 
