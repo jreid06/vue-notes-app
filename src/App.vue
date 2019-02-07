@@ -15,7 +15,8 @@ import CatModal from "./components/modals/CreateCategoryModal.vue";
 import LoadModal from './components/modals/LoadNoteModal.vue';
 import DeleteItemModal from './components/modals/ConfirmDelete';
 
-import { mapGetters } from "vuex";
+import { orientationEnum, breakpoints } from './enums/Orientation.js'
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "app",
@@ -28,13 +29,29 @@ export default {
   computed: {
     ...mapGetters(["modalID"])
   },
+  watch:{
+    windowWidth(nv, ov){
+      this.windowWidth = nv;
+    }
+  },
   data() {
     return {
-      appName: "mynotes"
+      appName: "mynotes",
+      windowWidth: document.documentElement.clientWidth || window.innerWidth 
     };
   },
   methods: {
-   
+    ...mapMutations(['updateOrientation']),
+   watchOrientation(){
+     const vm = this;
+
+     if(vm.windowWidth < breakpoints.tablet){
+       vm.updateOrientation(orientationEnum.mobile);
+       return;
+     }
+
+     if(vm.windowWidth){}
+   }
   },
   mounted(){
   
