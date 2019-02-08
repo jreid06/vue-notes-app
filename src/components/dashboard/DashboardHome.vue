@@ -71,12 +71,6 @@ export default {
   computed: {
     ...mapGetters(["appDescription", "modalID", "allCategories", "allNotes"])
   },
-  // beforeRouteEnter(to, from, next) {
-  //   next(vm => {
-  //     vm.$store.commit("syncDatabase", { load: "categories" });
-  //     vm.$store.commit("syncDatabase", { load: "notes" });
-  //   });
-  // },
   data() {
     return {
       actions: [
