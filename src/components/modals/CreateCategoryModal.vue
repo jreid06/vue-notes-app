@@ -95,11 +95,12 @@ import { mapMutations } from "vuex";
 import Category from "./../../classes/category";
 import Storage from "./../../classes/LocalStorage";
 import HelperMixin from "./../../mixins/helpers.js";
+import Notifications from "./../../mixins/toaster.js";
 
 const $ = require("jquery");
 
 export default {
-  mixins: [HelperMixin],
+  mixins: [HelperMixin, Notifications],
   props: {
     id: {
       type: String,
@@ -160,7 +161,7 @@ export default {
       this.colors.forEach((el, i) => {
         if (el.selected) el.selected = false;
       });
-      
+
       this.colors[pos].selected = true;
       this.updateColor(this.colors[pos].styleObj.backgroundColor);
     },
@@ -196,6 +197,12 @@ export default {
       if (valid.error !== null) {
         vm.error = true;
         vm.updateErrorMessage(valid.error.details[0].path[0]);
+
+        // trigger notification
+        this.errorToaster(
+          `${valid.error.details[0].path[0]}`
+        );
+
         return;
       }
 
@@ -215,6 +222,13 @@ export default {
       // // emit result to redirect via route
       this.$emit("change-route", `/dashboard/categories/${category.key}`);
 
+      // trigger notification
+      this.successToaster(
+        `Your category ${
+          category.title
+        } has been created successfully. Add some Notes!!`
+      );
+
       // close modal
       $(`#${this.modalID("category")}`).modal("hide");
     },
@@ -222,10 +236,15 @@ export default {
       let { title, description, colour } = this.categoryDetails;
       this.updateEditItem({ title, description, colour });
 
-       // // emit result to update the selected category
+      // // emit result to update the selected category
       this.$emit("update-selected", `reload`);
 
-       // close modal
+      // trigger notification
+      this.successToaster(
+        `Your category ${title} has been updated successfully`
+      );
+
+      // close modal
       $(`#${this.modalID("category")}`).modal("hide");
     },
     toggleError() {

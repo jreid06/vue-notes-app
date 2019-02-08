@@ -49,6 +49,7 @@ export default {
 @import "./../node_modules/hover.css/scss/hover.scss";
 @import './../node_modules/simplemde/dist/simplemde.min.css';
 @import './../node_modules/animate.css/animate.min.css';
+@import "./../node_modules/toastr/toastr.scss";
 
 #app {
   font-family: "Passion One", cursive;

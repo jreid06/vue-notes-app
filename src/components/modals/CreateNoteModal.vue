@@ -51,7 +51,7 @@
               <div class="col-12 pb-2">
                 <div class="input-group mb-3">
                   <select class="custom-select" id="inputGroupSelect02" v-model="note.catID">
-                    <option value="" selected>Choose...</option>
+                    <option value selected>Choose...</option>
                     <option
                       :value="category.key"
                       v-for="(category, i) in allCategories"
@@ -70,7 +70,7 @@
           <button type="button" class="btn text-danger" data-dismiss="modal">
             <i class="far fa-times-circle"></i>
           </button>
-           <button
+          <button
             type="button"
             class="btn text-success"
             @click="createNote"
@@ -93,12 +93,13 @@ import { mapMutations } from "vuex";
 import Note from "./../../classes/note.js";
 import Storage from "./../../classes/LocalForageClass.js";
 import HelperMixin from "./../../mixins/helpers.js";
+import Notifications from "./../../mixins/toaster.js"
 
 const $ = require("jquery");
 const Joi = require("joi-browser");
 
 export default {
-  mixins: [HelperMixin],
+  mixins: [HelperMixin, Notifications],
   props: {
     id: {
       type: String,
@@ -167,24 +168,27 @@ export default {
       if (valid.error !== null) {
         vm.error = true;
         vm.updateErrorMessage(valid.error.details[0].path[0]);
+
+        // trigger notification
+        this.errorToaster(valid.error.details[0].path[0]);
         return;
       }
 
       // get the corresponding category
-      let category = vm.getCategory(vm.noteDetails.catID);
-      let catJSON = JSON.stringify(category.cat);
+      let category = vm.getCategory(vm.noteDetails.catID).cat;
+
       // instantiate a new note
       note = new Note(
         vm.noteDetails.title,
         vm.noteDetails.brief,
         vm.noteDetails.catID,
-        vm.randomString(),
+        vm.randomString()
       );
 
       // update category array with new category
       // save in local storage
       this.$store.commit("updateAllNotes", note);
-      this.$store.commit("updateSelectedNote", {payload: note});
+      this.$store.commit("updateSelectedNote", { payload: note });
 
       // add note to correct category
       this.$store.dispatch("addNoteToCategory", note);
@@ -192,21 +196,34 @@ export default {
       // // emit result to redirect via route
       this.$emit("change-route", `/dashboard/notes/${note.key}`);
 
+      // trigger notification
+      this.successToaster(
+        `Your note ${
+          note.title
+        } has been created successfully & added to category ${category.title}`
+      );
+
       // close modal
       $(`#${this.modalID("note")}`).modal("hide");
     },
     updateNote() {
       const vm = this;
-      
+
       let { title, brief, catID } = this.noteDetails;
       // update edited item first
       this.updateEditItem({ title, brief, categoryID: catID });
 
       // when modal disappears view gets data
-      this.updateSelectedNote({payload: vm.getItemToEdit, changeCategory: true});
+      this.updateSelectedNote({
+        payload: vm.getItemToEdit,
+        changeCategory: true
+      });
 
       // // emit result to update the selected note in the view
       this.$emit("update-selected", `reload`);
+
+      // trigger notification
+      this.successToaster(`Your note ${title} has been updated successfully`);
 
       // close modal
       $(`#${this.modalID("note")}`).modal("hide");
@@ -223,7 +240,6 @@ export default {
       }
 
       this.toggleError();
-
     },
     resetEdit() {
       this.action = "create";
