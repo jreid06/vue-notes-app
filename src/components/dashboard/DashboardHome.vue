@@ -47,7 +47,7 @@
       </div>
     </div>
     <category-modal :id="modalID('category')" v-on:change-route="redirectTo"></category-modal>
-    <note-modal :id="modalID('note')"></note-modal>
+    <note-modal :id="modalID('note')" :all-categories-p="allCategories"></note-modal>
   </div>
 </template>
 <script>

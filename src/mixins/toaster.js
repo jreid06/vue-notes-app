@@ -23,21 +23,20 @@ export default {
   },
   methods: {
     initializeToaster(){
-		toaster.options.timeOut = 30;
-		toaster.options.extendedTimeOut = 60; 
+		toaster.options.extendedTimeOut = 3000; 
 		toaster.options.progressBar = true;
 	},
 	successToaster(message){
 		toaster.success(!!message ? message : this.message.success);
 	},
 	errorToaster(message){
-		toaster.error(!!message ? message : this.message.success);
+		toaster.error(!!message ? message : this.message.error);
 	},
 	warningToaster(message) {
-	  toaster.warning(!!message ? message : this.message.success);
+	  toaster.warning(!!message ? message : this.message.warning);
 	},
 	infoToaster(message) {
-	  toaster.info(!!message ? message : this.message.success);
+	  toaster.info(!!message ? message : this.message.info);
 	}
 
   }

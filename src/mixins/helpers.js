@@ -10,11 +10,6 @@ const Joi = require("joi-browser");
 
 
 export default {
-    data() {
-        return {
-
-        }
-    },
     computed: {
         ...mapGetters(['modalID',
             'allCategories'
@@ -63,8 +58,7 @@ export default {
 
         triggerModal(e) {
             const vm = this;
-
-            let target = e.target,
+            let target = e.currentTarget,
                 action = target.hasAttribute("data-action") ?
                 target.attributes["data-action"].value :
                 target.parentElement.attributes["data-action"].value,
@@ -86,7 +80,7 @@ export default {
 
 
                 vm.itemToEdit(item);
-
+                // set action to either note or category
                 action = type;
             }
 
@@ -97,7 +91,10 @@ export default {
                 return;
             }
 
-            $(`#${vm.modalID(action)}`).modal();
+            setTimeout(()=>{
+                $(`#${vm.modalID(action)}`).modal();
+            },200);
+            
 
         },
 

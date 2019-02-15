@@ -82,7 +82,8 @@ export default {
       "deleteCategory",
       "deleteRelatedNotes",
       "deleteNote",
-      "deleteCategoryNote"
+      "deleteCategoryNote",
+      "deleteCategoryBookmark"
     ]),
     removeItem() {
       const vm = this;
@@ -97,6 +98,9 @@ export default {
         case "categories":
           //delete all notes associated in notes table
           vm.deleteRelatedNotes(vm.deleteItem.key);
+
+          // 
+          vm.deleteCategoryBookmark(vm.deleteItem.key);
 
           // delete the category
           vm.deleteCategory(vm.deleteItem.key);

@@ -53,7 +53,6 @@ export default {
       "toggleCategoryBookmark"
     ]),
     toggleBookmarked() {
-		debugger;
 	  const vm = this;
 	  let bookmarked;
 

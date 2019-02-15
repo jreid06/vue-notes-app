@@ -17,6 +17,13 @@ const state = {
     status: false,
     item: ''
   },
+  nav: {
+    id: "nav-box"
+  },
+  menuStatus: {
+    clicked: false,
+    state: null
+  },
   modal: {
     note: 'note-modal',
     category: 'category-modal',
@@ -139,6 +146,15 @@ const getters = {
   appStatus: state => {
     return state.app.init;
   },
+  menuInfo: state =>{
+    return {
+      clicked: state.menuStatus.clicked,
+      state: state.menuStatus.state
+    }
+  },
+  getOrientation: state => {
+    return state.app.orientation;
+  },
   orientationSet: state => {
     return state.app.orientation ? true : false
   },
@@ -181,6 +197,9 @@ const mutations = {
   },
   updateOrientation(state, payload) {
     state.app.orientation = payload;
+  },
+  toggleMenuMutation(state, payload){
+    state.menuStatus.state = payload;
   },
   addColour(state, payload) {
     // validate hex code

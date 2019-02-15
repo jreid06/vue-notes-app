@@ -54,7 +54,7 @@
                     <option value selected>Choose...</option>
                     <option
                       :value="category.key"
-                      v-for="(category, i) in allCategories"
+                      v-for="(category, i) in allCategoriesP"
                       :key="i"
                     >{{category.title}}</option>
                   </select>
@@ -93,7 +93,7 @@ import { mapMutations } from "vuex";
 import Note from "./../../classes/note.js";
 import Storage from "./../../classes/LocalForageClass.js";
 import HelperMixin from "./../../mixins/helpers.js";
-import Notifications from "./../../mixins/toaster.js"
+import Notifications from "./../../mixins/toaster.js";
 
 const $ = require("jquery");
 const Joi = require("joi-browser");
@@ -104,6 +104,12 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    allCategoriesP:{
+      type: Array
+    },
+    setCat: {
+      type: Object
     }
   },
   computed: {
@@ -198,9 +204,11 @@ export default {
 
       // trigger notification
       this.successToaster(
-        `Your note ${
+        `Note <b>"${
           note.title
-        } has been created successfully & added to category ${category.title}`
+        }"</b> has been created successfully & added to category <b>"${
+          category.title
+        }"</b>`
       );
 
       // close modal
@@ -223,7 +231,9 @@ export default {
       this.$emit("update-selected", `reload`);
 
       // trigger notification
-      this.successToaster(`Your note ${title} has been updated successfully`);
+      this.successToaster(
+        `Note <b>"${title}"</b> has been updated successfully`
+      );
 
       // close modal
       $(`#${this.modalID("note")}`).modal("hide");
@@ -257,6 +267,10 @@ export default {
         vm.note.title = title;
         vm.note.brief = brief;
         vm.note.catID = categoryID;
+      }
+
+      if((typeof vm.setCat == 'object' && vm.setCat.hasOwnProperty('status')) && vm.setCat.status){
+        vm.note.catID = vm.setCat.categoryID;
       }
     });
 

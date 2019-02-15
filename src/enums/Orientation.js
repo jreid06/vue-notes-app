@@ -1,10 +1,12 @@
 export const orientationEnums = {
     mobile: 1,
     tablet: 2,
-    desktop: 3
+    laptop: 3,
+    desktop: 4
 }
 
 export const breakpoints = {
     tablet: 768,
-    desktop: 992
+    laptop: 992,
+    desktop: 1200
 }

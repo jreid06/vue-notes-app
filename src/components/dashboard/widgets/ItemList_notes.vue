@@ -2,11 +2,11 @@
   <div class="w-100 pr note-list-div pr">
     <div class="toggle-controls pa w-100 z-10 shadow-sm">
       <div class="d-flex flex-row flex-wrap">
-        <div class="header p-3 bg-dark text-light text-center w-100">Notes</div>
+        <div class="header p-3 bg-light text-success text-center w-100 h3 mb-0">Notes</div>
         <div
           class="control all-categories p-2 d-flex border flex-no-wrap justify-content-between flex-fill align-items-center"
           @click="toggleBookmarked(false)"
-          :class="{ 'bg-dark text-light':!bookmarked, 'bg-white':bookmarked}"
+          :class="{ 'bg-light text-success':!bookmarked, 'bg-white':bookmarked}"
         >
           <div class="p-2 h3">
             <i class="fas fa-folder"></i>
@@ -19,7 +19,7 @@
         <div
           class="control categories-bookmarked p-2 border d-flex flex-no-wrap justify-content-between flex-fill align-items-center"
           @click="toggleBookmarked(true)"
-          :class="{ 'bg-dark text-light':bookmarked, 'bg-white':!bookmarked}"
+          :class="{ 'bg-light text-success':bookmarked, 'bg-white':!bookmarked}"
         >
           <div class="p-2 h3">
             <i class="fas fa-star bookmark"></i>
@@ -58,7 +58,7 @@
               class="flex-fill d-flex flex-column flex-no-wrap justify-content-center text-light align-items-center"
             >
               <div
-                class="p-2 bg-danger w-100 flex-fill"
+                class="p-2 text-danger w-100 flex-fill"
                 :data-id="n.key"
                 :data-item="JSON.stringify(n)"
                 :data-type="load"
@@ -67,12 +67,12 @@
               >
                 <i class="far fa-trash-alt" :data-id="n.key"></i>
               </div>
-              <div class="p-2 bg-light w-100 flex-fill">
+              <div class="p-2 w-100 flex-fill">
                 <router-link :to="'/dashboard/'+ load +'/'+ n.key">
                   <i class="far fa-edit"></i>
                 </router-link>
               </div>
-              <div class="bg-light w-100 flex-fill" >
+              <div class="w-100 flex-fill" >
                 <i class="fas fa-ellipsis-h" :style="{color: getCategory(n.categoryID).cat.colour}"></i>
               </div>
             </div>

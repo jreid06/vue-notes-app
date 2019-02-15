@@ -68,6 +68,20 @@ const mutations = {
     // update storage
     Storage.updateCategories(state.categories.all);
   },
+  deleteCategoryBookmark(state, payload){
+    let deletedCategoryID, bookMarkPos;
+
+    if (state.categories.bookmarked.length > 0) {
+      state.categories.bookmarked.find((element, i) => {
+        if(element === payload){
+          deletedCategoryID = element;
+          bookMarkPos = i;
+        }
+      });
+
+      state.categories.bookmarked.splice(bookMarkPos, 1);
+    }
+  },
   deleteCategoryNote(state, payload) {
     let cat = store.getters.getCategory(payload.categoryID),
       noteToDelete;
@@ -117,7 +131,6 @@ const mutations = {
   updateEditedCategory(state, payload) {
     let cat = store.getters.getCategory(payload.key);
 
-    debugger;
     // overwrite old category data with the new data
     state.categories.all[cat.index] = payload;
 

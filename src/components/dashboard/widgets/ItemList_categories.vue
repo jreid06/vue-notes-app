@@ -2,11 +2,11 @@
   <div class="w-100 pr cat-list-div pr">
     <div class="toggle-controls pa w-100 z-10 shadow-sm">
       <div class="d-flex flex-row flex-wrap">
-        <div class="header p-3 bg-dark text-light text-center w-100">Categories</div>
+        <div class="header p-3 bg-light text-success text-center w-100 h3 mb-0">Categories</div>
         <div
           class="control all-categories p-2 d-flex border flex-no-wrap justify-content-between flex-fill align-items-center"
           @click="toggleBookmarked(false)"
-          :class="{ 'bg-dark text-light':!bookmarked, 'bg-white':bookmarked}"
+          :class="{ 'bg-light text-success':!bookmarked, 'bg-white':bookmarked}"
         >
           <div class="p-2 h3">
             <i class="fas fa-folder"></i>
@@ -19,7 +19,7 @@
         <div
           class="control categories-bookmarked p-2 border d-flex flex-no-wrap justify-content-between flex-fill align-items-center"
           @click="toggleBookmarked(true)"
-          :class="{ 'bg-dark text-light':bookmarked, 'bg-white':!bookmarked}"
+          :class="{ 'bg-light text-success':bookmarked, 'bg-white':!bookmarked}"
         >
           <div class="p-2 h3">
             <i class="fas fa-star bookmark"></i>
@@ -77,7 +77,6 @@ export default {
           return el.bookmarked;
         });
 
-        debugger;
         return f;
       }
 

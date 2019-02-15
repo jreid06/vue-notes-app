@@ -224,9 +224,9 @@ export default {
 
       // trigger notification
       this.successToaster(
-        `Your category ${
+        `Category <b>"${
           category.title
-        } has been created successfully. Add some Notes!!`
+        }"</b> has been created successfully. Add some Notes!!`
       );
 
       // close modal
@@ -241,7 +241,7 @@ export default {
 
       // trigger notification
       this.successToaster(
-        `Your category ${title} has been updated successfully`
+        `Category <b>"${title}"</b> has been updated successfully`
       );
 
       // close modal
