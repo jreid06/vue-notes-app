@@ -59,8 +59,6 @@ const mutations = {
       return;
     });
 
-    debugger;
-
     // delete the category
     state.notes.all.splice(note, 1);
 
