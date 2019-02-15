@@ -2,6 +2,13 @@
   <div id="app">
     <div class="h-100 app-body">
       <router-view></router-view>
+      <div
+        class="menu-mobile-icon h3 rounded-circle pa wfx-50 hfx-50 z-300 shadow text-light d-flex flex-column justify-content-center align-items-center cp hvr-buzz-out" data-toggle="tooltip" :data-original-title="!menuInfo.state ? 'Open Menu': 'Close Menu'" data-placement="bottom"
+        :class="{'bg-dark': menuInfo.state, 'bg-success': !menuInfo.state}"
+        @click="toggleMenu"
+      >
+        <i class="fas fa-bars"></i>
+      </div>
     </div>
 
     <load-modal :id="modalID('load')"></load-modal>
@@ -10,51 +17,97 @@
 </template>
 
 <script>
-import NoteModal from "./components/modals/CreateNoteModal.vue";
-import CatModal from "./components/modals/CreateCategoryModal.vue";
-import LoadModal from './components/modals/LoadNoteModal.vue';
-import DeleteItemModal from './components/modals/ConfirmDelete';
+import LoadModal from "./components/modals/LoadNoteModal.vue";
+import DeleteItemModal from "./components/modals/ConfirmDelete";
 
-import { orientationEnum, breakpoints } from './enums/Orientation.js'
+import { orientationEnums, breakpoints } from "./enums/Orientation.js";
 import { mapGetters, mapMutations } from "vuex";
+import ToasterMixin from "./mixins/toaster.js";
+import HelperMixin from "./mixins/helpers.js";
+
+const $ = require("jquery");
 
 export default {
+  mixins: [ToasterMixin],
   name: "app",
   components: {
-    "note-modal": NoteModal,
-    "category-modal": CatModal,
     "load-modal": LoadModal,
     "confirm-delete": DeleteItemModal
   },
   computed: {
-    ...mapGetters(["modalID"])
+    ...mapGetters(["modalID", "orientationSet", "menuInfo"])
   },
-  watch:{
-    windowWidth(nv, ov){
-      this.windowWidth = nv;
+  watch: {
+    windowWidth(nv, ov) {
+      console.log(nv);
     }
   },
   data() {
     return {
       appName: "mynotes",
-      windowWidth: document.documentElement.clientWidth || window.innerWidth 
+      windowWidth: document.documentElement.clientWidth || window.innerWidth,
+      menu: null
     };
   },
   methods: {
-    ...mapMutations(['updateOrientation']),
-   watchOrientation(){
-     const vm = this;
+    ...mapMutations(["updateOrientation", "toggleMenuMutation"]),
+    toggleMenu() {
+      const vm = this;
+      if (vm.menu === null) {
+        vm.menu = true;
+        vm.toggleMenuMutation(vm.menu);
+        return;
+      }
 
-     if(vm.windowWidth < breakpoints.tablet){
-       vm.updateOrientation(orientationEnum.mobile);
-       return;
-     }
+      vm.menu = !vm.menu;
 
-     if(vm.windowWidth){}
-   }
+      vm.toggleMenuMutation(vm.menu);
+      return;
+    },
+    getOrientationEnum(currentWidth) {
+      if (currentWidth < breakpoints.tablet) {
+        return orientationEnums.mobile;
+      }
+
+      if (
+        currentWidth >= breakpoints.tablet &&
+        currentWidth < breakpoints.laptop
+      ) {
+        return orientationEnums.tablet;
+      }
+
+      if (
+        currentWidth >= breakpoints.laptop &&
+        currentWidth < breakpoints.desktop
+      ) {
+        return orientationEnums.laptop;
+      }
+
+      if (currentWidth >= breakpoints.desktop) {
+        return orientationEnums.desktop;
+      }
+    },
+    watchOrientation() {
+      const vm = this;
+      if (!vm.orientationSet)
+        vm.updateOrientation(
+          vm.getOrientationEnum(
+            document.documentElement.clientWidth || window.innerWidth
+          )
+        );
+
+      window.addEventListener("resize", function() {
+        vm.windowWidth =
+          document.documentElement.clientWidth || window.innerWidth;
+
+        vm.updateOrientation(vm.getOrientationEnum(vm.windowWidth));
+      });
+    }
   },
-  mounted(){
-  
+  mounted() {
+    this.initializeToaster();
+    this.watchOrientation();
+     $('[data-toggle="tooltip"]').tooltip()
   }
 };
 </script>
@@ -64,8 +117,8 @@ export default {
 @import url("https://fonts.googleapis.com/css?family=Passion+One:400,700");
 @import "./../node_modules/bootstrap/scss/bootstrap.scss";
 @import "./../node_modules/hover.css/scss/hover.scss";
-@import './../node_modules/simplemde/dist/simplemde.min.css';
-@import './../node_modules/animate.css/animate.min.css';
+@import "./../node_modules/simplemde/dist/simplemde.min.css";
+@import "./../node_modules/animate.css/animate.min.css";
 @import "./../node_modules/toastr/toastr.scss";
 
 #app {
@@ -77,25 +130,43 @@ export default {
   // margin-top: 60px;
 }
 
-.pointer{
+.menu-mobile-icon {
+  bottom: 30px;
+  left: 20px;
+  transition: all .3s ease-in-out;
+}
+
+.pointer {
   cursor: pointer !important;
 }
 
-.app-body::-webkit-scrollbar { width: 0 !important }
-.app-body{ overflow: -moz-scrollbars-none; }
-.app-body{ -ms-overflow-style: none; }
+.app-body::-webkit-scrollbar {
+  width: 0 !important;
+}
+.app-body {
+  overflow: -moz-scrollbars-none;
+}
+.app-body {
+  -ms-overflow-style: none;
+}
 
-.oy-s{
+.oy-s {
   overflow-y: scroll !important;
 }
 
-.ox-h{
+.ox-h {
   overflow-x: hidden;
 }
 
-.oy-s::-webkit-scrollbar { width: 0 !important }
-.oy-s{ overflow: -moz-scrollbars-none; }
-.oy-s{ -ms-overflow-style: none; }
+.oy-s::-webkit-scrollbar {
+  width: 0 !important;
+}
+.oy-s {
+  overflow: -moz-scrollbars-none;
+}
+.oy-s {
+  -ms-overflow-style: none;
+}
 
 .app-body {
   overflow-y: scroll;
@@ -106,11 +177,11 @@ export default {
   position: relative !important;
 }
 
-.cp{
+.cp {
   cursor: pointer;
 }
 
-.pa{
+.pa {
   position: absolute !important;
 }
 
@@ -120,7 +191,7 @@ export default {
   }
 }
 
-@for $i from 1 through 10 {
+@for $i from 1 through 1000 {
   .z-#{$i} {
     z-index: #{$i};
   }
@@ -128,18 +199,29 @@ export default {
 
 @for $i from 0 through 99 {
   // e.g width notes - 99&
-  .wn-#{$i}{
+  .wn-#{$i} {
     width: round(percentage($i/100));
   }
 
   // e.g max width percentage - 78%
-  .mwp-#{$i}{
+  .mwp-#{$i} {
     max-width: round(percentage($i/100));
   }
 
-  // e.g padding notes top 
+  // e.g padding notes top
   .pnt-#{$i} {
     padding-top: #{$i}rem;
+  }
+}
+
+@for $i from 50 to 400 {
+  // fixed height
+  .hfx-#{$i} {
+    height: #{$i}px;
+  }
+
+  .wfx-#{$i} {
+    width: #{$i}px;
   }
 }
 
@@ -147,7 +229,7 @@ export default {
   height: 100vh;
 }
 
-.h-80{
+.h-80 {
   height: 90% !important;
 }
 
@@ -170,5 +252,4 @@ a {
   // color: #42b983;
   color: #30a54a;
 }
-
 </style>
