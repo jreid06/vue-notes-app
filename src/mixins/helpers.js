@@ -52,6 +52,7 @@ export default {
             return {
                 readableDate: `${obj.day} ${obj.month} &bull; ${obj.hours}:${obj.minutes} ${obj.prefix} &bull; ${obj.year}`,
                 ukDate: `${obj.day} &bull; ${obj.monthNo} &bull; ${obj.year}`,
+                ukDate_s: `${obj.day}/${obj.monthNo}/${obj.year}`,
                 month: obj.month
             }
         },
@@ -71,6 +72,12 @@ export default {
                 item = JSON.parse(targ);
 
                 vm.itemToDelete(item);
+            }
+
+            if(action === 'viewnote'){
+                let targ = target.hasAttribute('data-item') ? target.attributes['data-item'].value : target.parentElement.attributes['data-item'].value;
+
+                debugger;
             }
 
             if (action === 'edit') {
