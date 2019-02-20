@@ -2,10 +2,10 @@
   <div
     class="p-md-2 vh-100 bg-white d-flex justify-content-center align-items-top z-300 oy-s ox-h"
     :class="{'nav-box-hidden': !menuInfo.state , 
-  'nav-box-mobile': menuInfo.state && getOrientation == 1, 
-  'nav-box-tablet': menuInfo.state && getOrientation == 2 || getOrientation == 1, 
-  'nav-box-laptop': menuInfo.state && getOrientation == 3,
-   'nav-box-desktop': menuInfo.state && getOrientation == 4}"
+  'nav-box-mobile': menuInfo.state && getOrientation == OrientationEnums.mobile, 
+  'nav-box-tablet': menuInfo.state && getOrientation == OrientationEnums.tablet || getOrientation == OrientationEnums.mobile, 
+  'nav-box-laptop': menuInfo.state && getOrientation == OrientationEnums.laptop,
+   'nav-box-desktop': menuInfo.state && getOrientation == OrientationEnums.desktop}"
   >
     <div class="nav-links d-flex flex-column flex-wrap">
       <div class="nav-link-item py-4 h5" v-for="(link, i) in links" :key="i">
@@ -18,12 +18,14 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import { orientationEnums } from "./../enums/Orientation.js";
 export default {
   computed: {
     ...mapGetters(["getOrientation", "menuInfo"])
   },
   data() {
     return {
+      OrientationEnums: orientationEnums,
       links: [
         {
           icon: "fas fa-circle",
