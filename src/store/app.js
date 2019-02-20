@@ -25,6 +25,7 @@ const state = {
         state: null
     },
     modal: {
+        viewnote: 'view-note-modal',
         note: 'note-modal',
         category: 'category-modal',
         load: 'load-modal',
