@@ -73,7 +73,7 @@
                 </router-link>
               </div>
               <div class="w-100 flex-fill" >
-                <i class="fas fa-ellipsis-h" :style="{color: getCategory(n.categoryID).cat.colour}"></i>
+                <i class="far fa-eye" :style="{color: getCategory(n.categoryID).cat.colour}"></i>
               </div>
             </div>
           </li>

@@ -9,13 +9,15 @@
           </h3>
           <p class="lead">{{note.brief | firstWordCapital}}</p>
           <hr>
-          <h5>
+         <router-link :to="'/dashboard/categories/'+note.categoryID">
+            <h5>
             <i class="fas fa-folder" :style="{color: getCategory(note.categoryID).cat.colour}"></i>
             <span
               :style="{color: getCategory(note.categoryID).cat.colour}"
               class="text-capitalize"
             >{{ getCategory(note.categoryID).cat.title}}</span>
           </h5>
+         </router-link>
           <!-- <p class="small">{{category.description}}</p> -->
         </div>
         <div class="float-right display-4 pointer">
@@ -52,7 +54,7 @@
       </div>
     </div>
     <!--  -->
-    <note-modal :id="modalID('note')" v-on:update-selected="getSelectedNote"></note-modal>
+    <note-modal :id="modalID('note')" v-on:update-selected="getSelectedNote" :all-categories-p="allCategories"></note-modal>
   </div>
 </template>
 <script>
@@ -91,7 +93,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["selectedNoteItem", "getCategory", "getNote"])
+    ...mapGetters(["selectedNoteItem", "getCategory", "getNote", "allCategories"])
   },
   watch: {
     editing: function(nv, ov) {

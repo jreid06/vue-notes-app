@@ -3,17 +3,33 @@
     <div class="row">
       <template v-if="latestcategories.length > 0">
         <div
-          class="col-6 col-md-4 col-lg-3 mb-4 animated fadeIn"
+          class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 animated fadeIn"
           v-for="(n,i) in latestcategories"
           :key="i"
         >
-          <div class="card hfx-320">
+          <div class="card hfx-380 cp">
             <div class="p-1 w-100 rounded-top" :style="{backgroundColor: n.colour}"></div>
             <div class="card-body">
               <h4 class="card-title">{{n.title | firstWordCapital}}</h4>
               <p class="font-italic font-weight-light" v-html="formatDate(n.createdAt).ukDate"></p>
               <p class="card-text">{{n.description | truncate(15) }}</p>
 
+              <div class="d-flex flex-row flex-no-wrap delete-controls justify-content-center">
+                <div class="bg-success p-2 rounded-left">
+                  <router-link
+                    :to="'/dashboard/categories/'+n.key"
+                    class="card-link text-capitalize text-light"
+                  >
+                    <i class="far fa-edit hvr-grow"></i>
+                  </router-link>
+                </div>
+                <div class="bg-light p-2" :style="{color: n.colour}">
+                  <i class="far fa-eye"></i>
+                </div>
+                <div class="bg-danger text-light p-2 rounded-right">
+                  <i class="far fa-trash-alt hvr-grow"></i>
+                </div>
+              </div>
               <hr>
               <div
                 class="rounded border border-light bg-light shadow-sm p-2 d-flex flex-wrap hfx-135 oy-s ox-h"
@@ -74,11 +90,7 @@
             class="create-component d-flex flex-column justify-content-center align-items-center"
           >
             <div>
-              <i
-                class="fas fa-plus-circle"
-                data-action="category"
-                :style="{color: '#9b9b9b'}"
-              ></i>
+              <i class="fas fa-plus-circle" data-action="category" :style="{color: '#9b9b9b'}"></i>
               <p>Create a category</p>
             </div>
           </div>
