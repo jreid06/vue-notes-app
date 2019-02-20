@@ -4,7 +4,7 @@
       class="card-img-top hfx-125"
       :style="{background: `url(${selectedImage.url})`, backgroundPosition: 'center', backgroundSize: 'cover'}"
     >
-      <div class="s h-100" :style="{background: categoryBelongsTo.colour + '7F'}"></div>
+      <div class="s h-100" :style="{background: getCategory(note.categoryID).cat.colour + '7F'}"></div>
     </div>
     <div class="card-body">
       <div class="row">
@@ -15,11 +15,11 @@
           <router-link :to="`/dashboard/categories/${note.categoryID}`">
             <h6
               class="font-weight-bold"
-              :style="{color: categoryBelongsTo.colour}"
-            >{{categoryBelongsTo.title | firstWordCapital}}</h6>
+              :style="{color: getCategory(note.categoryID).cat.colour}"
+            >{{getCategory(note.categoryID).cat.title | firstWordCapital}}</h6>
           </router-link>
         </div>
-        <div class="col-12 col-sm-6 text-center pt-2 h2" :style="{color: categoryBelongsTo.colour}">
+        <div class="col-12 col-sm-6 text-center pt-2 h2" :style="{color: getCategory(note.categoryID).cat.colour}">
           <i :class="note.icon"></i>
         </div>
         <!--  -->
@@ -47,8 +47,9 @@
             </div>
             <div
               class="bg-light p-3"
-              :style="{color: categoryBelongsTo.colour}"
-			  :data-item="JSON.stringify(note)"
+              :style="{color: getCategory(note.categoryID).cat.colour}"
+			  :data-item-id="note.key"
+			  :data-item-type="note.type"
               data-action="viewnote"
               @click="triggerModal"
             >
@@ -80,14 +81,6 @@ export default {
       type: Object,
       required: true
     },
-    categoryBelongsTo: {
-      type: Object,
-      required: true
-    },
-    c: {
-      type: String,
-      required: false
-    }
   },
   data() {
     return {

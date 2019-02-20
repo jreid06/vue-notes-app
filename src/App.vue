@@ -13,12 +13,14 @@
 
     <load-modal :id="modalID('load')"></load-modal>
     <confirm-delete :id="modalID('delete')"></confirm-delete>
+    <view-note :id="modalID('viewnote')"></view-note>
   </div>
 </template>
 
 <script>
 import LoadModal from "./components/modals/LoadNoteModal.vue";
-import DeleteItemModal from "./components/modals/ConfirmDelete";
+import DeleteItemModal from "./components/modals/ConfirmDelete.vue";
+import ViewNoteModal from './components/modals/NoteView.vue';
 
 import { orientationEnums, breakpoints } from "./enums/Orientation.js";
 import { mapGetters, mapMutations } from "vuex";
@@ -32,7 +34,8 @@ export default {
   name: "app",
   components: {
     "load-modal": LoadModal,
-    "confirm-delete": DeleteItemModal
+    "confirm-delete": DeleteItemModal,
+    "view-note": ViewNoteModal
   },
   computed: {
     ...mapGetters(["modalID", "orientationSet", "menuInfo"])
@@ -191,9 +194,13 @@ export default {
   }
 }
 
-@for $i from 1 through 1000 {
+@for $i from 0 through 1000 {
   .z-#{$i} {
     z-index: #{$i};
+  }
+
+  .l-#{$i}{
+    left: #{$i};
   }
 }
 
@@ -222,6 +229,11 @@ export default {
 
   .wfx-#{$i} {
     width: #{$i}px;
+  }
+
+  // min-height
+  .hm-#{$i}{
+    min-height: #{$i}px;
   }
 }
 

@@ -46,7 +46,10 @@
                 <li
                   class="list-inline-item text-danger hvr-grow"
                   :data-id="getNote(n.id).note.key"
-                  @click="quickDeleteItem"
+                  :data-item="JSON.stringify(getNote(n.id).note)"
+                  :data-type="getNote(n.id).note.type"
+                  data-action="delete"
+                  @click="triggerModal"
                 >
                   <i class="far fa-trash-alt" :data-id="getNote(n.id).note.key"></i>
                 </li>

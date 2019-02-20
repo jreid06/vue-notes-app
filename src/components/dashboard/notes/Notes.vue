@@ -13,7 +13,7 @@
 	  </div> -->
 	  <div class="col-12">
 		  <div class="card-columns">
-			  <note-card :note="note" :category-belongs-to="getCategory(note.categoryID).cat" v-for="(note, i) in latestNotes" :key="i"></note-card>
+			  <note-card :note="note" v-for="(note, i) in latestNotes" :key="i"></note-card>
 		  </div>
 	  </div>
     </div>

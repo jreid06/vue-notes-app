@@ -72,8 +72,15 @@
                   <i class="far fa-edit"></i>
                 </router-link>
               </div>
-              <div class="w-100 flex-fill" >
-                <i class="far fa-eye" :style="{color: getCategory(n.categoryID).cat.colour}"></i>
+              <div class="w-100 flex-fill">
+                <i
+                  class="far fa-eye"
+                  :style="{color: getCategory(n.categoryID).cat.colour}"
+                  :data-item-id="n.key"
+                  :data-item-type="n.type"
+                  data-action="viewnote"
+                  @click="triggerModal"
+                ></i>
               </div>
             </div>
           </li>

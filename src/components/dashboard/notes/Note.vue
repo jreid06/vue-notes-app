@@ -34,7 +34,7 @@
     <!--  -->
     <div class="row pt-3 note-data pr">
       <transition
-        name="loader-fade-toggel"
+        name="loader-fade-toggle"
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
       >
@@ -62,7 +62,7 @@ import { mapGetters } from "vuex";
 import { mapMutations } from "vuex";
 import notesvg from "./../../notesvg";
 import NoteModal from "./../../modals/CreateNoteModal.vue";
-import Loader from "./../../Loader";
+import Loader from "./../../Loader.vue";
 import store from "./../../../store";
 
 import HelperMixin from "./../../../mixins/helpers.js";

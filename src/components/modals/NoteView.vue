@@ -3,14 +3,31 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header text-center">
-          <h5>viewing note</h5>
+          <h5>Viewing Note <b :style="{color: getCategory(note.categoryID).cat.colour}">{{note.title | firstWordCapital}}</b></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-          <div></div>
-        </div>
+        <div class="modal-body pt-3 pr hm-200">
+          
+		  <transition
+        name="loader-fade-toggle"
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+      >
+        <loading class="l-0" v-if="loading"></loading>
+      </transition>
+
+		<template v-if="status">
+			<div v-if="note.noteMarkdown" v-html="marked(note.noteMarkdown)"></div>
+			<div class="p-3 text-center bg-light" v-else>
+				<p>This note has no content ..</p>
+				<router-link :to="`/dashboard/note/${note.key}`">
+					<i class="fas fa-edit"></i>
+				</router-link>
+			</div>
+		</template>
+		
         <div class="modal-footer">
           <button type="button" class="btn text-danger" data-dismiss="modal">
             <i class="far fa-times-circle"></i>
@@ -30,6 +47,7 @@
       </div>
     </div>
   </div>
+ </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
@@ -38,6 +56,7 @@ import Note from "./../../classes/note.js";
 import Storage from "./../../classes/LocalForageClass.js";
 import HelperMixin from "./../../mixins/helpers.js";
 import Notifications from "./../../mixins/toaster.js";
+import Loader from './../Loader.vue';
 
 const $ = require("jquery");
 const Joi = require("joi-browser");
@@ -49,10 +68,10 @@ export default {
     id: {
       type: String,
       required: true
-    },
-    note: {
-      type: Object
     }
+  },
+  components: {
+	  loading: Loader
   },
   computed: {
     ...mapGetters([
@@ -62,94 +81,18 @@ export default {
       "editStatus",
       "getItemToEdit"
     ]),
-    noteDetails() {
-      return this.note;
-    }
+  
   },
   data() {
     return {
-		marked: marked,
-      action: "create",
+	  marked: marked,
+	  note: {},
+	  loading: true,
+	  status: false
     };
   },
   methods: {
     ...mapMutations(["updateEditItem", "updateNoteInCategory"]),
-    updateErrorMessage(key) {
-      let message = "";
-
-      switch (key) {
-        case "title":
-          message = "please enter a title more than 3 characters long";
-          setTimeout(() => {
-            document.getElementById("error-message").innerHTML = message;
-          }, 100);
-          break;
-        case "brief":
-          message = "please enter a brief more than 3 characters long";
-          setTimeout(() => {
-            document.getElementById("error-message").innerHTML = message;
-          }, 100);
-          break;
-        case "catID":
-          message = "please select a 'category' the note belongs to";
-          setTimeout(() => {
-            document.getElementById("error-message").innerHTML = message;
-          }, 100);
-          break;
-
-        default:
-          break;
-      }
-    },
-    createNote() {
-      const vm = this;
-      // manual check to see if user has actually selected a category or ch
-      let valid = this.validateNote(),
-        note = "";
-
-      if (valid.error !== null) {
-        vm.error = true;
-        vm.updateErrorMessage(valid.error.details[0].path[0]);
-
-        // trigger notification
-        this.errorToaster(valid.error.details[0].path[0]);
-        return;
-      }
-
-      // get the corresponding category
-      let category = vm.getCategory(vm.noteDetails.catID).cat;
-
-      // instantiate a new note
-      note = new Note(
-        vm.noteDetails.title,
-        vm.noteDetails.brief,
-        vm.noteDetails.catID,
-        vm.randomString()
-      );
-
-      // update category array with new category
-      // save in local storage
-      this.$store.commit("updateAllNotes", note);
-      this.$store.commit("updateSelectedNote", { payload: note });
-
-      // add note to correct category
-      this.$store.dispatch("addNoteToCategory", note);
-
-      // // emit result to redirect via route
-      this.$emit("change-route", `/dashboard/notes/${note.key}`);
-
-      // trigger notification
-      this.successToaster(
-        `Note <b>"${
-          note.title
-        }"</b> has been created successfully & added to category <b>"${
-          category.title
-        }"</b>`
-      );
-
-      // close modal
-      $(`#${this.modalID("note")}`).modal("hide");
-    },
     updateNote() {
       const vm = this;
 
@@ -174,47 +117,27 @@ export default {
       // close modal
       $(`#${this.modalID("note")}`).modal("hide");
     },
-    toggleError() {
-      this.error = false;
-    },
     resetData() {
       const vm = this;
-      for (const key in vm.noteDetails) {
-        if (vm.noteDetails.hasOwnProperty(key)) {
-          vm.note[key] = "";
-        }
-      }
-
-      this.toggleError();
+	  vm.status = false;
     },
     resetEdit() {
-      this.action = "create";
       this.$store.dispatch("resetEditObjAction");
     }
   },
   mounted() {
     const vm = this;
 
-    $(`#${this.modalID("note")}`).on("show.bs.modal", function(e) {
-      if (vm.editStatus) {
-        vm.action = "edit";
-        var { title, brief, categoryID } = vm.getItemToEdit;
+    $(`#${this.modalID("viewnote")}`).on("show.bs.modal", function(e) {
+		vm.note = vm.getItemToEdit;
+		vm.status = true;
 
-        vm.note.title = title;
-        vm.note.brief = brief;
-        vm.note.catID = categoryID;
-      }
-
-      if (
-        typeof vm.setCat == "object" &&
-        vm.setCat.hasOwnProperty("status") &&
-        vm.setCat.status
-      ) {
-        vm.note.catID = vm.setCat.categoryID;
-      }
+		setTimeout(()=>{
+			vm.loading = false;
+		}, 1500)
     });
 
-    $(`#${this.modalID("note")}`).on("hidden.bs.modal", function(e) {
+    $(`#${this.modalID("viewnote")}`).on("hidden.bs.modal", function(e) {
       vm.resetData();
 
       if (vm.editStatus) {

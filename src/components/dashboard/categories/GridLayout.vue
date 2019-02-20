@@ -26,7 +26,14 @@
                 <div class="bg-light p-2" :style="{color: n.colour}">
                   <i class="far fa-eye"></i>
                 </div>
-                <div class="bg-danger text-light p-2 rounded-right">
+                <div
+                  class="bg-danger text-light p-2 rounded-right"
+                  :data-id="n.key"
+                  :data-item="JSON.stringify(n)"
+                  :data-type="n.type"
+                  data-action="delete"
+                  @click="triggerModal"
+                >
                   <i class="far fa-trash-alt hvr-grow"></i>
                 </div>
               </div>
