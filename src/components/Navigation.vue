@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-md-2 vh-100 bg-white d-flex justify-content-center align-items-top z-300"
+    class="p-md-2 vh-100 bg-white d-flex justify-content-center align-items-top z-300 oy-s ox-h"
     :class="{'nav-box-hidden': !menuInfo.state , 
   'nav-box-mobile': menuInfo.state && getOrientation == 1, 
   'nav-box-tablet': menuInfo.state && getOrientation == 2 || getOrientation == 1, 
