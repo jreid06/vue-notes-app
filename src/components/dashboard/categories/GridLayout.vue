@@ -94,16 +94,18 @@
       <template v-else>
         <div class="col-12">
           <div
-            class="create-component d-flex flex-column justify-content-center align-items-center"
-          >
-            <div>
-              <i class="fas fa-plus-circle" data-action="category" :style="{color: '#9b9b9b'}"></i>
+            class="create-component d-flex flex-column justify-content-center align-items-center hfx-400"
+          :data-action="'category'"
+          @click="triggerModal">
+            <div class="h3" >
+              <i class="fas fa-plus-circle hvr-grow" :style="{color: '#9b9b9b'}"></i>
               <p>Create a category</p>
             </div>
           </div>
         </div>
       </template>
     </div>
+    <category-modal :id="modalID('category')" v-on:change-route="redirectTo"></category-modal>
     <note-modal
       :id="modalID('note')"
       :allCategoriesP="[sCategory]"
@@ -115,13 +117,15 @@
 import { mapGetters } from "vuex";
 import HelperMixin from "./../../../mixins/helpers.js";
 import NoteModal from "./../../modals/CreateNoteModal.vue";
+import CategoryModal from './../../modals/CreateCategoryModal.vue'
 
 const $ = require("jquery");
 
 export default {
   mixins: [HelperMixin],
   components: {
-    "note-modal": NoteModal
+    "note-modal": NoteModal,
+    "category-modal": CategoryModal
   },
   props: ["latestcategories", "total"],
   data() {
