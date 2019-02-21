@@ -12,6 +12,7 @@
     </div>
     <div
       class="reset-app-data h3 rounded-circle pa wfx-50 hfx-50 z-300 shadow text-light d-flex flex-column justify-content-center align-items-center cp hvr-buzz-out bg-danger" data-toggle="tooltip" data-original-title="Reset apps data. Do at your own risk" data-placement="bottom"
+      data-action="reset"
       @click="triggerModal"
     >
       <i class="fas fa-trash-alt"></i>
