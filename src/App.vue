@@ -14,6 +14,7 @@
     <load-modal :id="modalID('load')"></load-modal>
     <confirm-delete :id="modalID('delete')"></confirm-delete>
     <view-note :id="modalID('viewnote')"></view-note>
+    <reset-app :id="modalID('reset')"></reset-app>
   </div>
 </template>
 
@@ -21,6 +22,7 @@
 import LoadModal from "./components/modals/LoadNoteModal.vue";
 import DeleteItemModal from "./components/modals/ConfirmDelete.vue";
 import ViewNoteModal from './components/modals/NoteView.vue';
+import ResetAppModal from './components/modals/ResetModal.vue'
 
 import { orientationEnums, breakpoints } from "./enums/Orientation.js";
 import { mapGetters, mapMutations } from "vuex";
@@ -35,7 +37,8 @@ export default {
   components: {
     "load-modal": LoadModal,
     "confirm-delete": DeleteItemModal,
-    "view-note": ViewNoteModal
+    "view-note": ViewNoteModal,
+    "reset-app": ResetAppModal
   },
   computed: {
     ...mapGetters(["modalID", "orientationSet", "menuInfo"])
