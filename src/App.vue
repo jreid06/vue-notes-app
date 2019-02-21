@@ -221,7 +221,7 @@ export default {
   }
 }
 
-@for $i from 50 to 400 {
+@for $i from 50 to 401 {
   // fixed height
   .hfx-#{$i} {
     height: #{$i}px;
