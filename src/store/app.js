@@ -198,6 +198,9 @@ const mutations = {
   initApp(state) {
     !state.app.init ? state.app.init = true : '';
   },
+  resetAppData(state, payload){
+    Storage.resetStorage(payload.modalID);
+  }, 
   updateOrientation(state, payload) {
     state.app.orientation = payload;
   },

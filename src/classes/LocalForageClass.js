@@ -1,16 +1,30 @@
 import Global from '../Global'
 import store from './../store'
+import toaster from 'toastr';
+
 import 'babel-polyfill'
 
 const categoriesKey = Global.categoriesKey;
 const notesKey = Global.notesKey;
 const DB = require('localforage');
+const $ = require('jquery');
 
 export default class {
     static itemExists(key) {
         if (DB.getItem(key)) return true;
 
         return false;
+    }
+
+    static resetStorage(modalID){
+        DB.clear().then(()=>{
+            toaster.success("Your data has been reset successfully");
+           setTimeout(()=>{
+            $(`#${modalID}`).modal('hide');
+           }, 4200);
+        }).catch((err)=>{
+            toaster.error('There was an issue resetting the apps data. Try again');
+        });
     }
 
 
