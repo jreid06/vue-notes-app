@@ -9,15 +9,15 @@
           </h3>
           <p class="lead">{{note.brief | firstWordCapital}}</p>
           <hr>
-         <router-link :to="'/dashboard/categories/'+note.categoryID">
+          <router-link :to="'/dashboard/categories/'+note.categoryID">
             <h5>
-            <i class="fas fa-folder" :style="{color: getCategory(note.categoryID).cat.colour}"></i>
-            <span
-              :style="{color: getCategory(note.categoryID).cat.colour}"
-              class="text-capitalize"
-            >{{ getCategory(note.categoryID).cat.title}}</span>
-          </h5>
-         </router-link>
+              <i class="fas fa-folder" :style="{color: getCategory(note.categoryID).cat.colour}"></i>
+              <span
+                :style="{color: getCategory(note.categoryID).cat.colour}"
+                class="text-capitalize"
+              >{{ getCategory(note.categoryID).cat.title}}</span>
+            </h5>
+          </router-link>
           <!-- <p class="small">{{category.description}}</p> -->
         </div>
         <div class="float-right display-4 pointer">
@@ -41,8 +41,8 @@
         <loading v-if="loading"></loading>
       </transition>
 
-      <div class="col-12 col-lg-5 markdown-note-column text-left">
-        
+      <div class="col-12">
+        <markdown-editor :smdeid="'note-smde'" :note="note"></markdown-editor>
       </div>
       <!-- <div class="col-12 col-lg-7 parsed-note-markdown">
         <note-svg :fill="getCategory(note.categoryID).cat.colour"></note-svg>
@@ -51,10 +51,14 @@
 
           </div>
         </div>
-      </div> -->
+      </div>-->
     </div>
     <!--  -->
-    <note-modal :id="modalID('note')" v-on:update-selected="getSelectedNote" :all-categories-p="allCategories"></note-modal>
+    <note-modal
+      :id="modalID('note')"
+      v-on:update-selected="getSelectedNote"
+      :all-categories-p="allCategories"
+    ></note-modal>
   </div>
 </template>
 <script>
@@ -63,6 +67,7 @@ import { mapMutations } from "vuex";
 // import notesvg from "./../../notesvg";
 import NoteModal from "./../../modals/CreateNoteModal.vue";
 import Loader from "./../../Loader.vue";
+import MarkdownEditor from "./../widgets/MarkdownEditor.vue";
 import store from "./../../../store";
 
 import HelperMixin from "./../../../mixins/helpers.js";
@@ -73,6 +78,7 @@ const marked = require("marked");
 export default {
   components: {
     // "note-svg": notesvg,
+    "markdown-editor": MarkdownEditor,
     "note-modal": NoteModal,
     loading: Loader
   },
@@ -93,14 +99,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["selectedNoteItem", "getCategory", "getNote", "allCategories"])
+    ...mapGetters([
+      "selectedNoteItem",
+      "getCategory",
+      "getNote",
+      "allCategories"
+    ])
   },
   methods: {
-    ...mapMutations([
-      "updateSelectedNote",
-      "updateNoteInCategory",
-      "updateEditedNote"
-    ]),
     quickDeleteItem() {},
     getSelectedNote() {
       let noteID = this.$route.params.noteid;
@@ -109,15 +115,13 @@ export default {
       this.updateSelectedNote({ payload: note.note });
       this.note = this.selectedNoteItem;
       this.noteindex = note.index;
-    },
+    }
   },
   created() {
-    console.log("created");
     this.getSelectedNote();
   },
   mounted() {
     const vm = this;
-    this.initSMDE();
 
     setTimeout(function() {
       vm.loading = false;
@@ -131,32 +135,27 @@ export default {
   transition: all 0.3s ease-in-out;
 }
 
-.parsed-note-markdown {
-  // position: relative;
-  
+h1 {
+  color: gold !important;
 }
 
- h1{
-     color: gold !important;
-   }
-
 #markdown-div {
-    border-radius: 10px;
-    background-color: rgba(241, 241, 241, 0.2);
-    position: relative;
-    top: -100%;
-    height: 100%;
-    // right: 0;
-    width: 75%;
-    padding-left: 10px;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    z-index: 20;
-  }
+  border-radius: 10px;
+  background-color: rgba(241, 241, 241, 0.2);
+  position: relative;
+  top: -100%;
+  height: 100%;
+  // right: 0;
+  width: 75%;
+  padding-left: 10px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 20;
+}
 
-  img {
-     width: 100%
-  }
+img {
+  width: 100%;
+}
 </style>
