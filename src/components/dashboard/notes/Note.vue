@@ -42,16 +42,16 @@
       </transition>
 
       <div class="col-12 col-lg-5 markdown-note-column text-left">
-        <textarea id="note-smde"></textarea>
+        
       </div>
-      <div class="col-12 col-lg-7 parsed-note-markdown">
+      <!-- <div class="col-12 col-lg-7 parsed-note-markdown">
         <note-svg :fill="getCategory(note.categoryID).cat.colour"></note-svg>
         <div id="markdown-div" class="pt-4 p-3">
           <div  v-html="marked(note.noteMarkdown)">
 
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <!--  -->
     <note-modal :id="modalID('note')" v-on:update-selected="getSelectedNote" :all-categories-p="allCategories"></note-modal>
@@ -60,7 +60,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { mapMutations } from "vuex";
-import notesvg from "./../../notesvg";
+// import notesvg from "./../../notesvg";
 import NoteModal from "./../../modals/CreateNoteModal.vue";
 import Loader from "./../../Loader.vue";
 import store from "./../../../store";
@@ -72,7 +72,7 @@ const marked = require("marked");
 
 export default {
   components: {
-    "note-svg": notesvg,
+    // "note-svg": notesvg,
     "note-modal": NoteModal,
     loading: Loader
   },
@@ -95,26 +95,6 @@ export default {
   computed: {
     ...mapGetters(["selectedNoteItem", "getCategory", "getNote", "allCategories"])
   },
-  watch: {
-    editing: function(nv, ov) {
-      console.log("watchers");
-      console.log(nv);
-      const vm = this;
-
-      if (!nv) {
-        // this.updateNoteInCategory({
-        //   getters: this.$store.getters,
-        //   categoryID: this.note.categoryID,
-        //   note: this.note
-        // });
-        vm.updateEditedNote(vm.note);
-        vm.updateSelectedNote({ payload: vm.note });
-      }
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {});
-  },
   methods: {
     ...mapMutations([
       "updateSelectedNote",
@@ -130,27 +110,6 @@ export default {
       this.note = this.selectedNoteItem;
       this.noteindex = note.index;
     },
-    initSMDE() {
-      const vm = this;
-      let smde = new SimpleMDE({
-        element: document.getElementById("note-smde"),
-        initialValue: vm.note.noteMarkdown
-          ? vm.note.noteMarkdown
-          : "# Your note information here"
-      });
-
-      let timeout = null;
-      // smde events
-      smde.codemirror.on("changes", val => {
-        clearTimeout(timeout);
-        vm.editing = true;
-
-        timeout = setTimeout(function() {
-          vm.note.noteMarkdown = smde.value();
-          vm.editing = false;
-        }, 400);
-      });
-    }
   },
   created() {
     console.log("created");
