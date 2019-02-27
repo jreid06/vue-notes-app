@@ -44,14 +44,6 @@
       <div class="col-12">
         <markdown-editor :smdeid="'note-smde'" :note="note"></markdown-editor>
       </div>
-      <!-- <div class="col-12 col-lg-7 parsed-note-markdown">
-        <note-svg :fill="getCategory(note.categoryID).cat.colour"></note-svg>
-        <div id="markdown-div" class="pt-4 p-3">
-          <div  v-html="marked(note.noteMarkdown)">
-
-          </div>
-        </div>
-      </div>-->
     </div>
     <!--  -->
     <note-modal
@@ -64,7 +56,6 @@
 <script>
 import { mapGetters } from "vuex";
 import { mapMutations } from "vuex";
-// import notesvg from "./../../notesvg";
 import NoteModal from "./../../modals/CreateNoteModal.vue";
 import Loader from "./../../Loader.vue";
 import MarkdownEditor from "./../widgets/MarkdownEditor.vue";
@@ -77,7 +68,6 @@ const marked = require("marked");
 
 export default {
   components: {
-    // "note-svg": notesvg,
     "markdown-editor": MarkdownEditor,
     "note-modal": NoteModal,
     loading: Loader
@@ -107,7 +97,6 @@ export default {
     ])
   },
   methods: {
-    quickDeleteItem() {},
     getSelectedNote() {
       let noteID = this.$route.params.noteid;
       let note = this.getNote(noteID);
