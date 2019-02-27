@@ -1,6 +1,6 @@
 <template>
   <div>
-      <textarea id="note-smde"></textarea>
+      <textarea :id="smdeid"></textarea>
   </div>
 </template>
 <script>
@@ -13,7 +13,7 @@ const marked = require("marked");
 export default {
   props: {
       smdeid: {
-          type: string,
+          type: String,
           required: true
       },
       note: {
@@ -66,6 +66,9 @@ export default {
         }, 400);
       });
     }
+  },
+  mounted(){
+      this.initSMDE();
   }
 };
 </script>
