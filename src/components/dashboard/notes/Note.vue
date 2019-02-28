@@ -42,7 +42,22 @@
       </transition>
 
       <div class="col-12">
-        <markdown-editor :smdeid="'note-smde'" :note="note"></markdown-editor>
+        <div>
+          <ul>
+            <li></li>
+            <li></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-12">
+        <template v-if="editing">
+          <markdown-editor :smdeid="'note-smde'" :note="note"></markdown-editor>
+        </template>
+        <template v-else>
+          <div v-html="marked(note.noteMarkdown)">
+
+          </div>
+        </template>
       </div>
     </div>
     <!--  -->
