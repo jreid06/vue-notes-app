@@ -1,16 +1,18 @@
 <template>
-  <div>
+  <div class="text-left">
       <textarea :id="smdeid"></textarea>
   </div>
 </template>
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import HelperMixin from "./../../../mixins/helpers.js";
+import ToasterMixin from "./../../../mixins/toaster.js";
 
 const SimpleMDE = require("simplemde");
 const marked = require("marked");
 
 export default {
+  mixins:[ToasterMixin],
   props: {
       smdeid: {
           type: String,
@@ -30,6 +32,8 @@ export default {
       if (!nv) {
         vm.updateEditedNote(vm.note);
         vm.updateSelectedNote({ payload: vm.note });
+
+        vm.successToaster(`<b>${vm.note.title}</b> has been saved successfully`);
       }
     }
   },

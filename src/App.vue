@@ -224,7 +224,7 @@ export default {
   }
 }
 
-@for $i from 50 to 401 {
+@for $i from 50 to 901 {
   // fixed height
   .hfx-#{$i} {
     height: #{$i}px;
@@ -232,6 +232,10 @@ export default {
 
   .wfx-#{$i} {
     width: #{$i}px;
+  }
+
+  .wmx-#{$i} {
+    max-width: #{$i}px;
   }
 
   // min-height
@@ -258,10 +262,10 @@ ul {
   padding: 0;
 }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
+// li {
+//   display: inline-block;
+//   margin: 0 10px;
+// }
 
 a {
   // color: #42b983;

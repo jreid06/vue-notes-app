@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row pt-0 bg-light" v-if="note">
+    <div class="row pt-0" v-if="note">
       <div class="col-12 p-4 text-left">
         <div class="float-left">
           <h3>
@@ -41,11 +41,23 @@
         <loading v-if="loading"></loading>
       </transition>
 
-      <div class="col-12">
+      <div class="col-12 p-3">
         <div>
-          <ul>
-            <li></li>
-            <li></li>
+          <ul class="h4 text-left cp list-inline">
+            <li
+              class="list-inline-item"
+              :class="{'text-success': !editing}"
+              @click="toggleEdit(false)"
+            >
+              <i class="far fa-eye"></i>
+            </li>
+            <li
+              class="list-inline-item"
+              :class="{'text-success': editing}"
+              @click="toggleEdit(true)"
+            >
+              <i class="fab fa-markdown"></i>
+            </li>
           </ul>
         </div>
       </div>
@@ -54,9 +66,14 @@
           <markdown-editor :smdeid="'note-smde'" :note="note"></markdown-editor>
         </template>
         <template v-else>
-          <div v-html="marked(note.noteMarkdown)">
-
+          <div class="w-100 bg-light pt-3">
+            <ul class="list-inline">
+              <li class="list-inline-item h4 pr-3 cp" :data-action="alignment.action" v-for="(alignment, i) in textAlign" :key="i" @click="alignment.method">
+                <i :class="alignment.icon"></i>
+              </li>
+            </ul>
           </div>
+          <div class="border border-light p-2 px-5 rounded wmx-900 m-auto" :class="[alignValue]" v-html="marked(note.noteMarkdown)"></div>
         </template>
       </div>
     </div>
@@ -69,8 +86,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import { mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import NoteModal from "./../../modals/CreateNoteModal.vue";
 import Loader from "./../../Loader.vue";
 import MarkdownEditor from "./../widgets/MarkdownEditor.vue";
@@ -97,10 +113,33 @@ export default {
       smde: "",
       editing: false,
       selectedNote: false,
-      noteDiv: {
-        src: "src/assets/notebg.png",
-        minHeight: "200px"
-      }
+      alignValue: 'text-left',
+      textAlign: [
+        {
+          icon: "fas fa-align-left",
+          method: this.toggleAlignment,
+          action: "text-left",
+          active: true
+        },
+        // {
+        //   icon: "fas fa-align-justify",
+        //   method: this.toggleAlignment,
+        //   action: "text-justify",
+        //   active: false
+        // },
+        {
+          icon: "fas fa-align-center",
+          method: this.toggleAlignment,
+          action: "text-center",
+          active: false
+        },
+        {
+          icon: "fas fa-align-right",
+          method: this.toggleAlignment,
+          action: "text-right",
+          active: false
+        }
+      ]
     };
   },
   computed: {
@@ -112,6 +151,19 @@ export default {
     ])
   },
   methods: {
+    // ...mapMutations(["updateSelectedNote"]),
+    toggleAlignment(e) {
+      let target = e.currentTarget,
+          alignment = target.attributes['data-action'].value;
+
+      console.dir(target);
+      console.log(alignment);
+      this.alignValue = alignment;
+      
+    },
+    toggleEdit(editMode) {
+      this.editing = editMode;
+    },
     getSelectedNote() {
       let noteID = this.$route.params.noteid;
       let note = this.getNote(noteID);
@@ -160,6 +212,6 @@ h1 {
 }
 
 img {
-  width: 100%;
+  width: 20%;
 }
 </style>
