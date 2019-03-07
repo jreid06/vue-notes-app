@@ -45,7 +45,7 @@ export default {
   },
   watch: {
     windowWidth(nv, ov) {
-      console.log(nv);
+      // console.log(nv);
     }
   },
   data() {

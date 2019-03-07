@@ -12,19 +12,21 @@
     <div class="row pr t-30 z-3">
       <div class="col-12 p-2 d-flex flex-row">
         <div
-          class="click-box create-category p-3 w-100 shadow-sm mb-3 bg-white hvr-grow"
+          class="click-box create-category p-3 w-100 shadow-sm mb-3 bg-white hvr-grow d-flex flex-column"
           v-for="(action, key) in actions[0]"
           :key="key"
           :data-action="key"
           @click="triggerModal"
         >
-          <h2 :data-action="key">
-            <i :class="action.icon"></i>
-          </h2>
-          <h4 class="text-capitalize" :data-action="key">{{action.name}}</h4>
-          <p class="h3 hvr-grow" :data-action="key">
-            <i class="fas fa-plus-circle text-success" :data-action="key"></i>
-          </p>
+          <div>
+            <h2 :data-action="key">
+              <i :class="action.icon"></i>
+            </h2>
+            <h4 class="text-capitalize" :data-action="key">{{action.name}}</h4>
+            <p class="h3 hvr-grow" :data-action="key">
+              <i class="fas fa-plus-circle text-success" :data-action="key"></i>
+            </p>
+          </div>
         </div>
       </div>
       <div class="col-12 col-md-6 p-2">
@@ -55,10 +57,9 @@ const $ = require("jquery");
 
 import { mapGetters } from "vuex";
 import ItemList from "./widgets/ItemList.vue";
-import HelperMixin from './../../mixins/helpers.js';
-import CategoryModal from './../modals/CreateCategoryModal.vue'
+import HelperMixin from "./../../mixins/helpers.js";
+import CategoryModal from "./../modals/CreateCategoryModal.vue";
 import NoteModal from "./../modals/CreateNoteModal.vue";
-
 
 export default {
   mixins: [HelperMixin],
@@ -84,7 +85,7 @@ export default {
             name: "create note",
             icon: "far fa-file-alt",
             action: "note"
-          },
+          }
           // load: {
           //   name: "load note",
           //   icon: "far fa-hdd",
@@ -94,9 +95,7 @@ export default {
       ]
     };
   },
-  methods: {
-   
-  }
+  methods: {}
 };
 </script>
 <style lang="scss" scoped>
@@ -105,7 +104,9 @@ export default {
 }
 
 .create-category {
-  width: calc(100% / 3) !important;
+  width: calc(100% / 2) !important;
+  justify-content: center;
+  align-items: center;
   @media screen and (max-width: 992px) {
     h2 {
       font-size: 2rem;
@@ -118,6 +119,10 @@ export default {
     .h3 {
       font-size: 2rem !important;
     }
+
+    height: 200px;
   }
+
+  height: 225px;
 }
 </style>
