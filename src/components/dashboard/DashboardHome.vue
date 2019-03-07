@@ -85,11 +85,11 @@ export default {
             icon: "far fa-file-alt",
             action: "note"
           },
-          load: {
-            name: "load note",
-            icon: "far fa-hdd",
-            action: "load"
-          }
+          // load: {
+          //   name: "load note",
+          //   icon: "far fa-hdd",
+          //   action: "load"
+          // }
         }
       ]
     };
