@@ -67,7 +67,7 @@ export default {
         timeout = setTimeout(function() {
           vm.note.noteMarkdown = smde.value();
           vm.editing = false;
-        }, 400);
+        }, 1000);
       });
     }
   },
