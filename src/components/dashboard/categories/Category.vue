@@ -130,8 +130,9 @@ export default {
     getSelectedCategory() {
       let catKey = this.$route.params.catid;
 
-      this.category = this.getCategory(catKey).cat;
-      this.catindex = this.getCategory(catKey).index;
+      let {cat, index} = this.getCategory(catKey);
+      this.category = cat;
+      this.catindex = index;
 
       //
       this.updateSelectedCategory(this.category);
