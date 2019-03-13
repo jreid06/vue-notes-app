@@ -8,10 +8,6 @@
     <div class="p-2 text-left wn-35">
       <span class="small">Title</span>
       <h6>{{n.title |truncate(17) | firstWordCapital}}</h6>
-      <!-- <span class="small">Created</span>
-              <h6 class="small">
-                <span v-html="formatDate(n.createdAt).ukDate"></span>
-      </h6>-->
     </div>
     <div
       class="p-2 pt-4 flex-fill d-flex flex-row justify-content-around align-items-center"
@@ -44,7 +40,6 @@
       </div>
       <div class="w-100 flex-fill">
         <bookmark-item :requires-container="false" :is-bookmarked="n.bookmarked" :item-type="n.type" :ikey="n.key"></bookmark-item>
-		<!-- {{n.key}} - {{n.bookmarked}} -->
       </div>
     </div>
   </li>

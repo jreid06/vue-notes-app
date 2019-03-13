@@ -18,7 +18,6 @@
               >{{ getCategory(note.categoryID).cat.title}}</span>
             </h5>
           </router-link>
-          <!-- <p class="small">{{category.description}}</p> -->
         </div>
         <div class="float-right display-4 pointer">
           <i
@@ -121,12 +120,6 @@ export default {
           action: "text-left",
           active: true
         },
-        // {
-        //   icon: "fas fa-align-justify",
-        //   method: this.toggleAlignment,
-        //   action: "text-justify",
-        //   active: false
-        // },
         {
           icon: "fas fa-align-center",
           method: this.toggleAlignment,
@@ -151,15 +144,11 @@ export default {
     ])
   },
   methods: {
-    // ...mapMutations(["updateSelectedNote"]),
     toggleAlignment(e) {
       let target = e.currentTarget,
           alignment = target.attributes['data-action'].value;
 
-      console.dir(target);
-      console.log(alignment);
       this.alignValue = alignment;
-      
     },
     toggleEdit(editMode) {
       this.editing = editMode;

@@ -65,7 +65,6 @@
             </div>
           </li>
         </ul>
-        <!-- <textarea name="markdown" id="category-markdown" cols="30" rows="10"></textarea> -->
       </div>
       <div class="col-12 col-md-6 text-left">
         <h4 class="bg-info p-3 text-white">Quick view of note:</h4>
@@ -113,11 +112,6 @@ export default {
   computed: {
     ...mapGetters(["selectedCategory", "getCategory", "getNote"])
   },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      // on initial load get selected category
-    });
-  },
   methods: {
     ...mapMutations(["updateSelectedCategory"]),
     quickDeleteItem() {},
@@ -141,17 +135,9 @@ export default {
 
       //
       this.updateSelectedCategory(this.category);
-    },
-    initSMDE() {
-      this.smde = new SimpleMDE({
-        element: document.getElementById("category-markdown")
-      });
     }
   },
   mounted() {
-    console.log(this.$route.params);
-    // this.initSMDE();
-    // console.log(this.smde);
     this.getSelectedCategory();
   }
 };
