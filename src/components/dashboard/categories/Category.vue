@@ -128,9 +128,14 @@ export default {
       this.selectedNote = this.getNote(noteID).note;
     },
     getSelectedCategory() {
+      const vm = this;
       let catKey = this.$route.params.catid;
 
       let {cat, index} = this.getCategory(catKey);
+
+      if(cat==="" || index===""){
+        vm.$router.push({path: '/dashboard/categories'});
+      }
       this.category = cat;
       this.catindex = index;
 
