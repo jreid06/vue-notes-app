@@ -23,9 +23,6 @@
                     <i class="far fa-edit hvr-grow"></i>
                   </router-link>
                 </div>
-                <div class="bg-light p-2" :style="{color: n.colour}">
-                  <i class="far fa-eye"></i>
-                </div>
                 <div
                   class="bg-danger text-light p-2 rounded-right"
                   :data-id="n.key"
